@@ -1,4 +1,4 @@
-package com.lollipop.wear.ttt.presentation.theme
+package com.lollipop.wear.ttt.theme
 
 import androidx.compose.runtime.Composable
 import androidx.wear.compose.material.MaterialTheme

@@ -12,7 +12,7 @@ enum class GamePiece(val code: Int) {
                     return piece
                 }
             }
-            return GamePiece.Empty
+            return Empty
         }
     }
 
