@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "LWearApps"
 include(":app")
 include(":ttt")
+include(":basic")
