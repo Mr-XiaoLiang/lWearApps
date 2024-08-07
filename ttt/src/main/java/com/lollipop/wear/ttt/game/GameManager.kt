@@ -13,9 +13,31 @@ object GameManager : GameBoardProvider {
     var current: GameBoard = GameBoard()
         private set
 
+    var firstHand: GamePlayer = GamePlayer.HumanA
+        private set
+    var rearHand: GamePlayer = GamePlayer.HumanB
+        private set
+
     override fun snapshot(): GameBoardSnapshot {
         return current.snapshot()
     }
 
+    fun randomFirstHand(robot: Boolean) {
+        if (robot) {
+            randomFirstHand(GamePlayer.Robot, GamePlayer.HumanA)
+        } else {
+            randomFirstHand(GamePlayer.HumanA, GamePlayer.HumanB)
+        }
+    }
+
+    private fun randomFirstHand(playerA: GamePlayer, playerB: GamePlayer) {
+        if (Math.random() > 0.5) {
+            firstHand = playerA
+            rearHand = playerB
+        } else {
+            firstHand = playerB
+            rearHand = playerA
+        }
+    }
 
 }
