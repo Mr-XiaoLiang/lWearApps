@@ -14,7 +14,7 @@ import com.lollipop.wear.basic.ListenerManager
  * 7. 因此当8条线都存在2种棋子的时候，认为平局
  * 8. 如果不满足[6, 7]，则游戏继续
  */
-object GameManager : GameBoardProvider {
+object GameManager : GameBoardProvider, GameControl {
 
     var current: GameBoard = GameBoard()
         private set
@@ -34,13 +34,13 @@ object GameManager : GameBoardProvider {
     var rearHand: GamePlayer = GamePlayer.HumanB
         private set
 
-    private val stateListener = ListenerManager<StateListener>()
+    private val stateListener = ListenerManager<GameControl.StateListener>()
 
     override fun snapshot(): GameBoardSnapshot {
         return current.snapshot()
     }
 
-    fun newGame() {
+    override fun newGame() {
         current = GameBoard()
         currentHand = firstHand
         stateListener.invoke {
@@ -49,36 +49,29 @@ object GameManager : GameBoardProvider {
         }
     }
 
-    fun addListener(listener: StateListener) {
+    override fun addListener(listener: GameControl.StateListener) {
         stateListener.add(listener)
     }
 
-    fun removeListener(listener: StateListener) {
+    override fun removeListener(listener: GameControl.StateListener) {
         stateListener.remove(listener)
     }
 
-    fun randomFirstHand(robot: Boolean) {
-        if (robot) {
-            randomFirstHand(GamePlayer.Robot, GamePlayer.HumanA)
-        } else {
-            randomFirstHand(GamePlayer.HumanA, GamePlayer.HumanB)
-        }
-    }
-
-    fun put(x: Int, y: Int, piece: GamePiece) {
+    override fun put(x: Int, y: Int, piece: GamePiece) {
         if (current.get(x, y) != GamePiece.Empty) {
             return
         }
         current.put(x, y, piece)
-        checkWinner()
+        if (checkWinner()) {
+            nextHand()
+        }
     }
 
-    private fun checkWinner() {
-        // TODO
-
+    private fun checkWinner(): Boolean {
+        TODO()
     }
 
-    fun switchHand() {
+    override fun switchHand() {
         val player = firstHand
         firstHand = rearHand
         rearHand = player
@@ -95,7 +88,7 @@ object GameManager : GameBoardProvider {
         stateListener.invoke { it.onCurrentHandChanged() }
     }
 
-    private fun randomFirstHand(playerA: GamePlayer, playerB: GamePlayer) {
+    override fun randomFirstHand(playerA: GamePlayer, playerB: GamePlayer) {
         if (Math.random() > 0.5) {
             firstHand = playerA
             rearHand = playerB
@@ -105,13 +98,6 @@ object GameManager : GameBoardProvider {
         }
         stateListener.invoke { it.onPlayerChanged() }
         newGame()
-    }
-
-    interface StateListener {
-        fun onGameStart()
-        fun onGameEnd(winner: GamePlayer?)
-        fun onPlayerChanged()
-        fun onCurrentHandChanged()
     }
 
 }

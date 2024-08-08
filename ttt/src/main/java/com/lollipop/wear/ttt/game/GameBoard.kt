@@ -45,7 +45,7 @@ class GameBoard : GameBoardProvider {
 
     }
 
-    private val map = newMap()
+    internal val map = newMap()
 
     fun get(x: Int, y: Int): GamePiece {
         if (x < 0 || x >= BOARD_SIZE || y < 0 || y >= BOARD_SIZE) {
