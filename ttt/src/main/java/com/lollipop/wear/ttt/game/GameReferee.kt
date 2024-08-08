@@ -9,19 +9,19 @@ object GameReferee {
             // 循环检查每一项，如果提前计算出了胜负，那么直接返回
             // 否则我们检查是否有空位，有的话，我们在检查结束之后，告诉外部可以继续。否则告诉他们已经平局
             when (getCheckResult(board, loop)) {
-                is Result.WinnerO -> {
+                Result.WinnerO -> {
                     return Result.WinnerO
                 }
 
-                is Result.WinnerX -> {
+                Result.WinnerX -> {
                     return Result.WinnerX
                 }
 
-                is Result.Continue -> {
+                Result.Continue -> {
                     hasNext = true
                 }
 
-                is Result.Draw -> {
+                Result.Draw -> {
                     // 当前的线路填满了
                 }
                 // 为空那么结束循环，没有然后了
@@ -170,6 +170,10 @@ object GameReferee {
 
     /**
      * 我们把判断规则再次细化到相邻的两个棋子的关系
+     * 假设我们将棋子设定为A、B
+     * 1. A为空时，那么必定无法连接，因此我们需要判断B的内容，确定是空一个还是全空，以此来帮助下一个棋子
+     * 2. B为空时，那么也必定无法连接，但是此时A已经确定不为空了，因此他不可能出现全空结果
+     * 3. 第三阶段时，A和B都不可能为空了，因此我们判断是否一致，如果一致，那么它可能连成一线，否则无法连线
      */
     private fun checkPiece(pieceA: GamePiece, pieceB: GamePiece): PieceResult {
         // 如果A为空，那么我们判断B
@@ -209,40 +213,64 @@ object GameReferee {
         return PieceResult.Draw
     }
 
-    sealed class PieceResult {
+    /**
+     * 棋子判定结果细分
+     */
+    private enum class PieceResult {
+        /**
+         * 全空
+         */
+        ContinueAll,
 
-        abstract val piece: GamePiece
+        /**
+         * 一个空与一个O
+         */
+        ContinueO,
 
-        data object ContinueAll : PieceResult() {
-            override val piece: GamePiece = GamePiece.Empty
-        }
+        /**
+         * 一个空与一个X
+         */
+        ContinueX,
 
-        data object ContinueO : PieceResult() {
-            override val piece = GamePiece.O
-        }
+        /**
+         * 两个O
+         */
+        WinnerO,
 
-        data object ContinueX : PieceResult() {
-            override val piece = GamePiece.X
-        }
+        /**
+         * 两个X
+         */
+        WinnerX,
 
-        data object WinnerO : PieceResult() {
-            override val piece: GamePiece = GamePiece.O
-        }
-
-        data object WinnerX : PieceResult() {
-            override val piece: GamePiece = GamePiece.X
-        }
-
-        data object Draw : PieceResult() {
-            override val piece: GamePiece = GamePiece.Empty
-        }
+        /**
+         * 一个O与一个X
+         */
+        Draw;
     }
 
-    sealed class Result {
-        data object WinnerO : Result()
-        data object WinnerX : Result()
-        data object Draw : Result()
-        data object Continue : Result()
+    /**
+     * 游戏结果的细分
+     */
+    enum class Result {
+        /**
+         * O赢了
+         */
+        WinnerO,
+
+        /**
+         * X赢了
+         */
+        WinnerX,
+
+        /**
+         * 平局
+         */
+        Draw,
+
+        /**
+         * 还未结束
+         */
+        Continue;
     }
 
 }

@@ -62,13 +62,31 @@ object GameManager : GameBoardProvider, GameControl {
             return
         }
         current.put(x, y, piece)
-        if (checkWinner()) {
-            nextHand()
+        when (checkWinner()) {
+            GameReferee.Result.WinnerO -> {
+                // 后手获胜
+                stateListener.invoke { it.onGameEnd(rearHand) }
+            }
+
+            GameReferee.Result.WinnerX -> {
+                // 先手获胜
+                stateListener.invoke { it.onGameEnd(firstHand) }
+            }
+
+            GameReferee.Result.Draw -> {
+                // 平局，没有赢家
+                stateListener.invoke { it.onGameEnd(null) }
+            }
+
+            GameReferee.Result.Continue -> {
+                // 没有结束，继续
+                nextHand()
+            }
         }
     }
 
-    private fun checkWinner(): Boolean {
-        TODO()
+    private fun checkWinner(): GameReferee.Result {
+        return GameReferee.checkWinner(current)
     }
 
     override fun switchHand() {
