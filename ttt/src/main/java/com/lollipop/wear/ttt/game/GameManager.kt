@@ -57,6 +57,14 @@ object GameManager : GameBoardProvider, GameControl {
         stateListener.remove(listener)
     }
 
+    fun currentPiece(): GamePiece {
+        return if (currentHand == firstHand) {
+            GamePiece.X
+        } else {
+            GamePiece.O
+        }
+    }
+
     override fun put(x: Int, y: Int, piece: GamePiece) {
         if (current.get(x, y) != GamePiece.Empty) {
             return
@@ -119,3 +127,59 @@ object GameManager : GameBoardProvider, GameControl {
     }
 
 }
+
+
+//fun main() {
+//    val game = GameManager
+//    var gameLive = true
+//    game.addListener(object : GameControl.StateListener {
+//        override fun onGameStart() {
+//            println("游戏开始")
+//        }
+//
+//        override fun onGameEnd(winner: GamePlayer?) {
+//            gameLive = false
+//            println("游戏结束，${winner?.name ?: "平局"}")
+//        }
+//
+//        override fun onCurrentHandChanged() {
+//            println("当前手：${game.currentHand.name}")
+//        }
+//
+//        override fun onPlayerChanged() {
+//            println("玩家切换：${game.firstHand.name} vs ${game.rearHand.name}")
+//        }
+//    })
+//    while (gameLive) {
+//        print(game.current)
+//        val self = game.currentPiece()
+//        when (val result = GameRobot.getResult(game.current, self)) {
+//            GameRobot.Result.Error -> {
+//                println("Robot Error")
+//                break
+//            }
+//
+//            is GameRobot.Result.Success -> {
+//                game.put(result.x, result.y, self)
+//            }
+//        }
+//    }
+//}
+//
+//private fun print(game: GameBoard) {
+//    println("-------------")
+//    for (y in 0 until 3) {
+//        print("| ")
+//        for (x in 0 until 3) {
+//            val piece = game.get(x, y)
+//            if (piece == GamePiece.Empty) {
+//                print(" ")
+//            } else {
+//                print(piece.name)
+//            }
+//            print(" | ")
+//        }
+//        println("")
+//    }
+//    println("-------------")
+//}
