@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="piece_tint_a">#FF34FFAC</color>
+    <color name="piece_tint_b">#FFFF3914</color>
+    <color name="piece_tint_c">#FF349BFF</color>
+</resources>

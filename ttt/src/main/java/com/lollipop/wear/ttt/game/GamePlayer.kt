@@ -1,9 +1,11 @@
 package com.lollipop.wear.ttt.game
 
-enum class GamePlayer {
+import com.lollipop.wear.ttt.R
 
-    HumanA,
-    HumanB,
-    Robot;
+enum class GamePlayer(val colorRes: Int) {
+
+    HumanA(R.color.piece_tint_a),
+    HumanB(R.color.piece_tint_b),
+    Robot(R.color.piece_tint_c);
 
 }
