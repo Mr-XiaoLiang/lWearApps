@@ -90,6 +90,11 @@ interface GameBoardProvider {
 class GameBoardSnapshot(
     private val map: Array<Array<GamePiece>>
 ) {
+
+    companion object {
+        val EMPTY = GameBoardSnapshot(emptyArray())
+    }
+
     fun get(x: Int, y: Int): GamePiece {
         if (x !in map.indices || y !in map[x].indices) {
             return GamePiece.Empty

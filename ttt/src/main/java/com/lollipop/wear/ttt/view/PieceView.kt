@@ -10,7 +10,7 @@ import kotlin.math.min
 
 class PieceView(
     context: Context, attributeSet: AttributeSet? = null
-) : ViewGroup(context, attributeSet), BoardView.Piece {
+) : ViewGroup(context, attributeSet) {
 
     companion object {
         var iconScale: Float = 0.7F
@@ -22,7 +22,7 @@ class PieceView(
     private var pieceO: View? = null
     private var pieceEmpty: View? = null
 
-    override fun update(piece: GamePiece) {
+    fun update(piece: GamePiece) {
         currentPiece = piece
         checkState()
     }
@@ -81,8 +81,10 @@ class PieceView(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val width = MeasureSpec.getSize(widthMeasureSpec) - paddingLeft - paddingRight
-        val height = MeasureSpec.getSize(heightMeasureSpec) - paddingTop - paddingBottom
+        val srcWidth = MeasureSpec.getSize(widthMeasureSpec)
+        val srcHeight = MeasureSpec.getSize(heightMeasureSpec)
+        val width = srcWidth - paddingLeft - paddingRight
+        val height = srcHeight - paddingTop - paddingBottom
         // 选小的那一个，内部限制为正方形
         val size = min(width, height)
         val childWidthSpec = MeasureSpec.makeMeasureSpec(size, MeasureSpec.EXACTLY)
@@ -91,7 +93,7 @@ class PieceView(
             val child = getChildAt(i)
             child.measure(childWidthSpec, childHeightSpec)
         }
-        setMeasuredDimension(width, height)
+        setMeasuredDimension(srcWidth, srcHeight)
     }
 
 }
