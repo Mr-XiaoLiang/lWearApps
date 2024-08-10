@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BoardView">
+        <attr name="patternColor" format="color" />
+        <attr name="patternStrokeWidth" format="dimension" />
+        <attr name="patternInsets" format="float" />
+    </declare-styleable>
+</resources>

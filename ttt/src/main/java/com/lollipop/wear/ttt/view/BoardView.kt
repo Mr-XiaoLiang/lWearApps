@@ -1,10 +1,12 @@
 package com.lollipop.wear.ttt.view
 
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
+import com.lollipop.wear.ttt.R
 import com.lollipop.wear.ttt.game.GameBoardProvider
 import com.lollipop.wear.ttt.game.GameBoardSnapshot
 import kotlin.math.min
@@ -43,6 +45,39 @@ class BoardView @JvmOverloads constructor(
 
     init {
         background = backgroundDrawable
+        attributeSet?.let { attr ->
+            val typedArray = context.obtainStyledAttributes(
+                attr, R.styleable.BoardView
+            )
+            patternColor = typedArray.getColor(
+                R.styleable.BoardView_patternColor,
+                Color.GRAY
+            )
+            patternStrokeWidth = typedArray.getDimensionPixelSize(
+                R.styleable.BoardView_patternStrokeWidth,
+                1
+            ).toFloat()
+            val patternInsets = typedArray.getFloat(
+                R.styleable.BoardView_patternInsets,
+                0.2F
+            )
+            backgroundDrawable.setInsets(patternInsets, patternInsets, patternInsets, patternInsets)
+            typedArray.recycle()
+        }
+        if (isInEditMode) {
+            pieceProvider = object : PieceProvider {
+                override fun themeChanged(): Boolean {
+                    return false
+                }
+
+                override fun createPieceView(context: Context): PieceView {
+                    return PieceView(context).apply {
+                        setBackgroundColor(Color.RED)
+                    }
+                }
+            }
+            notifyPieceChanged()
+        }
     }
 
     fun notifyBoardChanged() {
@@ -147,6 +182,11 @@ class BoardView @JvmOverloads constructor(
 
     fun setPieceProvider(provider: PieceProvider) {
         pieceProvider = provider
+    }
+
+    override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
+        super.setPadding(left, top, right, bottom)
+        backgroundDrawable.setPadding(left, top, right, bottom)
     }
 
     private class BoardViewMap(

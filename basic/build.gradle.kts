@@ -33,5 +33,9 @@ android {
 dependencies {
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
-    implementation(libs.material)
+    api(libs.material)
+    // Standard Wear OS libraries
+    api(libs.wear)
+    // includes support for wearable specific inputs
+    api(libs.wear.input)
 }

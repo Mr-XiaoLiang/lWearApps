@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <com.lollipop.wear.ttt.view.BoardView
+        android:id="@+id/boardView"
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.8"
+        app:patternColor="@android:color/darker_gray"
+        app:patternInsets="0.2"
+        app:patternStrokeWidth="2dp" />
+
+    <androidx.wear.widget.CurvedTextView
+        android:id="@+id/timeView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="4dp"
+        android:text="@string/app_name"
+        android:textSize="12sp" />
+
+    <com.lollipop.wear.widget.CircularProgressIndicator
+        android:id="@+id/rightProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="4dp"
+        app:activeColor="#fff"
+        app:antiClockwise="true"
+        app:inactiveColor="#3fff"
+        app:interval="2dp"
+        app:startAngle="315"
+        app:strokeWidth="3dp"
+        app:sweepAngle="90"
+        tools:activeColor="@color/piece_tint_a"
+        tools:indicatorProgress="0.6" />
+
+    <com.lollipop.wear.widget.CircularProgressIndicator
+        android:id="@+id/leftProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="4dp"
+        app:activeColor="#fff"
+        app:antiClockwise="false"
+        app:inactiveColor="#3fff"
+        app:interval="2dp"
+        app:startAngle="135"
+        app:strokeWidth="3dp"
+        app:sweepAngle="90"
+        tools:activeColor="@color/piece_tint_b"
+        tools:indicatorProgress="0.4" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
