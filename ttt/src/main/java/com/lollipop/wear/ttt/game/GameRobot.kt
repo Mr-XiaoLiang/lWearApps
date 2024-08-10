@@ -1,5 +1,7 @@
 package com.lollipop.wear.ttt.game
 
+import kotlin.random.Random
+
 /**
  * 游戏的机器人
  * 它其实并不具备智能
@@ -42,6 +44,12 @@ object GameRobot {
                     maxSource = score
                     lastX = x
                     lastY = y
+                } else if (score == maxSource) {
+                    // 当评分相等的时候，为了多一些变化，我们让它有50%的概率使用另一种方式
+                    if (Random.nextFloat() > 0.5f) {
+                        lastX = x
+                        lastY = y
+                    }
                 }
             }
         }

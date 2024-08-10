@@ -128,18 +128,26 @@ object GameManager : GameBoardProvider, GameControl {
 
 }
 
-
+//
 //fun main() {
 //    val game = GameManager
 //    var gameLive = true
+//
+//    val gameHistory = ArrayList<GameBoard>()
+//
 //    game.addListener(object : GameControl.StateListener {
 //        override fun onGameStart() {
 //            println("游戏开始")
 //        }
 //
 //        override fun onGameEnd(winner: GamePlayer?) {
-//            gameLive = false
 //            println("游戏结束，${winner?.name ?: "平局"}")
+//            gameHistory.add(game.current)
+//            if (winner != null || gameHistory.size >= 10) {
+//                gameLive = false
+//            } else {
+//                game.newGame()
+//            }
 //        }
 //
 //        override fun onCurrentHandChanged() {
@@ -150,8 +158,8 @@ object GameManager : GameBoardProvider, GameControl {
 //            println("玩家切换：${game.firstHand.name} vs ${game.rearHand.name}")
 //        }
 //    })
+//
 //    while (gameLive) {
-//        print(game.current)
 //        val self = game.currentPiece()
 //        when (val result = GameRobot.getResult(game.current, self)) {
 //            GameRobot.Result.Error -> {
@@ -163,6 +171,9 @@ object GameManager : GameBoardProvider, GameControl {
 //                game.put(result.x, result.y, self)
 //            }
 //        }
+//    }
+//    for (board in gameHistory) {
+//        print(board)
 //    }
 //}
 //
