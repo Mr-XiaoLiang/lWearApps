@@ -18,10 +18,32 @@ class BoardView @JvmOverloads constructor(
     private var gameBoardProvider: GameBoardProvider? = null
     private var pieceClickListener: OnPieceClickListener? = null
 
+    private val backgroundDrawable = BoardBackgroundDrawable()
+
     private val boardViewMap = BoardViewMap(
         viewProvider = ::createPieceView,
         onViewClick = ::onPieceViewClick
     )
+
+    var patternColor: Int
+        get() {
+            return backgroundDrawable.color
+        }
+        set(value) {
+            backgroundDrawable.color = value
+        }
+
+    var patternStrokeWidth: Float
+        get() {
+            return backgroundDrawable.strokeWidth
+        }
+        set(value) {
+            backgroundDrawable.strokeWidth = value
+        }
+
+    init {
+        background = backgroundDrawable
+    }
 
     fun notifyBoardChanged() {
         currentSnapshot = null
