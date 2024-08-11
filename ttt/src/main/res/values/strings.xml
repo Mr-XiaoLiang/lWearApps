@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TicTacToe</string>
+    <string name="title_game_record">胜利场次</string>
 </resources>

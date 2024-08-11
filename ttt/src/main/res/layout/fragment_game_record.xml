@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingVertical="40dp">
+
+        <TextView
+            android:id="@+id/titleView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginHorizontal="24dp"
+            android:gravity="center_horizontal"
+            android:text="@string/title_game_record"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.lollipop.wear.widget.CircularImageView
+            android:id="@+id/playAIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/piece_tint_a"
+            android:padding="4dp"
+            android:src="@drawable/baseline_videogame_asset_24"
+            app:layout_constraintEnd_toStartOf="@id/playARecord"
+            app:layout_constraintStart_toStartOf="@id/titleView"
+            app:layout_constraintTop_toBottomOf="@id/titleView" />
+
+        <TextView
+            android:id="@+id/playARecord"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/playAIcon"
+            app:layout_constraintEnd_toEndOf="@id/titleView"
+            app:layout_constraintStart_toEndOf="@id/playAIcon"
+            app:layout_constraintTop_toTopOf="@id/playAIcon"
+            app:layout_constraintWidth_percent="0.5"
+            tools:text="123" />
+
+        <com.lollipop.wear.widget.CircularImageView
+            android:id="@+id/playBIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/piece_tint_b"
+            android:padding="4dp"
+            android:src="@drawable/baseline_videogame_asset_24"
+            app:layout_constraintStart_toStartOf="@id/playAIcon"
+            app:layout_constraintTop_toBottomOf="@id/playAIcon" />
+
+        <TextView
+            android:id="@+id/playBRecord"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/playBIcon"
+            app:layout_constraintEnd_toEndOf="@id/playARecord"
+            app:layout_constraintStart_toStartOf="@id/playARecord"
+            app:layout_constraintTop_toTopOf="@id/playBIcon"
+            app:layout_constraintWidth_percent="0.5"
+            tools:text="123" />
+
+        <com.lollipop.wear.widget.CircularImageView
+            android:id="@+id/playRobotIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/piece_tint_c"
+            android:padding="4dp"
+            android:src="@drawable/baseline_android_24"
+            app:layout_constraintStart_toStartOf="@id/playBIcon"
+            app:layout_constraintTop_toBottomOf="@id/playBIcon" />
+
+        <TextView
+            android:id="@+id/playRobotRecord"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/playRobotIcon"
+            app:layout_constraintEnd_toEndOf="@id/playBRecord"
+            app:layout_constraintStart_toStartOf="@id/playBRecord"
+            app:layout_constraintTop_toTopOf="@id/playRobotIcon"
+            app:layout_constraintWidth_percent="0.5"
+            tools:text="123" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

@@ -5,7 +5,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.ColorFilter
 import android.graphics.Paint
-import android.graphics.Path
 import android.graphics.PixelFormat
 import android.graphics.Rect
 import android.graphics.RectF
@@ -13,6 +12,7 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 import com.lollipop.wear.basic.R
+import com.lollipop.wear.devices.DeviceHelper
 import kotlin.math.max
 import kotlin.math.min
 
@@ -150,16 +150,12 @@ class CircularProgressIndicator @JvmOverloads constructor(
             strokeCap = Paint.Cap.ROUND
         }
 
-        private val activePath = Path()
-        private val inactivePath = Path()
-
-        private val padding = Rect()
         private val boundsF = RectF()
 
         var progress = 0f
             set(value) {
                 field = max(0F, min(1F, value))
-                updatePath()
+                invalidateSelf()
             }
 
         var activeColor: Int
@@ -183,25 +179,25 @@ class CircularProgressIndicator @JvmOverloads constructor(
         var startAngle = 0F
             set(value) {
                 field = value
-                updatePath()
+                invalidateSelf()
             }
 
         var sweepAngle = 360F
             set(value) {
                 field = value
-                updatePath()
+                invalidateSelf()
             }
 
         var interval = 1F
             set(value) {
                 field = value
-                updatePath()
+                invalidateSelf()
             }
 
         var direction = Direction.Clockwise
             set(value) {
                 field = value
-                updatePath()
+                invalidateSelf()
             }
 
         var strokeWidth: Float
@@ -211,33 +207,20 @@ class CircularProgressIndicator @JvmOverloads constructor(
             set(value) {
                 activePaint.strokeWidth = value
                 inactivePaint.strokeWidth = value
-                updatePath()
+                invalidateSelf()
             }
-
-//        fun setPadding(padding: Int) {
-//            setPadding(padding, padding, padding, padding)
-//        }
-//
-//        fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
-//            padding.set(left, top, right, bottom)
-//            updatePath()
-//        }
 
         override fun onBoundsChange(bounds: Rect) {
             super.onBoundsChange(bounds)
-//            boundsF.set(
-//                (bounds.left + padding.left).toFloat(),
-//                (bounds.top + padding.top).toFloat(),
-//                (bounds.right - padding.right).toFloat(),
-//                (bounds.bottom - padding.bottom).toFloat()
-//            )
             boundsF.set(bounds)
-            updatePath()
+            invalidateSelf()
         }
 
-        private fun updatePath() {
-            activePath.reset()
-            inactivePath.reset()
+        private fun arcDimenToAngle(radius: Float, arcDimen: Float): Float {
+            return DeviceHelper.arcDimenToAngle(radius, arcDimen)
+        }
+
+        override fun draw(canvas: Canvas) {
             if (bounds.isEmpty) {
                 return
             }
@@ -252,7 +235,7 @@ class CircularProgressIndicator @JvmOverloads constructor(
             when (direction) {
                 Direction.Clockwise -> {
                     if (activeEnable) {
-                        activePath.addArc(boundsF, startAngle, activeSweep)
+                        canvas.drawArc(boundsF, startAngle, activeSweep, false, activePaint)
                     }
                     var inactiveSweep = sweepAngle - activeSweep
                     if ((360 - inactiveSweep) < intervalAngle) {
@@ -268,14 +251,14 @@ class CircularProgressIndicator @JvmOverloads constructor(
                             inactiveSweep -= intervalAngle
                             inactiveSweep -= intervalAngle
                         }
-                        inactivePath.addArc(boundsF, inactiveStart, inactiveSweep)
+                        canvas.drawArc(boundsF, inactiveStart, inactiveSweep, false, inactivePaint)
                     }
                 }
 
                 Direction.AntiClockwise -> {
                     if (activeEnable) {
                         val activeStart = startAngle + sweepAngle - activeSweep
-                        activePath.addArc(boundsF, activeStart, activeSweep)
+                        canvas.drawArc(boundsF, activeStart, activeSweep, false, activePaint)
                     }
                     var inactiveSweep = sweepAngle - activeSweep
                     if ((360 - inactiveSweep) < intervalAngle) {
@@ -290,25 +273,9 @@ class CircularProgressIndicator @JvmOverloads constructor(
                             inactiveStart += intervalAngle
                             inactiveSweep -= intervalAngle
                         }
-                        inactivePath.addArc(boundsF, inactiveStart, inactiveSweep)
+                        canvas.drawArc(boundsF, inactiveStart, inactiveSweep, false, inactivePaint)
                     }
                 }
-            }
-            invalidateSelf()
-        }
-
-        private fun arcDimenToAngle(radius: Float, arcDimen: Float): Float {
-            // 角度计算长度：2 * PI * radius * (angle / 360)
-            // 反过来，通过长度尺寸换算角度
-            return (arcDimen / (2 * Math.PI * radius) * 360).toFloat()
-        }
-
-        override fun draw(canvas: Canvas) {
-            if (!activePath.isEmpty) {
-                canvas.drawPath(activePath, activePaint)
-            }
-            if (!inactivePath.isEmpty) {
-                canvas.drawPath(inactivePath, inactivePaint)
             }
         }
 
