@@ -10,6 +10,7 @@
         android:id="@+id/exitButton"
         android:layout_width="0px"
         android:layout_height="0px"
+        android:padding="4dp"
         app:backgroundColor="@color/exit_button_background"
         app:colorSchemeColors="@color/exit_button_scheme"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,6 +18,7 @@
         app:layout_constraintEnd_toStartOf="@id/restartButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.45"
         app:layout_constraintWidth_percent="0.3"
         app:strokeWidth="4dp">
 
@@ -31,10 +33,20 @@
 
     </androidx.wear.widget.CircularProgressLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/exit"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="@id/exitButton"
+        app:layout_constraintStart_toStartOf="@id/exitButton"
+        app:layout_constraintTop_toBottomOf="@id/exitButton" />
+
     <androidx.wear.widget.CircularProgressLayout
         android:id="@+id/restartButton"
         android:layout_width="0px"
         android:layout_height="0px"
+        android:padding="4dp"
         app:backgroundColor="@color/restart_button_background"
         app:colorSchemeColors="@color/restart_button_scheme"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,6 +54,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/exitButton"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.45"
         app:layout_constraintWidth_percent="0.3"
         app:strokeWidth="4dp">
 
@@ -55,5 +68,14 @@
             tools:ignore="HardcodedText" />
 
     </androidx.wear.widget.CircularProgressLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/restart"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="@id/restartButton"
+        app:layout_constraintStart_toStartOf="@id/restartButton"
+        app:layout_constraintTop_toBottomOf="@id/restartButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

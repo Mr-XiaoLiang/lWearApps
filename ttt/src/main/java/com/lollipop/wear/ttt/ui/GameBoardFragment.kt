@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.lollipop.wear.ttt.databinding.FragmentGameBoardBinding
+import com.lollipop.wear.ttt.ui.basic.SubpageFragment
 
 /**
  * 游戏棋盘
  */
-class GameBoardFragment: Fragment() {
+class GameBoardFragment: SubpageFragment() {
 
     private val binding by lazy {
         FragmentGameBoardBinding.inflate(layoutInflater)

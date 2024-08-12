@@ -7,7 +7,6 @@
     <color name="exit_button_background">#F0573C</color>
     <color name="exit_button_scheme">#FF2600</color>
 
-
     <color name="restart_button_background">#34D5A2</color>
     <color name="restart_button_scheme">#3BF8BC</color>
 </resources>

@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.lollipop.wear.ttt.databinding.FragmentGameThemeBinding
+import com.lollipop.wear.ttt.ui.basic.SubpageFragment
 
 /**
  * 游戏主题
  */
-class GameThemeFragment : Fragment() {
+class GameThemeFragment : SubpageFragment() {
 
     private val binding by lazy {
         FragmentGameThemeBinding.inflate(layoutInflater)

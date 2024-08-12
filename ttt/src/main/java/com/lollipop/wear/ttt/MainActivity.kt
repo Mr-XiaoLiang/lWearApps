@@ -14,18 +14,20 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.lollipop.wear.ttt.databinding.ActivityMainBinding
+import com.lollipop.wear.ttt.game.GameDelegate
 import com.lollipop.wear.ttt.ui.GameBoardFragment
 import com.lollipop.wear.ttt.ui.GameRecordFragment
 import com.lollipop.wear.ttt.ui.GameStateFragment
 import com.lollipop.wear.ttt.ui.GameThemeFragment
+import com.lollipop.wear.ttt.ui.basic.SubpageFragment
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), GameStateFragment.Callback {
 
     companion object {
-        private val pageList: Array<Class<out Fragment>> = arrayOf(
+        private val pageList: Array<Class<out SubpageFragment>> = arrayOf(
             GameStateFragment::class.java,
             GameBoardFragment::class.java,
             GameRecordFragment::class.java,
@@ -48,6 +50,8 @@ class MainActivity : AppCompatActivity() {
             updateTime()
         }
     }
+
+    private val gameDelegate = GameDelegate(::onGameStateChanged)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -75,6 +79,26 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    private fun onGameStateChanged(state: GameDelegate.State) {
+        when (state) {
+            GameDelegate.State.Idle -> {
+                // TODO
+            }
+
+            GameDelegate.State.Ready -> {
+// TODO
+            }
+
+            GameDelegate.State.Pause -> {
+// TODO
+            }
+
+            GameDelegate.State.Running -> {
+// TODO
+            }
+        }
+    }
+
     private fun updateTime() {
         binding.timeView.text = dateFormat.format(Date(System.currentTimeMillis()))
     }
@@ -83,11 +107,18 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         updateTime()
         minuteTimer.onResume()
+        gameDelegate.onResume()
     }
 
     override fun onPause() {
         super.onPause()
         minuteTimer.onPause()
+        gameDelegate.onPause()
+    }
+
+    override fun callRestart() {
+//        GameManager.newGame()
+        TODO("Not yet implemented")
     }
 
     private class FragmentAdapter(
@@ -139,6 +170,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
 
 }
 
