@@ -1,7 +1,7 @@
 package com.lollipop.wear.ttt.game
 
 class GameDelegate(
-    val onStateChanged: (State) -> Unit
+    val onStateChanged: (GameState) -> Unit
 ) {
 
     var mode: Mode = Mode.Unknown
@@ -12,17 +12,17 @@ class GameDelegate(
     var playerB: GamePlayer? = null
         private set
 
-    var state: State = State.Idle
+    var state: GameState = GameState.Idle
         private set
 
     fun start() {
-        if (state == State.Pause || state == State.Ready) {
-            changeState(State.Running)
+        if (state == GameState.Pause || state == GameState.Ready) {
+            changeState(GameState.Running)
         }
     }
 
     fun onClick(x: Int, y: Int) {
-        if (state != State.Running) {
+        if (state != GameState.Running) {
             return
         }
         val currentHand = GameManager.currentHand
@@ -40,10 +40,10 @@ class GameDelegate(
     }
 
     fun onPause() {
-        changeState(State.Pause)
+        changeState(GameState.Pause)
     }
 
-    private fun changeState(newState: State) {
+    private fun changeState(newState: GameState) {
         state = newState
         onStateChanged(newState)
     }
@@ -55,14 +55,14 @@ class GameDelegate(
     fun reset() {
         playerA = null
         playerB = null
-        changeState(State.Idle)
+        changeState(GameState.Idle)
     }
 
     fun addPlayer(player: GamePlayer) {
         if (player == GamePlayer.Robot) {
             // 有机器人了，就不能要机器人了
             if (playerA == GamePlayer.Robot || playerB == GamePlayer.Robot) {
-                changeState(State.Idle)
+                changeState(GameState.Idle)
                 return
             }
         }
@@ -74,12 +74,12 @@ class GameDelegate(
         val a = playerA
         val b = playerB
         if (a == null || b == null) {
-            changeState(State.Idle)
+            changeState(GameState.Idle)
             return
         }
         if (a == b && a == GamePlayer.Robot) {
             playerB = null
-            changeState(State.Idle)
+            changeState(GameState.Idle)
             return
         }
         mode = if (a == GamePlayer.Robot || b == GamePlayer.Robot) {
@@ -88,15 +88,10 @@ class GameDelegate(
             Mode.HumanVsHuman
         }
         GameManager.randomFirstHand(a, b)
-        changeState(State.Ready)
+        changeState(GameState.Ready)
     }
 
-    enum class State {
-        Idle,
-        Ready,
-        Pause,
-        Running,
-    }
+
 
     enum class Mode {
         HumanVsHuman,
@@ -104,4 +99,11 @@ class GameDelegate(
         Unknown
     }
 
+}
+
+enum class GameState {
+    Idle,
+    Ready,
+    Pause,
+    Running,
 }

@@ -9,4 +9,6 @@
 
     <color name="restart_button_background">#34D5A2</color>
     <color name="restart_button_scheme">#3BF8BC</color>
+
+    <color name="background_start">#3BCC75</color>
 </resources>

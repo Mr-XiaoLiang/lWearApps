@@ -15,6 +15,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.lollipop.wear.ttt.databinding.ActivityMainBinding
 import com.lollipop.wear.ttt.game.GameDelegate
+import com.lollipop.wear.ttt.game.GameManager
+import com.lollipop.wear.ttt.game.GamePlayer
+import com.lollipop.wear.ttt.game.GameState
 import com.lollipop.wear.ttt.ui.GameBoardFragment
 import com.lollipop.wear.ttt.ui.GameRecordFragment
 import com.lollipop.wear.ttt.ui.GameStateFragment
@@ -24,7 +27,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class MainActivity : AppCompatActivity(), GameStateFragment.Callback {
+class MainActivity : AppCompatActivity(),
+    GameStateFragment.Callback,
+    GameBoardFragment.Callback {
 
     companion object {
         private val pageList: Array<Class<out SubpageFragment>> = arrayOf(
@@ -53,12 +58,32 @@ class MainActivity : AppCompatActivity(), GameStateFragment.Callback {
 
     private val gameDelegate = GameDelegate(::onGameStateChanged)
 
+
+    private val stateFragment: GameStateFragment?
+        get() {
+            return findFragment()
+        }
+
+    private val boardFragment: GameBoardFragment?
+        get() {
+            return findFragment()
+        }
+
+    private val recordFragment: GameRecordFragment?
+        get() {
+            return findFragment()
+        }
+
+    private val themeFragment: GameThemeFragment?
+        get() {
+            return findFragment()
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         binding.viewPager.adapter = FragmentAdapter(this)
-        binding.viewPager.currentItem = 1
         binding.pageIndicator.indicatorCount = pageList.size
         binding.viewPager.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
@@ -77,26 +102,11 @@ class MainActivity : AppCompatActivity(), GameStateFragment.Callback {
                 }
             }
         )
+        selectPage(SubPage.Board, false)
     }
 
-    private fun onGameStateChanged(state: GameDelegate.State) {
-        when (state) {
-            GameDelegate.State.Idle -> {
-                // TODO
-            }
-
-            GameDelegate.State.Ready -> {
-// TODO
-            }
-
-            GameDelegate.State.Pause -> {
-// TODO
-            }
-
-            GameDelegate.State.Running -> {
-// TODO
-            }
-        }
+    private fun onGameStateChanged(state: GameState) {
+        boardFragment?.updateByState(state)
     }
 
     private fun updateTime() {
@@ -117,22 +127,61 @@ class MainActivity : AppCompatActivity(), GameStateFragment.Callback {
     }
 
     override fun callRestart() {
-//        GameManager.newGame()
-        TODO("Not yet implemented")
+        gameDelegate.reset()
+        selectPage(SubPage.Board)
+    }
+
+    override fun startGame() {
+        GameManager.newGame()
+    }
+
+    override fun getGameState(): GameState {
+        return gameDelegate.state
+    }
+
+    override fun onPlayerSelect(player: GamePlayer) {
+        gameDelegate.addPlayer(player)
+    }
+
+    override fun isPlayerSelected(player: GamePlayer): Boolean {
+        return gameDelegate.playerA == player || gameDelegate.playerB == player
+    }
+
+    override fun onPieceClick(x: Int, y: Int) {
+        gameDelegate.onClick(x, y)
+    }
+
+    private fun selectPage(page: SubPage, animate: Boolean = true) {
+        binding.viewPager.setCurrentItem(page.ordinal, animate)
+    }
+
+    private inline fun <reified T : Fragment> findFragment(): T? {
+        val fragment = supportFragmentManager.fragments.find { it is T }
+        if (fragment != null && fragment is T) {
+            return fragment
+        }
+        return null
+    }
+
+    private enum class SubPage(val clazz: Class<out SubpageFragment>) {
+        State(GameStateFragment::class.java),
+        Board(GameBoardFragment::class.java),
+        Record(GameRecordFragment::class.java),
+        Theme(GameThemeFragment::class.java),
     }
 
     private class FragmentAdapter(
         activity: AppCompatActivity
     ) : FragmentStateAdapter(activity) {
 
-        private val fragmentList = pageList
+        private val fragmentList = SubPage.entries
 
         override fun getItemCount(): Int {
             return fragmentList.size
         }
 
         override fun createFragment(position: Int): Fragment {
-            return fragmentList[position].getDeclaredConstructor().newInstance()
+            return fragmentList[position].clazz.getDeclaredConstructor().newInstance()
         }
     }
 
@@ -170,7 +219,6 @@ class MainActivity : AppCompatActivity(), GameStateFragment.Callback {
         }
 
     }
-
 
 }
 

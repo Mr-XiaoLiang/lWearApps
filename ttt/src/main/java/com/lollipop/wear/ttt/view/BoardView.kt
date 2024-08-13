@@ -184,6 +184,10 @@ class BoardView @JvmOverloads constructor(
         pieceProvider = provider
     }
 
+    fun setPieceClickListener(listener: OnPieceClickListener?) {
+        pieceClickListener = listener
+    }
+
     override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
         super.setPadding(left, top, right, bottom)
         backgroundDrawable.setPadding(left, top, right, bottom)

@@ -61,4 +61,96 @@
         tools:activeColor="@color/piece_tint_b"
         tools:indicatorProgress="0.4" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/playerSelectPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black">
+
+        <com.lollipop.wear.widget.CircularImageView
+            android:id="@+id/robotButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@color/piece_tint_c"
+            android:padding="8dp"
+            android:src="@drawable/baseline_android_24"
+            app:layout_constraintBottom_toTopOf="@id/playerAButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:tint="@android:color/white" />
+
+        <com.lollipop.wear.widget.CircularImageView
+            android:id="@+id/playerAButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@color/piece_tint_a"
+            android:padding="12dp"
+            android:rotation="90"
+            android:src="@drawable/baseline_videogame_asset_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/playerBButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/robotButton"
+            app:tint="@android:color/white" />
+
+        <com.lollipop.wear.widget.CircularImageView
+            android:id="@+id/playerBButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@color/piece_tint_b"
+            android:padding="12dp"
+            android:rotation="270"
+            android:src="@drawable/baseline_videogame_asset_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/playerAButton"
+            app:layout_constraintTop_toTopOf="@id/playerAButton"
+            app:tint="@android:color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_select_player"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/playerAButton" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/pausePanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.lollipop.wear.widget.CircularImageView
+            android:id="@+id/resumeButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:background="@color/background_start"
+            android:padding="8dp"
+            android:src="@drawable/baseline_play_arrow_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/playerAButton"
+            app:layout_constraintTop_toTopOf="@id/playerAButton"
+            app:tint="@android:color/white" />
+
+        <TextView
+            android:id="@+id/resumeButtonText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="@string/title_resume"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
