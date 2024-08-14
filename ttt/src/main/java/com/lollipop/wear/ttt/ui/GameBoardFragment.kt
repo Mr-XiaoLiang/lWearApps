@@ -79,6 +79,7 @@ class GameBoardFragment : SubpageFragment(),
 
     private fun startGame() {
         callback?.startGame()
+        binding.boardView.notifyBoardChanged()
     }
 
     override fun onPieceClick(x: Int, y: Int) {
@@ -95,6 +96,19 @@ class GameBoardFragment : SubpageFragment(),
 
     override fun createPieceView(context: Context): PieceView {
         return PieceViewFactory.createPieceView(context)
+    }
+
+    fun onNewGame() {
+        binding.boardView.notifyPieceChanged()
+    }
+
+    fun onPlayerChanged() {
+        // TODO
+    }
+
+    fun onCurrentHandChanged() {
+        binding.boardView.notifyBoardChanged()
+        // TODO
     }
 
     fun updateByState(gameState: GameState) {

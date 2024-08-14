@@ -15,9 +15,19 @@ class GameDelegate(
     var state: GameState = GameState.Idle
         private set
 
+    var winner: GamePlayer? = null
+        private set
+
     fun start() {
         if (state == GameState.Pause || state == GameState.Ready) {
             changeState(GameState.Running)
+        }
+    }
+
+    fun end(winner: GamePlayer?) {
+        this.winner = winner
+        if (state == GameState.Running) {
+            changeState(GameState.Pause)
         }
     }
 
@@ -90,7 +100,6 @@ class GameDelegate(
         GameManager.randomFirstHand(a, b)
         changeState(GameState.Ready)
     }
-
 
 
     enum class Mode {

@@ -2,6 +2,7 @@ package com.lollipop.wear.ttt.view
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isInvisible
@@ -31,6 +32,7 @@ class PieceView(
         pieceX?.let {
             removeView(view)
         }
+        pieceX = view
         addView(view)
         checkState()
     }
@@ -39,6 +41,7 @@ class PieceView(
         pieceO?.let {
             removeView(view)
         }
+        pieceO = view
         addView(view)
         checkState()
     }
@@ -47,6 +50,7 @@ class PieceView(
         pieceEmpty?.let {
             removeView(view)
         }
+        pieceEmpty = view
         addView(view)
         checkState()
     }
@@ -63,6 +67,7 @@ class PieceView(
         pieceX?.isInvisible = currentPiece != GamePiece.X
         pieceO?.isInvisible = currentPiece != GamePiece.O
         pieceEmpty?.isInvisible = currentPiece != GamePiece.Empty
+        Log.d("PieceView", "pieceX?.isInvisible = ${pieceX?.isInvisible}, currentPiece != GamePiece.X = ${currentPiece != GamePiece.X}")
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {

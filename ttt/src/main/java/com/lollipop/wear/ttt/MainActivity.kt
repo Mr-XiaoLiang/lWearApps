@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.lollipop.wear.ttt.databinding.ActivityMainBinding
+import com.lollipop.wear.ttt.game.GameControl
 import com.lollipop.wear.ttt.game.GameDelegate
 import com.lollipop.wear.ttt.game.GameManager
 import com.lollipop.wear.ttt.game.GamePlayer
@@ -28,6 +29,7 @@ import java.util.Date
 import java.util.Locale
 
 class MainActivity : AppCompatActivity(),
+    GameControl.StateListener,
     GameStateFragment.Callback,
     GameBoardFragment.Callback {
 
@@ -102,7 +104,11 @@ class MainActivity : AppCompatActivity(),
                 }
             }
         )
+
+        GameManager.addListener(this)
+
         selectPage(SubPage.Board, false)
+
     }
 
     private fun onGameStateChanged(state: GameState) {
@@ -133,6 +139,7 @@ class MainActivity : AppCompatActivity(),
 
     override fun startGame() {
         GameManager.newGame()
+        boardFragment?.onNewGame()
     }
 
     override fun getGameState(): GameState {
@@ -149,6 +156,23 @@ class MainActivity : AppCompatActivity(),
 
     override fun onPieceClick(x: Int, y: Int) {
         gameDelegate.onClick(x, y)
+    }
+
+
+    override fun onGameStart() {
+        gameDelegate.start()
+    }
+
+    override fun onGameEnd(winner: GamePlayer?) {
+        gameDelegate.end(winner)
+    }
+
+    override fun onPlayerChanged() {
+        boardFragment?.onPlayerChanged()
+    }
+
+    override fun onCurrentHandChanged() {
+        boardFragment?.onCurrentHandChanged()
     }
 
     private fun selectPage(page: SubPage, animate: Boolean = true) {

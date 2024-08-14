@@ -10,15 +10,14 @@
         android:id="@+id/boardView"
         android:layout_width="0px"
         android:layout_height="0px"
-        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.8"
+        app:layout_constraintWidth_percent="0.7"
         app:patternColor="@android:color/darker_gray"
-        app:patternInsets="0.2"
+        app:patternInsets="0.3"
         app:patternStrokeWidth="2dp" />
 
     <com.lollipop.wear.widget.CircularProgressIndicator
@@ -64,6 +63,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/playerSelectPanel"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="match_parent"
         android:background="@android:color/black">
 
@@ -127,6 +127,7 @@
         android:layout_height="match_parent"
         android:background="@android:color/black"
         android:gravity="center"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <com.lollipop.wear.widget.CircularImageView

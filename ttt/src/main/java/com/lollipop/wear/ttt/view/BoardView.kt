@@ -142,7 +142,7 @@ class BoardView @JvmOverloads constructor(
         val groupLeft = paddingLeft + ((groupWidth - (childSize * 3)) / 2)
         val groupTop = paddingTop + ((groupHeight - (childSize * 3)) / 2)
         // 只排列棋子，其他的不管
-        layoutChild(boardViewMap.leftTop, groupLeft, childSize, childSize, 0, 0)
+        layoutChild(boardViewMap.leftTop, groupLeft, groupTop, childSize, 0, 0)
         layoutChild(boardViewMap.leftCenter, groupLeft, groupTop, childSize, 0, 1)
         layoutChild(boardViewMap.leftBottom, groupLeft, groupTop, childSize, 0, 2)
         layoutChild(boardViewMap.middleTop, groupLeft, groupTop, childSize, 1, 0)

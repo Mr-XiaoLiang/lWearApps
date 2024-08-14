@@ -99,6 +99,6 @@ class GameBoardSnapshot(
         if (x !in map.indices || y !in map[x].indices) {
             return GamePiece.Empty
         }
-        return map[x][y]
+        return map[y][x]
     }
 }
