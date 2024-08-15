@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import com.lollipop.wear.ttt.R
 import com.lollipop.wear.ttt.databinding.FragmentGameBoardBinding
@@ -103,12 +104,33 @@ class GameBoardFragment : SubpageFragment(),
     }
 
     fun onPlayerChanged() {
-        // TODO
+        updatePlayerIndicator()
     }
 
     fun onCurrentHandChanged() {
         binding.boardView.notifyBoardChanged()
-        // TODO
+        updatePlayerIndicator()
+    }
+
+    private fun updatePlayerIndicator() {
+        updateIndicator(binding.playerAIndicator, GameManager.firstHand)
+        updateIndicator(binding.playerBIndicator, GameManager.rearHand)
+    }
+
+    private fun updateIndicator(imageView: ImageView, player: GamePlayer) {
+        imageView.alpha = if (GameManager.currentHand == player) {
+            1f
+        } else {
+            0.3f
+        }
+        imageView.setBackgroundResource(player.colorRes)
+        imageView.setImageResource(
+            if (player.isHuman()) {
+                R.drawable.baseline_videogame_asset_24
+            } else {
+                R.drawable.baseline_android_24
+            }
+        )
     }
 
     fun updateByState(gameState: GameState) {

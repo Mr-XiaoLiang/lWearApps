@@ -60,12 +60,40 @@
         tools:activeColor="@color/piece_tint_b"
         tools:indicatorProgress="0.4" />
 
+    <com.lollipop.wear.widget.CircularImageView
+        android:id="@+id/playerAIndicator"
+        android:layout_width="36dp"
+        android:layout_height="24dp"
+        android:alpha="0.3"
+        tools:background="@color/piece_tint_c"
+        android:paddingHorizontal="8dp"
+        tools:src="@drawable/baseline_android_24"
+        app:layout_constraintBottom_toBottomOf="@id/boardView"
+        app:layout_constraintEnd_toStartOf="@id/playerBIndicator"
+        app:layout_constraintStart_toStartOf="@id/boardView"
+        app:layout_constraintTop_toBottomOf="@id/boardView"
+        app:tint="@android:color/white" />
+
+    <com.lollipop.wear.widget.CircularImageView
+        android:id="@+id/playerBIndicator"
+        android:layout_width="36dp"
+        android:layout_height="24dp"
+        android:alpha="0.3"
+        tools:background="@color/piece_tint_a"
+        android:paddingHorizontal="8dp"
+        tools:src="@drawable/baseline_videogame_asset_24"
+        app:layout_constraintBottom_toBottomOf="@id/boardView"
+        app:layout_constraintEnd_toEndOf="@id/boardView"
+        app:layout_constraintStart_toEndOf="@id/playerAIndicator"
+        app:layout_constraintTop_toBottomOf="@id/boardView"
+        app:tint="@android:color/white" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/playerSelectPanel"
         android:layout_width="match_parent"
-        android:visibility="gone"
         android:layout_height="match_parent"
-        android:background="@android:color/black">
+        android:background="@android:color/black"
+        android:visibility="gone">
 
         <com.lollipop.wear.widget.CircularImageView
             android:id="@+id/robotButton"
@@ -127,8 +155,8 @@
         android:layout_height="match_parent"
         android:background="@android:color/black"
         android:gravity="center"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <com.lollipop.wear.widget.CircularImageView
             android:id="@+id/resumeButton"

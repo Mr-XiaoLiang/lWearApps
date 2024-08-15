@@ -5,6 +5,7 @@ import android.graphics.Outline
 import android.util.AttributeSet
 import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
+import kotlin.math.min
 
 class CircularImageView @JvmOverloads constructor(
     context: Context,
@@ -16,7 +17,13 @@ class CircularImageView @JvmOverloads constructor(
         outlineProvider = object : android.view.ViewOutlineProvider() {
             override fun getOutline(view: View?, outline: Outline?) {
                 if (view != null && outline != null) {
-                    outline.setOval(0, 0, view.width, view.height)
+                    outline.setRoundRect(
+                        0,
+                        0,
+                        view.width,
+                        view.height,
+                        min(view.width, view.height) * 0.5F
+                    )
                 }
             }
         }

@@ -8,4 +8,8 @@ enum class GamePlayer(val colorRes: Int) {
     HumanB(R.color.piece_tint_b),
     Robot(R.color.piece_tint_c);
 
+    fun isHuman(): Boolean {
+        return this != Robot
+    }
+
 }
