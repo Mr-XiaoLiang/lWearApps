@@ -65,28 +65,28 @@
         android:layout_width="36dp"
         android:layout_height="24dp"
         android:alpha="0.3"
-        tools:background="@color/piece_tint_c"
         android:paddingHorizontal="8dp"
-        tools:src="@drawable/baseline_android_24"
         app:layout_constraintBottom_toBottomOf="@id/boardView"
         app:layout_constraintEnd_toStartOf="@id/playerBIndicator"
         app:layout_constraintStart_toStartOf="@id/boardView"
         app:layout_constraintTop_toBottomOf="@id/boardView"
-        app:tint="@android:color/white" />
+        app:tint="@android:color/white"
+        tools:background="@color/piece_tint_c"
+        tools:src="@drawable/baseline_android_24" />
 
     <com.lollipop.wear.widget.CircularImageView
         android:id="@+id/playerBIndicator"
         android:layout_width="36dp"
         android:layout_height="24dp"
         android:alpha="0.3"
-        tools:background="@color/piece_tint_a"
         android:paddingHorizontal="8dp"
-        tools:src="@drawable/baseline_videogame_asset_24"
         app:layout_constraintBottom_toBottomOf="@id/boardView"
         app:layout_constraintEnd_toEndOf="@id/boardView"
         app:layout_constraintStart_toEndOf="@id/playerAIndicator"
         app:layout_constraintTop_toBottomOf="@id/boardView"
-        app:tint="@android:color/white" />
+        app:tint="@android:color/white"
+        tools:background="@color/piece_tint_a"
+        tools:src="@drawable/baseline_videogame_asset_24" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/playerSelectPanel"
@@ -149,14 +149,32 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/pausePanel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/black"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <FrameLayout
+            android:id="@+id/winnerGroup"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:visibility="visible"
+            app:layout_constraintHeight_percent="0.5F"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/piece_tint_c">
+
+            <com.lollipop.wear.widget.CircularImageView
+                android:id="@+id/winnerIconView"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                app:tint="@android:color/white"
+                tools:src="@drawable/baseline_videogame_asset_24" />
+
+        </FrameLayout>
 
         <com.lollipop.wear.widget.CircularImageView
             android:id="@+id/resumeButton"
@@ -166,9 +184,11 @@
             android:background="@color/background_start"
             android:padding="8dp"
             android:src="@drawable/baseline_play_arrow_24"
+            app:layout_constraintBottom_toTopOf="@id/resumeButtonText"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/playerAButton"
-            app:layout_constraintTop_toTopOf="@id/playerAButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/winnerGroup"
+            app:layout_constraintVertical_chainStyle="packed"
             app:tint="@android:color/white" />
 
         <TextView
@@ -179,7 +199,11 @@
             android:layout_marginTop="8dp"
             android:text="@string/title_resume"
             android:textColor="@android:color/white"
-            android:textSize="14sp" />
-    </LinearLayout>
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/resumeButton"
+            app:layout_constraintStart_toStartOf="@id/resumeButton"
+            app:layout_constraintTop_toBottomOf="@id/resumeButton" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

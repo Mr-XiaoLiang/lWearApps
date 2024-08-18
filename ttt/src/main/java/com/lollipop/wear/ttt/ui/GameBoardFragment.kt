@@ -14,6 +14,7 @@ import com.lollipop.wear.ttt.game.GameBoardSnapshot
 import com.lollipop.wear.ttt.game.GameManager
 import com.lollipop.wear.ttt.game.GamePlayer
 import com.lollipop.wear.ttt.game.GameState
+import com.lollipop.wear.ttt.game.PlayerScore
 import com.lollipop.wear.ttt.ui.basic.SubpageFragment
 import com.lollipop.wear.ttt.view.BoardView.OnPieceClickListener
 import com.lollipop.wear.ttt.view.BoardView.PieceProvider
@@ -124,13 +125,7 @@ class GameBoardFragment : SubpageFragment(),
             0.3f
         }
         imageView.setBackgroundResource(player.colorRes)
-        imageView.setImageResource(
-            if (player.isHuman()) {
-                R.drawable.baseline_videogame_asset_24
-            } else {
-                R.drawable.baseline_android_24
-            }
-        )
+        imageView.setImageResource(player.iconRes)
     }
 
     fun updateByState(gameState: GameState) {
@@ -151,11 +146,22 @@ class GameBoardFragment : SubpageFragment(),
             }
 
             GameState.Pause -> {
+                val winner = callback?.getWinner()
+                if (winner != null) {
+                    binding.winnerGroup.isVisible = true
+                    binding.winnerGroup.setBackgroundColor(winner.colorRes)
+                    binding.winnerIconView.setImageResource(winner.iconRes)
+                    updateScore()
+                } else {
+                    binding.winnerGroup.isVisible = false
+                }
                 binding.resumeButtonText.setText(R.string.title_resume)
             }
 
             GameState.Running -> {
                 // 更新游戏界面
+                updateScore()
+                binding.boardView.notifyBoardChanged()
             }
         }
     }
@@ -186,6 +192,14 @@ class GameBoardFragment : SubpageFragment(),
         }
     }
 
+    private fun updateScore() {
+        val score = callback?.getPlayerScore() ?: return
+        binding.leftProgressBar.progress = score.playerAScore * 1F / score.maxScore
+        binding.leftProgressBar.setActiveColorResource(score.playerA.colorRes)
+        binding.rightProgressBar.progress = score.playerBScore * 1F / score.maxScore
+        binding.rightProgressBar.setActiveColorResource(score.playerB.colorRes)
+    }
+
     private fun isPlayerSelected(player: GamePlayer): Boolean {
         return callback?.isPlayerSelected(player) ?: false
     }
@@ -196,6 +210,8 @@ class GameBoardFragment : SubpageFragment(),
         fun onPlayerSelect(player: GamePlayer)
         fun isPlayerSelected(player: GamePlayer): Boolean
         fun onPieceClick(x: Int, y: Int)
+        fun getWinner(): GamePlayer?
+        fun getPlayerScore(): PlayerScore?
     }
 
 }

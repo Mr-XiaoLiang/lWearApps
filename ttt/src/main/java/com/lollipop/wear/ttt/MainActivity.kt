@@ -158,6 +158,10 @@ class MainActivity : AppCompatActivity(),
         gameDelegate.onClick(x, y)
     }
 
+    override fun getWinner(): GamePlayer? {
+        return gameDelegate.winner
+    }
+
 
     override fun onGameStart() {
         gameDelegate.start()

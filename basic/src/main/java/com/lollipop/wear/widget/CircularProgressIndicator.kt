@@ -11,6 +11,7 @@ import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.content.ContextCompat
 import com.lollipop.wear.basic.R
 import com.lollipop.wear.devices.DeviceHelper
 import kotlin.math.max
@@ -132,6 +133,10 @@ class CircularProgressIndicator @JvmOverloads constructor(
             }
             typedArray.recycle()
         }
+    }
+
+    fun setActiveColorResource(resId: Int) {
+        activeColor = ContextCompat.getColor(context, resId)
     }
 
     class CircularProgressDrawable : Drawable() {

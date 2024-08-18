@@ -1,8 +1,20 @@
 package com.lollipop.wear.ttt.game
 
+import android.content.Context
+import android.content.SharedPreferences
+
 class GameDelegate(
+    val context: Context,
     val onStateChanged: (GameState) -> Unit
 ) {
+
+    companion object {
+        private const val KEY_MAX_SCORE = "max_score"
+        private const val KEY_A_SCORE = "a_score"
+        private const val KEY_B_SCORE = "b_score"
+        private const val KEY_A_PLAYER = "a_player"
+        private const val KEY_B_PLAYER = "b_player"
+    }
 
     var mode: Mode = Mode.Unknown
         private set
@@ -18,6 +30,45 @@ class GameDelegate(
     var winner: GamePlayer? = null
         private set
 
+    var maxScore = 5
+        private set
+
+    var playerAScore = 0
+        private set
+
+    var playerBScore = 0
+        private set
+
+    fun init() {
+        val preferences = context.getSharedPreferences("TTT_Game", Context.MODE_PRIVATE)
+        maxScore = preferences.getInt(KEY_MAX_SCORE, 5)
+        playerA = getPreferencesPlayer(preferences, KEY_A_PLAYER)
+        playerB = getPreferencesPlayer(preferences, KEY_B_PLAYER)
+        playerAScore = preferences.getInt(KEY_A_SCORE, 0)
+        playerBScore = preferences.getInt(KEY_B_SCORE, 0)
+    }
+
+    private fun getPreferencesPlayer(preferences: SharedPreferences, key: String): GamePlayer? {
+        val string = preferences.getString(key, "")
+        GamePlayer.entries.find { it.name == string }?.let { return it }
+        return null
+    }
+
+    private fun getPreferences(): SharedPreferences {
+        return context.getSharedPreferences("TTT_Game", Context.MODE_PRIVATE)
+    }
+
+    private fun savePreferences() {
+        val preferences = getPreferences()
+        preferences.edit()
+            .putInt(KEY_MAX_SCORE, maxScore)
+            .putString(KEY_A_PLAYER, playerA?.name ?: "")
+            .putString(KEY_B_PLAYER, playerB?.name ?: "")
+            .putInt(KEY_A_SCORE, playerAScore)
+            .putInt(KEY_B_SCORE, playerBScore)
+            .apply()
+    }
+
     fun start() {
         if (state == GameState.Pause || state == GameState.Ready) {
             changeState(GameState.Running)
@@ -26,9 +77,24 @@ class GameDelegate(
 
     fun end(winner: GamePlayer?) {
         this.winner = winner
+        if (winner != null) {
+            if (winner == playerA) {
+                playerAScore++
+                savePreferences()
+            } else if (winner == playerB) {
+                playerBScore++
+                savePreferences()
+            }
+        }
         if (state == GameState.Running) {
             changeState(GameState.Pause)
         }
+    }
+
+    fun getScore(): PlayerScore? {
+        val a = playerA ?: return null
+        val b = playerB ?: return null
+        return PlayerScore(a, b, maxScore, playerAScore, playerBScore)
     }
 
     fun onClick(x: Int, y: Int) {
@@ -51,6 +117,7 @@ class GameDelegate(
 
     fun onPause() {
         changeState(GameState.Pause)
+        savePreferences()
     }
 
     private fun changeState(newState: GameState) {
@@ -65,7 +132,10 @@ class GameDelegate(
     fun reset() {
         playerA = null
         playerB = null
+        playerAScore = 0
+        playerBScore = 0
         changeState(GameState.Idle)
+        savePreferences()
     }
 
     fun addPlayer(player: GamePlayer) {
