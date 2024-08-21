@@ -19,6 +19,8 @@ import com.lollipop.wear.ttt.game.GameDelegate
 import com.lollipop.wear.ttt.game.GameManager
 import com.lollipop.wear.ttt.game.GamePlayer
 import com.lollipop.wear.ttt.game.GameState
+import com.lollipop.wear.ttt.game.PlayerScore
+import com.lollipop.wear.ttt.theme.PieceTheme
 import com.lollipop.wear.ttt.ui.GameBoardFragment
 import com.lollipop.wear.ttt.ui.GameRecordFragment
 import com.lollipop.wear.ttt.ui.GameStateFragment
@@ -32,15 +34,6 @@ class MainActivity : AppCompatActivity(),
     GameControl.StateListener,
     GameStateFragment.Callback,
     GameBoardFragment.Callback {
-
-    companion object {
-        private val pageList: Array<Class<out SubpageFragment>> = arrayOf(
-            GameStateFragment::class.java,
-            GameBoardFragment::class.java,
-            GameRecordFragment::class.java,
-            GameThemeFragment::class.java,
-        )
-    }
 
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -58,7 +51,9 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    private val gameDelegate = GameDelegate(::onGameStateChanged)
+    private val gameDelegate by lazy {
+        GameDelegate(this, ::onGameStateChanged)
+    }
 
 
     private val stateFragment: GameStateFragment?
@@ -85,7 +80,10 @@ class MainActivity : AppCompatActivity(),
         installSplashScreen()
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        binding.viewPager.adapter = FragmentAdapter(this)
+        init()
+
+        val pageList = getPageList()
+        binding.viewPager.adapter = FragmentAdapter(this, pageList)
         binding.pageIndicator.indicatorCount = pageList.size
         binding.viewPager.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
@@ -104,11 +102,24 @@ class MainActivity : AppCompatActivity(),
                 }
             }
         )
-
-        GameManager.addListener(this)
-
         selectPage(SubPage.Board, false)
+        gameDelegate
+    }
 
+    private fun getPageList(): List<SubPage> {
+        val subPageList = mutableListOf<SubPage>()
+        subPageList.add(SubPage.State)
+        subPageList.add(SubPage.Board)
+        subPageList.add(SubPage.Record)
+        if (PieceTheme.resourceArray.size > 1) {
+            subPageList.add(SubPage.Theme)
+        }
+        return subPageList
+    }
+
+    private fun init() {
+        GameManager.addListener(this)
+        PieceTheme.init(this)
     }
 
     private fun onGameStateChanged(state: GameState) {
@@ -130,6 +141,11 @@ class MainActivity : AppCompatActivity(),
         super.onPause()
         minuteTimer.onPause()
         gameDelegate.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        GameManager.removeListener(this)
     }
 
     override fun callRestart() {
@@ -160,6 +176,10 @@ class MainActivity : AppCompatActivity(),
 
     override fun getWinner(): GamePlayer? {
         return gameDelegate.winner
+    }
+
+    override fun getPlayerScore(): PlayerScore? {
+        return gameDelegate.getScore()
     }
 
 
@@ -199,10 +219,9 @@ class MainActivity : AppCompatActivity(),
     }
 
     private class FragmentAdapter(
-        activity: AppCompatActivity
+        activity: AppCompatActivity,
+        private val fragmentList: List<SubPage>
     ) : FragmentStateAdapter(activity) {
-
-        private val fragmentList = SubPage.entries
 
         override fun getItemCount(): Int {
             return fragmentList.size

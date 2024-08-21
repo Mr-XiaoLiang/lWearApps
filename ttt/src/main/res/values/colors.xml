@@ -11,4 +11,7 @@
     <color name="restart_button_scheme">#3BF8BC</color>
 
     <color name="background_start">#3BCC75</color>
+
+    <color name="background_item">#474747</color>
+    <color name="background_item_pressed">#646464</color>
 </resources>

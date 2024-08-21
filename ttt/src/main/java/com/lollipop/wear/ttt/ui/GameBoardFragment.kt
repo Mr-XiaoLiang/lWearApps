@@ -142,6 +142,7 @@ class GameBoardFragment : SubpageFragment(),
             }
 
             GameState.Ready -> {
+                binding.winnerGroup.isVisible = false
                 binding.resumeButtonText.setText(R.string.title_start)
             }
 
@@ -149,8 +150,8 @@ class GameBoardFragment : SubpageFragment(),
                 val winner = callback?.getWinner()
                 if (winner != null) {
                     binding.winnerGroup.isVisible = true
-                    binding.winnerGroup.setBackgroundColor(winner.colorRes)
-                    binding.winnerIconView.setImageResource(winner.iconRes)
+                    binding.winnerGroup.setBackgroundResource(winner.colorRes)
+                    binding.winnerIconView.setBackgroundResource(winner.iconRes)
                     updateScore()
                 } else {
                     binding.winnerGroup.isVisible = false

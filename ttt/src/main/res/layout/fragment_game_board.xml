@@ -162,7 +162,7 @@
             android:layout_width="match_parent"
             android:layout_height="0px"
             android:visibility="visible"
-            app:layout_constraintHeight_percent="0.5F"
+            app:layout_constraintHeight_percent="0.5"
             app:layout_constraintTop_toTopOf="parent"
             android:background="@color/piece_tint_c">
 
