@@ -14,6 +14,10 @@ class GameDelegate(
         private const val KEY_B_SCORE = "b_score"
         private const val KEY_A_PLAYER = "a_player"
         private const val KEY_B_PLAYER = "b_player"
+
+        private const val KEY_HUMAN_A_SCORE = "HUMAN_A_SCORE"
+        private const val KEY_HUMAN_B_SCORE = "HUMAN_B_SCORE"
+        private const val KEY_ROBOT_SCORE = "ROBOT_SCORE"
     }
 
     var mode: Mode = Mode.Unknown
@@ -39,6 +43,15 @@ class GameDelegate(
     var playerBScore = 0
         private set
 
+    var humanAScoreHistory = 0
+        private set
+
+    var humanBScoreHistory = 0
+        private set
+
+    var robotScoreHistory = 0
+        private set
+
     fun init() {
         val preferences = context.getSharedPreferences("TTT_Game", Context.MODE_PRIVATE)
         maxScore = preferences.getInt(KEY_MAX_SCORE, 5)
@@ -46,6 +59,10 @@ class GameDelegate(
         playerB = getPreferencesPlayer(preferences, KEY_B_PLAYER)
         playerAScore = preferences.getInt(KEY_A_SCORE, 0)
         playerBScore = preferences.getInt(KEY_B_SCORE, 0)
+        humanAScoreHistory = preferences.getInt(KEY_HUMAN_A_SCORE, 0)
+        humanBScoreHistory = preferences.getInt(KEY_HUMAN_B_SCORE, 0)
+        robotScoreHistory = preferences.getInt(KEY_ROBOT_SCORE, 0)
+        checkPlayer()
     }
 
     private fun getPreferencesPlayer(preferences: SharedPreferences, key: String): GamePlayer? {
@@ -66,6 +83,9 @@ class GameDelegate(
             .putString(KEY_B_PLAYER, playerB?.name ?: "")
             .putInt(KEY_A_SCORE, playerAScore)
             .putInt(KEY_B_SCORE, playerBScore)
+            .putInt(KEY_HUMAN_A_SCORE, humanAScoreHistory)
+            .putInt(KEY_HUMAN_B_SCORE, humanBScoreHistory)
+            .putInt(KEY_ROBOT_SCORE, robotScoreHistory)
             .apply()
     }
 
@@ -77,18 +97,33 @@ class GameDelegate(
 
     fun end(winner: GamePlayer?) {
         this.winner = winner
-        if (winner != null) {
-            if (winner == playerA) {
-                playerAScore++
-                savePreferences()
-            } else if (winner == playerB) {
-                playerBScore++
-                savePreferences()
-            }
-        }
+        saveWinnerScore(winner)
         if (state == GameState.Running) {
             changeState(GameState.Pause)
         }
+    }
+
+    private fun saveWinnerScore(winner: GamePlayer?) {
+        winner ?: return
+        if (winner == playerA) {
+            playerAScore++
+        } else if (winner == playerB) {
+            playerBScore++
+        }
+        when (winner) {
+            GamePlayer.HumanA -> {
+                humanAScoreHistory++
+            }
+
+            GamePlayer.HumanB -> {
+                humanBScoreHistory++
+            }
+
+            GamePlayer.Robot -> {
+                robotScoreHistory++
+            }
+        }
+        savePreferences()
     }
 
     fun getScore(): PlayerScore? {
@@ -151,6 +186,10 @@ class GameDelegate(
         } else if (playerB == null) {
             playerB = player
         }
+        checkPlayer()
+    }
+
+    private fun checkPlayer() {
         val a = playerA
         val b = playerB
         if (a == null || b == null) {

@@ -33,7 +33,8 @@ import java.util.Locale
 class MainActivity : AppCompatActivity(),
     GameControl.StateListener,
     GameStateFragment.Callback,
-    GameBoardFragment.Callback {
+    GameBoardFragment.Callback,
+    GameRecordFragment.Callback {
 
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -103,7 +104,7 @@ class MainActivity : AppCompatActivity(),
             }
         )
         selectPage(SubPage.Board, false)
-        gameDelegate
+        gameDelegate.init()
     }
 
     private fun getPageList(): List<SubPage> {
@@ -197,6 +198,18 @@ class MainActivity : AppCompatActivity(),
 
     override fun onCurrentHandChanged() {
         boardFragment?.onCurrentHandChanged()
+    }
+
+    override fun getHumanAScore(): Int {
+        return gameDelegate.humanAScoreHistory
+    }
+
+    override fun getHumanBScore(): Int {
+        return gameDelegate.humanBScoreHistory
+    }
+
+    override fun getRobotScore(): Int {
+        return gameDelegate.robotScoreHistory
     }
 
     private fun selectPage(page: SubPage, animate: Boolean = true) {
