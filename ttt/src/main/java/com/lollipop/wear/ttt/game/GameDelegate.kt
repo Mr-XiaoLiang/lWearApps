@@ -53,20 +53,21 @@ class GameDelegate(
         private set
 
     fun init() {
-        val preferences = context.getSharedPreferences("TTT_Game", Context.MODE_PRIVATE)
-        maxScore = preferences.getInt(KEY_MAX_SCORE, 5)
-        playerA = getPreferencesPlayer(preferences, KEY_A_PLAYER)
-        playerB = getPreferencesPlayer(preferences, KEY_B_PLAYER)
-        playerAScore = preferences.getInt(KEY_A_SCORE, 0)
-        playerBScore = preferences.getInt(KEY_B_SCORE, 0)
-        humanAScoreHistory = preferences.getInt(KEY_HUMAN_A_SCORE, 0)
-        humanBScoreHistory = preferences.getInt(KEY_HUMAN_B_SCORE, 0)
-        robotScoreHistory = preferences.getInt(KEY_ROBOT_SCORE, 0)
+        getPreferences().apply {
+            maxScore = getInt(KEY_MAX_SCORE, 5)
+            playerA = getPreferencesPlayer(KEY_A_PLAYER)
+            playerB = getPreferencesPlayer(KEY_B_PLAYER)
+            playerAScore = getInt(KEY_A_SCORE, 0)
+            playerBScore = getInt(KEY_B_SCORE, 0)
+            humanAScoreHistory = getInt(KEY_HUMAN_A_SCORE, 0)
+            humanBScoreHistory = getInt(KEY_HUMAN_B_SCORE, 0)
+            robotScoreHistory = getInt(KEY_ROBOT_SCORE, 0)
+        }
         checkPlayer()
     }
 
-    private fun getPreferencesPlayer(preferences: SharedPreferences, key: String): GamePlayer? {
-        val string = preferences.getString(key, "")
+    private fun SharedPreferences.getPreferencesPlayer(key: String): GamePlayer? {
+        val string = getString(key, "")
         GamePlayer.entries.find { it.name == string }?.let { return it }
         return null
     }
@@ -76,8 +77,7 @@ class GameDelegate(
     }
 
     private fun savePreferences() {
-        val preferences = getPreferences()
-        preferences.edit()
+        getPreferences().edit()
             .putInt(KEY_MAX_SCORE, maxScore)
             .putString(KEY_A_PLAYER, playerA?.name ?: "")
             .putString(KEY_B_PLAYER, playerB?.name ?: "")
