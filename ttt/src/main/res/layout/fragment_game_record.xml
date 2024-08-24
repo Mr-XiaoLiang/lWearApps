@@ -16,7 +16,6 @@
             android:id="@+id/titleView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_marginHorizontal="24dp"
             android:gravity="center_horizontal"
             android:text="@string/title_game_record"
@@ -40,7 +39,7 @@
             android:id="@+id/playARecord"
             android:layout_width="0px"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/roboto_regular"
             android:gravity="center_horizontal"
             android:textColor="@android:color/white"
             android:textSize="14sp"
@@ -66,7 +65,7 @@
             android:id="@+id/playBRecord"
             android:layout_width="0px"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/roboto_regular"
             android:gravity="center_horizontal"
             android:textColor="@android:color/white"
             android:textSize="14sp"
@@ -92,7 +91,7 @@
             android:id="@+id/playRobotRecord"
             android:layout_width="0px"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/roboto_regular"
             android:gravity="center_horizontal"
             android:textColor="@android:color/white"
             android:textSize="14sp"
@@ -102,6 +101,58 @@
             app:layout_constraintTop_toTopOf="@id/playRobotIcon"
             app:layout_constraintWidth_percent="0.5"
             tools:text="123" />
+
+        <TextView
+            android:id="@+id/onceRecordTitleView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="26dp"
+            android:gravity="center_horizontal"
+            android:text="@string/title_game_record_once"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/playRobotRecord" />
+
+        <com.lollipop.wear.widget.CircularImageView
+            android:id="@+id/onceRecordReduceView"
+            android:layout_width="34dp"
+            android:layout_height="24dp"
+            android:background="@drawable/bg_item"
+            android:paddingVertical="4dp"
+            android:src="@drawable/baseline_exposure_neg_1_24"
+            app:layout_constraintBottom_toBottomOf="@id/onceRecordNumberView"
+            app:layout_constraintEnd_toStartOf="@id/onceRecordNumberView"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/onceRecordNumberView" />
+
+        <TextView
+            android:id="@+id/onceRecordNumberView"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/roboto_regular"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@id/onceRecordIncreaseView"
+            app:layout_constraintStart_toEndOf="@id/onceRecordReduceView"
+            app:layout_constraintTop_toBottomOf="@id/onceRecordTitleView"
+            app:layout_constraintWidth_percent="0.35"
+            tools:text="5555" />
+
+        <com.lollipop.wear.widget.CircularImageView
+            android:id="@+id/onceRecordIncreaseView"
+            android:layout_width="34dp"
+            android:layout_height="24dp"
+            android:background="@drawable/bg_item"
+            android:paddingVertical="4dp"
+            android:src="@drawable/baseline_exposure_plus_1_24"
+            app:layout_constraintBottom_toBottomOf="@id/onceRecordNumberView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/onceRecordNumberView"
+            app:layout_constraintTop_toTopOf="@id/onceRecordNumberView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

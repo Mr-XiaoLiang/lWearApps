@@ -13,5 +13,5 @@
     <color name="background_start">#3BCC75</color>
 
     <color name="background_item">#474747</color>
-    <color name="background_item_pressed">#646464</color>
+    <color name="background_item_pressed">#739B9D</color>
 </resources>

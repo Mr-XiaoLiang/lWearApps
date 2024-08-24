@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">TicTacToe</string>
     <string name="title_game_record">胜利场次</string>
+    <string name="title_game_record_once">胜局场次</string>
     <string name="exit">退出</string>
     <string name="restart">重新开始</string>
     <string name="title_select_player">选择玩家</string>
     <string name="title_resume">继续</string>
     <string name="title_start">开始</string>
+
+    <string name="title_theme">主题风格</string>
 </resources>

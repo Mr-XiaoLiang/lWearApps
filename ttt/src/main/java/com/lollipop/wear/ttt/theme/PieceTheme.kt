@@ -30,6 +30,41 @@ object PieceTheme {
             R.drawable.baseline_radio_button_unchecked_24,
             0
         ),
+        Style(
+            R.drawable.baseline_done_24,
+            R.drawable.baseline_favorite_border_24,
+            0
+        ),
+        Style(
+            R.drawable.baseline_sentiment_dissatisfied_24,
+            R.drawable.baseline_sentiment_satisfied_24,
+            0
+        ),
+        Style(
+            R.drawable.baseline_sentiment_very_dissatisfied_24,
+            R.drawable.baseline_sentiment_satisfied_alt_24,
+            0
+        ),
+        Style(
+            R.drawable.baseline_android_24,
+            R.drawable.baseline_smart_toy_24,
+            0
+        ),
+        Style(
+            R.drawable.baseline_sports_soccer_24,
+            R.drawable.baseline_sports_basketball_24,
+            0
+        ),
+        Style(
+            R.drawable.baseline_sports_rugby_24,
+            R.drawable.baseline_sports_volleyball_24,
+            0
+        ),
+        Style(
+            R.drawable.baseline_star_24,
+            R.drawable.baseline_star_border_24,
+            0
+        ),
     )
 
     fun init(context: Context) {

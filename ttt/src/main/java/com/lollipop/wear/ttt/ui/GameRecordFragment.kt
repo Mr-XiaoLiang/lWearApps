@@ -14,11 +14,18 @@ import com.lollipop.wear.ttt.ui.basic.SubpageFragment
  */
 class GameRecordFragment : SubpageFragment() {
 
+    companion object {
+        const val ONCE_RECORD_MAX = 10
+        const val ONCE_RECORD_MIN = 1
+    }
+
     private val binding by lazy {
         FragmentGameRecordBinding.inflate(layoutInflater)
     }
 
     private var callback: Callback? = null
+
+    private var onceRecord = ONCE_RECORD_MIN
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -38,6 +45,40 @@ class GameRecordFragment : SubpageFragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.onceRecordReduceView.setOnClickListener {
+            onceRecordUpdate(-1)
+        }
+        binding.onceRecordIncreaseView.setOnClickListener {
+            onceRecordUpdate(1)
+        }
+    }
+
+    private fun onceRecordUpdate(offset: Int) {
+        val old = onceRecord
+        onceRecord += offset
+        if (onceRecord < ONCE_RECORD_MIN) {
+            onceRecord = ONCE_RECORD_MIN
+        } else if (onceRecord > ONCE_RECORD_MAX) {
+            onceRecord = ONCE_RECORD_MAX
+        }
+        binding.onceRecordNumberView.text = onceRecord.toString()
+        binding.onceRecordReduceView.alpha = if (onceRecord == ONCE_RECORD_MIN) {
+            0.5F
+        } else {
+            1F
+        }
+        binding.onceRecordIncreaseView.alpha = if (onceRecord == ONCE_RECORD_MAX) {
+            0.5F
+        } else {
+            1F
+        }
+        if (old != onceRecord) {
+            callback?.onOnceRecordChanged(onceRecord)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         val humanAScore = callback?.getHumanAScore() ?: 0
@@ -52,12 +93,18 @@ class GameRecordFragment : SubpageFragment() {
         binding.playBIcon.setImageResource(GamePlayer.HumanB.iconRes)
         binding.playRobotIcon.setBackgroundResource(GamePlayer.Robot.colorRes)
         binding.playRobotIcon.setImageResource(GamePlayer.Robot.iconRes)
+
+        onceRecord = callback?.getOnceRecord() ?: 0
+        onceRecordUpdate(0)
     }
 
     interface Callback {
         fun getHumanAScore(): Int
         fun getHumanBScore(): Int
         fun getRobotScore(): Int
+
+        fun getOnceRecord(): Int
+        fun onOnceRecordChanged(onceRecord: Int)
     }
 
 }

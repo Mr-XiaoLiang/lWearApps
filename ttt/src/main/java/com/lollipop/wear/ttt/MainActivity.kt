@@ -212,6 +212,14 @@ class MainActivity : AppCompatActivity(),
         return gameDelegate.robotScoreHistory
     }
 
+    override fun getOnceRecord(): Int {
+        return gameDelegate.maxScore
+    }
+
+    override fun onOnceRecordChanged(onceRecord: Int) {
+        return gameDelegate.changeMaxScore(onceRecord)
+    }
+
     private fun selectPage(page: SubPage, animate: Boolean = true) {
         binding.viewPager.setCurrentItem(page.ordinal, animate)
     }

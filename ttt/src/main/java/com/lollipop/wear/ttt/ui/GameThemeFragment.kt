@@ -1,14 +1,19 @@
 package com.lollipop.wear.ttt.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Space
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.lollipop.wear.ttt.R
 import com.lollipop.wear.ttt.databinding.FragmentGameThemeBinding
 import com.lollipop.wear.ttt.databinding.ItemThemeStyleBinding
 import com.lollipop.wear.ttt.theme.PieceTheme
@@ -31,11 +36,12 @@ class GameThemeFragment : SubpageFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dataList.add("")
+        dataList.add(SpaceInfo)
+        dataList.add(TitleInfo)
         PieceTheme.resourceArray.forEach {
             dataList.add(it)
         }
-        dataList.add("")
+        dataList.add(SpaceInfo)
     }
 
     override fun onCreateView(
@@ -48,7 +54,6 @@ class GameThemeFragment : SubpageFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        binding.recyclerView.layoutManager = WearableLinearLayoutManager(view.context)
         binding.recyclerView.layoutManager = LinearLayoutManager(
             view.context, RecyclerView.VERTICAL, false
         )
@@ -96,6 +101,10 @@ class GameThemeFragment : SubpageFragment() {
         return position == selectedPosition
     }
 
+    private object TitleInfo
+
+    private object SpaceInfo
+
     private class StyleAdapter(
         private val data: List<Any>,
         private val isSelected: (Int, PieceTheme.Style) -> Boolean,
@@ -104,7 +113,8 @@ class GameThemeFragment : SubpageFragment() {
 
         companion object {
             private const val TYPE_SPACE = 0
-            private const val TYPE_STYLE = 1
+            private const val TYPE_TITLE = 1
+            private const val TYPE_STYLE = 2
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
@@ -118,7 +128,10 @@ class GameThemeFragment : SubpageFragment() {
                     ::onItemClick
                 )
             }
-            return ItemHolder.Space(Space(parent.context))
+            if (viewType == TYPE_TITLE) {
+                return ItemHolder.Title.create(parent.context)
+            }
+            return ItemHolder.Space.create(parent.context)
         }
 
         private fun onItemClick(position: Int) {
@@ -144,15 +157,25 @@ class GameThemeFragment : SubpageFragment() {
                         holder.bind(style, isSelected(position, style))
                     }
                 }
+
+                is ItemHolder.Title -> {}
             }
         }
 
         override fun getItemViewType(position: Int): Int {
             val any = data[position]
-            return if (any is PieceTheme.Style) {
-                TYPE_STYLE
-            } else {
-                TYPE_SPACE
+            return when (any) {
+                is PieceTheme.Style -> {
+                    TYPE_STYLE
+                }
+
+                is TitleInfo -> {
+                    TYPE_TITLE
+                }
+
+                else -> {
+                    TYPE_SPACE
+                }
             }
         }
 
@@ -160,19 +183,48 @@ class GameThemeFragment : SubpageFragment() {
 
     private sealed class ItemHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        class Space(
+        class Space private constructor(
             val spaceView: android.widget.Space
         ) : ItemHolder(spaceView) {
+
+            companion object {
+                fun create(context: Context): Space {
+                    return Space(Space(context))
+                }
+            }
 
             init {
                 spaceView.layoutParams = ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     TypedValue.applyDimension(
                         TypedValue.COMPLEX_UNIT_DIP,
-                        60F,
+                        40F,
                         spaceView.resources.displayMetrics
                     ).toInt()
                 )
+            }
+
+        }
+
+        class Title private constructor(
+            val titleView: TextView
+        ) : ItemHolder(titleView) {
+
+            companion object {
+                fun create(context: Context): Title {
+                    return Title(TextView(context))
+                }
+            }
+
+            init {
+                titleView.layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                titleView.textSize = 16F
+                titleView.gravity = Gravity.CENTER
+                titleView.setTextColor(Color.WHITE)
+                titleView.setText(R.string.title_theme)
             }
 
         }
@@ -198,7 +250,6 @@ class GameThemeFragment : SubpageFragment() {
             fun bind(style: PieceTheme.Style, selected: Boolean) {
                 binding.xPieceIcon.setImageResource(style.x)
                 binding.oPieceIcon.setImageResource(style.o)
-                binding.emptyPieceIcon.setImageResource(style.empty)
                 binding.itemContent.isSelected = selected
             }
 

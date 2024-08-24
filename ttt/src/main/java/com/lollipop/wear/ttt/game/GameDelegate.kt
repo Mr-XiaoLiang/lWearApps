@@ -132,6 +132,11 @@ class GameDelegate(
         return PlayerScore(a, b, maxScore, playerAScore, playerBScore)
     }
 
+    fun changeMaxScore(score: Int) {
+        maxScore = score
+        savePreferences()
+    }
+
     fun onClick(x: Int, y: Int) {
         if (state != GameState.Running) {
             return
