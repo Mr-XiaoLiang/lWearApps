@@ -2,6 +2,10 @@ package com.lollipop.wear.ttt.game
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Handler
+import android.os.HandlerThread
+import android.os.Looper
+import android.util.Log
 
 class GameDelegate(
     val context: Context,
@@ -18,6 +22,17 @@ class GameDelegate(
         private const val KEY_HUMAN_A_SCORE = "HUMAN_A_SCORE"
         private const val KEY_HUMAN_B_SCORE = "HUMAN_B_SCORE"
         private const val KEY_ROBOT_SCORE = "ROBOT_SCORE"
+
+        private val mainHandler by lazy {
+            Handler(Looper.getMainLooper())
+        }
+        private val asyncThread by lazy {
+            HandlerThread("TTT_Game_Async")
+        }
+        private val asyncHandler by lazy {
+            asyncThread.start()
+            Handler(asyncThread.looper)
+        }
     }
 
     var mode: Mode = Mode.Unknown
@@ -51,6 +66,8 @@ class GameDelegate(
 
     var robotScoreHistory = 0
         private set
+
+    private val robotPlayer = RobotPlayer(::getCurrentBoard, ::getCurrentPiece, ::onRobotPut)
 
     fun init() {
         getPreferences().apply {
@@ -89,9 +106,46 @@ class GameDelegate(
             .apply()
     }
 
+    private fun getCurrentBoard(): GameBoard {
+        return GameManager.current
+    }
+
+    private fun getCurrentPiece(): GamePiece {
+        return GameManager.currentPiece()
+    }
+
+    private fun log(value: String) {
+        Log.d("TTT_Game", value)
+    }
+
+    private fun onRobotPut(result: GameRobot.Result) {
+        log("Robot Put: $result")
+        mainHandler.post {
+            when (result) {
+                GameRobot.Result.Error -> {
+                    end(null)
+                }
+
+                is GameRobot.Result.Success -> {
+                    onRobotPut(result.x, result.y)
+                }
+            }
+        }
+    }
+
+    fun onCurrentHandChanged() {
+        log("onCurrentHandChanged: ${GameManager.currentHand}")
+        if (GameManager.currentHand == GamePlayer.Robot) {
+            asyncHandler.removeCallbacks(robotPlayer)
+            asyncHandler.postDelayed(robotPlayer, 1000L)
+        }
+    }
+
     fun start() {
+        log("start: ${state}")
         if (state == GameState.Pause || state == GameState.Ready) {
             changeState(GameState.Running)
+            onCurrentHandChanged()
         }
     }
 
@@ -151,6 +205,16 @@ class GameDelegate(
         GameManager.put(x, y, GameManager.currentPiece())
     }
 
+    private fun onRobotPut(x: Int, y: Int) {
+        if (GameManager.currentHand != GamePlayer.Robot) {
+            return
+        }
+        if (GameManager.current.get(x, y) != GamePiece.Empty) {
+            return
+        }
+        GameManager.put(x, y, GameManager.currentPiece())
+    }
+
     fun onResume() {
         changeState(state)
     }
@@ -161,6 +225,7 @@ class GameDelegate(
     }
 
     private fun changeState(newState: GameState) {
+        log("changeState: ${newState}")
         state = newState
         onStateChanged(newState)
     }
@@ -222,6 +287,16 @@ class GameDelegate(
         Unknown
     }
 
+    private class RobotPlayer(
+        val board: () -> GameBoard,
+        val piece: () -> GamePiece,
+        val onPut: (GameRobot.Result) -> Unit
+    ) : Runnable {
+        override fun run() {
+            val result = GameRobot.getResult(board(), piece())
+            onPut(result)
+        }
+    }
 }
 
 enum class GameState {

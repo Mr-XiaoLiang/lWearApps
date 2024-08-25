@@ -157,14 +157,16 @@
         android:visibility="gone"
         tools:visibility="visible">
 
-        <FrameLayout
+        <LinearLayout
             android:id="@+id/winnerGroup"
             android:layout_width="match_parent"
             android:layout_height="0px"
+            android:background="@color/piece_tint_c"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
             android:visibility="visible"
             app:layout_constraintHeight_percent="0.5"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@color/piece_tint_c">
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.lollipop.wear.widget.CircularImageView
                 android:id="@+id/winnerIconView"
@@ -174,7 +176,15 @@
                 app:tint="@android:color/white"
                 tools:src="@drawable/baseline_videogame_asset_24" />
 
-        </FrameLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:text="@string/win"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+
+        </LinearLayout>
 
         <com.lollipop.wear.widget.CircularImageView
             android:id="@+id/resumeButton"

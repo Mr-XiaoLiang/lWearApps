@@ -198,6 +198,7 @@ class MainActivity : AppCompatActivity(),
 
     override fun onCurrentHandChanged() {
         boardFragment?.onCurrentHandChanged()
+        gameDelegate.onCurrentHandChanged()
     }
 
     override fun getHumanAScore(): Int {

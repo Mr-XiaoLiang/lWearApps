@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TicTacToe</string>
+    <string name="app_name">井字棋</string>
     <string name="title_game_record">胜利场次</string>
     <string name="title_game_record_once">胜局场次</string>
     <string name="exit">退出</string>
@@ -9,4 +9,5 @@
     <string name="title_start">开始</string>
 
     <string name="title_theme">主题风格</string>
+    <string name="win">胜利</string>
 </resources>
