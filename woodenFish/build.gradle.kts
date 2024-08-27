@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.lollipop.wear.ttt"
+    namespace = "com.lollipop.wear.wf"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.lollipop.wear.ttt"
+        applicationId = "com.lollipop.wear.wf"
         minSdk = 28
         targetSdk = 34
         versionCode = 1
@@ -17,10 +17,6 @@ android {
             useSupportLibrary = true
         }
 
-    }
-
-    buildFeatures {
-        viewBinding = true
     }
 
     buildTypes {
@@ -39,6 +35,12 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -47,8 +49,17 @@ android {
 }
 
 dependencies {
+
     implementation(libs.play.services.wearable)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.compose.material)
+    implementation(libs.compose.foundation)
+    implementation(libs.activity.compose)
     implementation(libs.core.splashscreen)
-    implementation(libs.appcompat)
-    implementation(project(":basic"))
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.ui.test.junit4)
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
 }
