@@ -12,6 +12,7 @@ composeBom = "2024.04.01"
 composeMaterial = "1.2.1"
 composeFoundation = "1.2.1"
 activityCompose = "1.7.2"
+wearToolingPreview = "1.0.0"
 
 [libraries]
 play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "playServicesWearable" }
@@ -30,6 +31,7 @@ ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
 compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "composeFoundation" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+wear-tooling-preview = { group = "androidx.wear", name = "wear-tooling-preview", version.ref = "wearToolingPreview" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
