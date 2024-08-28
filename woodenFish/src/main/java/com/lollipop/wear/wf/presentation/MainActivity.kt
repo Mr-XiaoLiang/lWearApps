@@ -30,11 +30,8 @@ import com.lollipop.wear.wf.presentation.theme.LWearAppsTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
-
         super.onCreate(savedInstanceState)
-
         setTheme(android.R.style.Theme_DeviceDefault)
-
         setContent {
             WearApp("Android")
         }
