@@ -7,12 +7,12 @@
 package com.lollipop.wear.ttt
 
 import android.os.Bundle
-import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.lollipop.wear.devices.TimeViewDelegate
 import com.lollipop.wear.ttt.databinding.ActivityMainBinding
 import com.lollipop.wear.ttt.game.GameControl
 import com.lollipop.wear.ttt.game.GameDelegate
@@ -26,9 +26,6 @@ import com.lollipop.wear.ttt.ui.GameRecordFragment
 import com.lollipop.wear.ttt.ui.GameStateFragment
 import com.lollipop.wear.ttt.ui.GameThemeFragment
 import com.lollipop.wear.ttt.ui.basic.SubpageFragment
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class MainActivity : AppCompatActivity(),
     GameControl.StateListener,
@@ -40,15 +37,9 @@ class MainActivity : AppCompatActivity(),
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-    private val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-
-    private val mainHandler by lazy {
-        Handler(mainLooper)
-    }
-
-    private val minuteTimer by lazy {
-        MinuteTimer(mainHandler) {
-            updateTime()
+    private val minuteTimerDelegate by lazy {
+        TimeViewDelegate { value ->
+            binding.timeView.text = value
         }
     }
 
@@ -127,20 +118,15 @@ class MainActivity : AppCompatActivity(),
         boardFragment?.updateByState(state)
     }
 
-    private fun updateTime() {
-        binding.timeView.text = dateFormat.format(Date(System.currentTimeMillis()))
-    }
-
     override fun onResume() {
         super.onResume()
-        updateTime()
-        minuteTimer.onResume()
+        minuteTimerDelegate.onResume()
         gameDelegate.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        minuteTimer.onPause()
+        minuteTimerDelegate.onPause()
         gameDelegate.onPause()
     }
 
@@ -252,41 +238,6 @@ class MainActivity : AppCompatActivity(),
         override fun createFragment(position: Int): Fragment {
             return fragmentList[position].clazz.getDeclaredConstructor().newInstance()
         }
-    }
-
-    private class MinuteTimer(
-        private val handler: Handler,
-        private val callback: () -> Unit
-    ) {
-
-        companion object {
-            private const val MINUTE = 60 * 1000L
-        }
-
-        private val updateTask = Runnable {
-            next()
-            callback()
-        }
-
-        fun onResume() {
-            next()
-        }
-
-        private fun next() {
-            val now = now()
-            val offset = now % MINUTE
-            handler.removeCallbacks(updateTask)
-            handler.postDelayed(updateTask, MINUTE - offset)
-        }
-
-        fun onPause() {
-            handler.removeCallbacks(updateTask)
-        }
-
-        private fun now(): Long {
-            return System.currentTimeMillis()
-        }
-
     }
 
 }

@@ -36,7 +36,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
-        compose = true
+        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -50,12 +50,7 @@ android {
 
 dependencies {
     implementation(libs.play.services.wearable)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.ui)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.compose.material)
-    implementation(libs.compose.foundation)
-    implementation(libs.activity.compose)
     implementation(libs.core.splashscreen)
-    implementation(libs.wear.tooling.preview)
+    implementation(libs.appcompat)
+    implementation(project(":basic"))
 }
