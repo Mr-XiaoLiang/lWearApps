@@ -1,9 +1,13 @@
 package com.lollipop.wear.wf
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.ColorFilter
+import android.graphics.Paint
 import android.graphics.PixelFormat
+import android.graphics.PorterDuff
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.SystemClock
@@ -94,6 +98,7 @@ class PopupView @JvmOverloads constructor(
     ) : Drawable() {
 
         private var popupDrawable: Drawable? = null
+        private var popupBitmap: Bitmap? = null
 
         private val popupSize = Rect()
         private val tempBounds = Rect()
@@ -104,14 +109,28 @@ class PopupView @JvmOverloads constructor(
         var popupDuration = 800L
         var popupOffsetLength = 0
 
+        private val paint = Paint()
+
         fun setPopupSize(width: Int, height: Int) {
             popupSize.set(0, 0, width, height)
             popupDrawable?.bounds = popupSize
+            popupBitmap?.recycle()
+            val newBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            popupBitmap = newBitmap
+            updateBitmap()
         }
 
         fun setPopupDrawable(drawable: Drawable?) {
             popupDrawable = drawable
             drawable?.bounds = popupSize
+            updateBitmap()
+        }
+
+        private fun updateBitmap() {
+            val bitmap = popupBitmap ?: return
+            val canvas = Canvas(bitmap)
+            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
+            popupDrawable?.draw(canvas)
         }
 
         fun addPopup(x: Int, y: Int) {
@@ -121,7 +140,7 @@ class PopupView @JvmOverloads constructor(
         }
 
         override fun draw(canvas: Canvas) {
-            val drawable = popupDrawable ?: return
+            val bitmap = popupBitmap ?: return
             val popWidthHalf = popupSize.width() / 2
             val popHeightHalf = popupSize.height() / 2
             tempBounds.set(popupSize)
@@ -139,11 +158,11 @@ class PopupView @JvmOverloads constructor(
                 if (popAlpha < 0) {
                     popAlpha = 0
                 }
-                drawable.alpha = popAlpha
+                paint.alpha = popAlpha
                 val saveCount = canvas.save()
                 canvas.translate(tempBounds.left.toFloat(), tempBounds.top.toFloat())
                 canvas.clipRect(popupSize)
-                drawable.draw(canvas)
+                canvas.drawBitmap(bitmap, 0F, 0F, paint)
                 canvas.restoreToCount(saveCount)
             }
             val now = now()

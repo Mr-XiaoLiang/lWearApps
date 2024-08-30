@@ -1,0 +1,17 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="1000"
+    android:viewportHeight="1000">
+  <group android:scaleX="0.45057693"
+      android:scaleY="0.45057693"
+      android:translateX="274.71155"
+      android:translateY="274.71155">
+      <!--  这是我（lollipop8555@outlook.com）画的，如果要用需要跟我联系哦，否则算是侵权  -->
+      <path
+          android:fillColor="#FFFFFF"
+          android:fillType="evenOdd"
+          android:pathData="M478.8,161.2C292.1,229.2 150.4,509.5 116.3,571.2C93.2,612.8 56.2,652 31.7,684.7C7.3,717.4 52.5,792.1 116.3,776.7C180,761.4 346.1,860.7 527.8,860.7C709.4,860.7 825.5,839 912.3,759.7C999,680.4 983.9,447 943.8,417.7C903.7,388.4 765.3,425.2 662.3,453.7C559.2,482.3 400.8,601.1 353.8,608.7C306.7,616.3 287.3,559.8 329.8,523.2C372.2,486.7 548.6,465.2 637.3,439.2C725.9,413.2 973.1,400.4 912.3,305.7C851.4,211.1 665.3,93.2 478.8,161.2Z"
+          />
+  </group>
+</vector>

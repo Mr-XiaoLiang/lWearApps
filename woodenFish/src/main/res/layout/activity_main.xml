@@ -3,21 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/black">
 
     <ImageView
         android:id="@+id/muyuView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="4dp"
         android:alpha="0.5"
+        android:padding="4dp"
         android:src="@drawable/muyu"
         app:layout_boxedEdges="all" />
 
     <com.lollipop.wear.wf.PopupView
         android:id="@+id/muyuPopupView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <androidx.wear.widget.CurvedTextView
         android:id="@+id/timeView"
@@ -27,6 +28,21 @@
         android:padding="4dp"
         android:text="@string/app_name"
         android:textSize="11sp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.wear.widget.CurvedTextView
+        android:id="@+id/countView"
+        tools:text="123"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/roboto_regular"
+        android:padding="4dp"
+        android:textSize="16sp"
+        app:anchorAngleDegrees="180"
+        app:clockwise="false"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
