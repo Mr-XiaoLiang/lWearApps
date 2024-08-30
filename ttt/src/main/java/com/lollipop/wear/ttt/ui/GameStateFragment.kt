@@ -41,14 +41,10 @@ class GameStateFragment : SubpageFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.exitButton.totalTime = 3 * 1000L
-        binding.exitButton.setOnTimerFinishedListener {
-            activity?.finish()
-        }
+        binding.restartButton.totalTime = 3 * 1000L
         binding.restartButton.setOnTimerFinishedListener {
             callback?.callRestart()
         }
-        CircularProgressLayoutHelper.attach(binding.exitButton)
         CircularProgressLayoutHelper.attach(binding.restartButton)
     }
 

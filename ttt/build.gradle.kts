@@ -47,7 +47,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.play.services.wearable)
     implementation(libs.core.splashscreen)
     implementation(libs.appcompat)
     implementation(project(":basic"))
