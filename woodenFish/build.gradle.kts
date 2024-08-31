@@ -11,8 +11,8 @@ android {
         applicationId = "com.lollipop.wear.wf"
         minSdk = 28
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.1.0"
+        versionCode = 1_02_00
+        versionName = "1.2.0"
         vectorDrawables {
             useSupportLibrary = true
         }

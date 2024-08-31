@@ -1,5 +1,6 @@
 package com.lollipop.wear.wf
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -55,12 +56,12 @@ class PopupView @JvmOverloads constructor(
         popupCanvasDrawable.setPopupSize(width, height)
     }
 
-    fun setPopupDrawable(drawable: Drawable?) {
-        popupCanvasDrawable.setPopupDrawable(drawable)
+    fun setPopupDrawable(index: IconIndex, drawable: Drawable?) {
+        popupCanvasDrawable.setPopupDrawable(index, drawable)
     }
 
-    fun addPopup(x: Int, y: Int) {
-        popupCanvasDrawable.addPopup(x, y)
+    fun addPopup(x: Int, y: Int, index: IconIndex) {
+        popupCanvasDrawable.addPopup(x, y, index)
     }
 
     fun bindClickListener(onClick: (x: Int, y: Int) -> Unit) {
@@ -84,6 +85,7 @@ class PopupView @JvmOverloads constructor(
             onClick(lastX, lastY)
         }
 
+        @SuppressLint("ClickableViewAccessibility")
         override fun onTouch(v: View?, event: MotionEvent?): Boolean {
             event ?: return false
             lastX = event.x.toInt()
@@ -97,8 +99,7 @@ class PopupView @JvmOverloads constructor(
         val requestInvalidate: () -> Unit
     ) : Drawable() {
 
-        private var popupDrawable: Drawable? = null
-        private var popupBitmap: Bitmap? = null
+        private val iconMap = IconMap()
 
         private val popupSize = Rect()
         private val tempBounds = Rect()
@@ -113,34 +114,20 @@ class PopupView @JvmOverloads constructor(
 
         fun setPopupSize(width: Int, height: Int) {
             popupSize.set(0, 0, width, height)
-            popupDrawable?.bounds = popupSize
-            popupBitmap?.recycle()
-            val newBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-            popupBitmap = newBitmap
-            updateBitmap()
+            iconMap.setIconSize(width, height)
         }
 
-        fun setPopupDrawable(drawable: Drawable?) {
-            popupDrawable = drawable
-            drawable?.bounds = popupSize
-            updateBitmap()
+        fun setPopupDrawable(index: IconIndex, drawable: Drawable?) {
+            iconMap.setIcon(index, drawable)
         }
 
-        private fun updateBitmap() {
-            val bitmap = popupBitmap ?: return
-            val canvas = Canvas(bitmap)
-            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
-            popupDrawable?.draw(canvas)
-        }
-
-        fun addPopup(x: Int, y: Int) {
-            val popup = Popup(x, y)
+        fun addPopup(x: Int, y: Int, iconIndex: IconIndex) {
+            val popup = Popup(x, y, iconIndex)
             popupList.add(popup)
             requestInvalidate()
         }
 
         override fun draw(canvas: Canvas) {
-            val bitmap = popupBitmap ?: return
             val popWidthHalf = popupSize.width() / 2
             val popHeightHalf = popupSize.height() / 2
             tempBounds.set(popupSize)
@@ -149,6 +136,8 @@ class PopupView @JvmOverloads constructor(
                 if (progress > MAX_PROGRESS) {
                     continue
                 }
+                val iconCache = iconMap.getIcon(pop.iconIndex)
+                val bitmap = iconCache.bitmap ?: continue
                 val offset = (popupOffsetLength * progress).toInt()
                 tempBounds.offsetTo(pop.x - popWidthHalf, pop.y - popHeightHalf - offset)
                 var popAlpha = (baseAlpha * (1 - progress)).toInt()
@@ -177,7 +166,7 @@ class PopupView @JvmOverloads constructor(
         }
 
         override fun setColorFilter(colorFilter: ColorFilter?) {
-            popupDrawable?.colorFilter = colorFilter
+            iconMap.setColorFilter(colorFilter)
         }
 
         override fun getOpacity(): Int {
@@ -189,6 +178,7 @@ class PopupView @JvmOverloads constructor(
     private class Popup(
         val x: Int,
         val y: Int,
+        val iconIndex: IconIndex
     ) {
         val startTime: Long = now()
 
@@ -199,6 +189,80 @@ class PopupView @JvmOverloads constructor(
 
         fun isTimeout(now: Long, duration: Long): Boolean {
             return (now - startTime) > duration
+        }
+
+    }
+
+    enum class IconIndex {
+        One,
+        Two
+    }
+
+    private class IconMap {
+
+        private val iconArray = Array(IconIndex.entries.size) { IconCache() }
+
+        fun getIcon(index: IconIndex): IconCache {
+            return iconArray[index.ordinal]
+        }
+
+        fun setIconSize(width: Int, height: Int) {
+            iconArray.forEach {
+                it.setSize(width, height)
+            }
+        }
+
+        fun setIcon(index: IconIndex, drawable: Drawable?) {
+            getIcon(index).setIcon(drawable)
+        }
+
+        fun setColorFilter(colorFilter: ColorFilter?) {
+            iconArray.forEach {
+                it.setColorFilter(colorFilter)
+            }
+        }
+
+    }
+
+    private class IconCache {
+        private var drawable: Drawable? = null
+        var bitmap: Bitmap? = null
+            private set
+
+        private val iconSize = Rect()
+
+        fun setSize(width: Int, height: Int) {
+            iconSize.set(0, 0, width, height)
+            drawable?.bounds = iconSize
+            bitmap?.let {
+                if (it.width != width || it.height != height) {
+                    it.recycle()
+                    bitmap = null
+                }
+            }
+            if (bitmap == null) {
+                val newBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                bitmap = newBitmap
+                updateBitmap()
+            }
+        }
+
+        fun setColorFilter(colorFilter: ColorFilter?) {
+            drawable?.colorFilter = colorFilter
+            updateBitmap()
+        }
+
+        fun setIcon(drawable: Drawable?) {
+            this.drawable = drawable
+            drawable?.bounds = iconSize
+            updateBitmap()
+        }
+
+        private fun updateBitmap() {
+            val b = bitmap ?: return
+            val canvas = Canvas(b)
+            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
+            drawable?.draw(canvas)
         }
 
     }
