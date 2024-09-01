@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.widget.FrameLayout
+import com.lollipop.wear.ps.game.GamePainter.Painter
 
 class GamePlayer @JvmOverloads constructor(
     context: Context,
@@ -13,6 +14,7 @@ class GamePlayer @JvmOverloads constructor(
 
     private val gameEngine = GameEngine()
     private val surfaceView = SurfaceView(context)
+    private val gamePainter = GamePainter()
 
     private val surfaceCallback = object : SurfaceHolder.Callback2 {
         override fun surfaceCreated(holder: SurfaceHolder) {
@@ -33,9 +35,20 @@ class GamePlayer @JvmOverloads constructor(
 
     }
 
+    val frameIndex: Int
+        get() {
+            return gamePainter.frameIndex
+        }
+    val frameLoopCount: Int
+        get() {
+            return gamePainter.frameLoopCount
+        }
+
     init {
         addView(surfaceView)
         surfaceView.holder.addCallback(surfaceCallback)
+        surfaceView.holder.addCallback(gamePainter)
+        gameEngine.addFrameCallback(gamePainter)
     }
 
     fun setFPS(fps: Int) {
@@ -60,6 +73,18 @@ class GamePlayer @JvmOverloads constructor(
 
     fun onDestroy() {
         gameEngine.destroy()
+    }
+
+    fun setBackgroundPainter(painter: Painter?) {
+        gamePainter.setBackgroundPainter(painter)
+    }
+
+    fun setSpritePainter(painter: Painter?) {
+        gamePainter.setSpritePainter(painter)
+    }
+
+    fun setForegroundPainter(painter: Painter?) {
+        gamePainter.setForegroundPainter(painter)
     }
 
 }
