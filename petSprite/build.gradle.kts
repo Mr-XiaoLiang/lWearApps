@@ -4,19 +4,18 @@ plugins {
 }
 
 android {
-    namespace = "com.lollipop.wear.wf"
+    namespace = "com.lollipop.wear.ps"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.lollipop.wear.wf"
+        applicationId = "com.lollipop.wear.ps"
         minSdk = 28
         targetSdk = 34
-        versionCode = 1_02_00
-        versionName = "1.2.0"
+        versionCode = 1
+        versionName = "1.0"
         vectorDrawables {
             useSupportLibrary = true
         }
-
     }
 
     buildTypes {
