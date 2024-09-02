@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.widget.FrameLayout
-import com.lollipop.wear.ps.game.GamePainter.Painter
 
 class GamePlayer @JvmOverloads constructor(
     context: Context,
@@ -14,7 +13,7 @@ class GamePlayer @JvmOverloads constructor(
 
     private val gameEngine = GameEngine()
     private val surfaceView = SurfaceView(context)
-    private val gamePainter = GamePainter()
+    private val gameCanvas = GameCanvas()
 
     private val surfaceCallback = object : SurfaceHolder.Callback2 {
         override fun surfaceCreated(holder: SurfaceHolder) {
@@ -37,18 +36,18 @@ class GamePlayer @JvmOverloads constructor(
 
     val frameIndex: Int
         get() {
-            return gamePainter.frameIndex
+            return gameCanvas.frameIndex
         }
     val frameLoopCount: Int
         get() {
-            return gamePainter.frameLoopCount
+            return gameCanvas.frameLoopCount
         }
 
     init {
         addView(surfaceView)
         surfaceView.holder.addCallback(surfaceCallback)
-        surfaceView.holder.addCallback(gamePainter)
-        gameEngine.addFrameCallback(gamePainter)
+        surfaceView.holder.addCallback(gameCanvas)
+        gameEngine.addFrameCallback(gameCanvas)
     }
 
     fun setFPS(fps: Int) {
@@ -75,16 +74,16 @@ class GamePlayer @JvmOverloads constructor(
         gameEngine.destroy()
     }
 
-    fun setBackgroundPainter(painter: Painter?) {
-        gamePainter.setBackgroundPainter(painter)
+    fun setBackgroundPainter(painter: GameCanvas.Painter?) {
+        gameCanvas.setBackgroundPainter(painter)
     }
 
-    fun setSpritePainter(painter: Painter?) {
-        gamePainter.setSpritePainter(painter)
+    fun setSpritePainter(painter: GameCanvas.Painter?) {
+        gameCanvas.setSpritePainter(painter)
     }
 
-    fun setForegroundPainter(painter: Painter?) {
-        gamePainter.setForegroundPainter(painter)
+    fun setForegroundPainter(painter: GameCanvas.Painter?) {
+        gameCanvas.setForegroundPainter(painter)
     }
 
 }

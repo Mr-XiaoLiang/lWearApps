@@ -4,7 +4,7 @@ import android.graphics.Canvas
 import android.graphics.Point
 import android.view.SurfaceHolder
 
-class GamePainter : SurfaceHolder.Callback2, GameEngine.FrameCallback {
+class GameCanvas : SurfaceHolder.Callback2, GameEngine.FrameCallback {
 
     private var currentHolder: SurfaceHolder? = null
     var frameIndex = 0
@@ -94,6 +94,8 @@ class GamePainter : SurfaceHolder.Callback2, GameEngine.FrameCallback {
         fun onDraw(canvas: Canvas)
 
         fun onSizeChanged(width: Int, height: Int)
+
+        fun onGroundEdgeChanged(groundTopEdge: Float, groundBottomEdge: Float)
 
     }
 
