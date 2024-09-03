@@ -9,6 +9,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/barometer" />
             <option value="$PROJECT_DIR$/basic" />
             <option value="$PROJECT_DIR$/petSprite" />
             <option value="$PROJECT_DIR$/ttt" />
