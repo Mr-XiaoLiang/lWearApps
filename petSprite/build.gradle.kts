@@ -20,6 +20,18 @@ android {
 
     buildTypes {
         release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            ndk {
+                // 实体包只需要支持 armeabi-v7a
+                abiFilters.clear()
+                abiFilters.add("armeabi-v7a")
+            }
+        }
+        debug {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
