@@ -9,4 +9,6 @@
     <string name="hpa1100">1100hPa</string>
     <string name="alt_800">-800m</string>
     <string name="alt9000">9000m</string>
+    <string name="unit_hpa">hPa</string>
+    <string name="unit_m">m</string>
 </resources>
