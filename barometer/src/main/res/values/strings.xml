@@ -5,4 +5,8 @@
     values-round/strings.xml for round devices.
     -->
     <string name="hello_world">From the Square world,\nHello, %1$s!</string>
+    <string name="hpa950">950hPa</string>
+    <string name="hpa1100">1100hPa</string>
+    <string name="alt_800">-800m</string>
+    <string name="alt9000">9000m</string>
 </resources>

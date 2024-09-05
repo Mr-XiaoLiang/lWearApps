@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.lollipop.wear.widget.CircularProgressIndicator
+        android:id="@+id/pressureProgressIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="6dp"
+        app:activeColor="#fff"
+        app:antiClockwise="false"
+        app:inactiveColor="#3fff"
+        app:interval="2dp"
+        app:startAngle="185"
+        app:strokeWidth="8dp"
+        app:sweepAngle="140"
+        tools:activeColor="@color/piece_tint_a"
+        tools:indicatorProgress="0.6" />
+
+    <com.lollipop.wear.widget.CircularProgressIndicator
+        android:id="@+id/altitudeProgressIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="6dp"
+        app:activeColor="#fff"
+        app:antiClockwise="true"
+        app:inactiveColor="#3fff"
+        app:interval="2dp"
+        app:startAngle="35"
+        app:strokeWidth="8dp"
+        app:sweepAngle="140"
+        tools:activeColor="@color/piece_tint_a"
+        tools:indicatorProgress="0.6" />
+
+    <androidx.wear.widget.CurvedTextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="12dp"
+        android:text="@string/hpa950"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        app:anchorAngleDegrees="289"
+        app:clockwise="true" />
+
+    <androidx.wear.widget.CurvedTextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="12dp"
+        android:text="@string/hpa1100"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        app:anchorAngleDegrees="41"
+        app:clockwise="true" />
+
+    <androidx.wear.widget.CurvedTextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="12dp"
+        android:text="@string/alt_800"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        app:anchorAngleDegrees="251"
+        app:clockwise="false" />
+
+    <androidx.wear.widget.CurvedTextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="12dp"
+        android:text="@string/alt9000"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        app:anchorAngleDegrees="139"
+        app:clockwise="false" />
+
+    <TextView
+        android:id="@+id/pressureValueView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@id/altitudeValueView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="9000.00hPa" />
+
+    <TextView
+        android:id="@+id/altitudeValueView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@id/pressureGraphView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pressureValueView"
+        tools:text="9000.00m" />
+
+    <com.lollipop.wear.widget.GraphView
+        android:id="@+id/pressureGraphView"
+        android:layout_width="0px"
+        android:layout_height="0px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/altitudeValueView"
+        app:layout_constraintWidth_percent="0.5"
+        tools:background="#3f00" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
