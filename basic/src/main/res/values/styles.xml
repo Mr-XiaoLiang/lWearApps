@@ -1,0 +1,6 @@
+<resources>
+
+    <style name="MainActivityTheme.Starting" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowSwipeToDismiss">true</item>
+    </style>
+</resources>

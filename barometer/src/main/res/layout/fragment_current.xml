@@ -38,49 +38,55 @@
     <androidx.wear.widget.CurvedTextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fontFamily="@font/roboto_regular"
         android:padding="12dp"
         android:text="@string/hpa950"
         android:textColor="@android:color/white"
         android:textSize="11sp"
-        app:anchorAngleDegrees="289"
+        app:anchorAngleDegrees="284"
         app:clockwise="true" />
 
     <androidx.wear.widget.CurvedTextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fontFamily="@font/roboto_regular"
         android:padding="12dp"
         android:text="@string/hpa1100"
         android:textColor="@android:color/white"
         android:textSize="11sp"
-        app:anchorAngleDegrees="41"
+        app:anchorAngleDegrees="48"
         app:clockwise="true" />
 
     <androidx.wear.widget.CurvedTextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fontFamily="@font/roboto_regular"
         android:padding="12dp"
         android:text="@string/alt_800"
         android:textColor="@android:color/white"
         android:textSize="11sp"
-        app:anchorAngleDegrees="251"
+        app:anchorAngleDegrees="258"
         app:clockwise="false" />
 
     <androidx.wear.widget.CurvedTextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fontFamily="@font/roboto_regular"
         android:padding="12dp"
         android:text="@string/alt9000"
         android:textColor="@android:color/white"
         android:textSize="11sp"
-        app:anchorAngleDegrees="139"
+        app:anchorAngleDegrees="134"
         app:clockwise="false" />
 
     <TextView
         android:id="@+id/pressureValueView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
         android:textColor="@android:color/white"
-        android:textSize="22sp"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/altitudeValueView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -91,19 +97,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
+        android:text="@string/unit_hpa"
         android:textColor="@android:color/white"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@id/pressureValueView"
         app:layout_constraintBaseline_toBaselineOf="@id/pressureValueView"
-        android:text="@string/unit_hpa" />
+        app:layout_constraintStart_toEndOf="@id/pressureValueView" />
 
     <TextView
         android:id="@+id/altitudeValueView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
         android:textColor="@android:color/white"
-        android:textSize="22sp"
-        app:layout_constraintBottom_toTopOf="@id/pressureGraphView"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pressureValueView"
@@ -112,22 +121,28 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
+        android:text="@string/unit_m"
         android:textColor="@android:color/white"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@id/altitudeValueView"
         app:layout_constraintBaseline_toBaselineOf="@id/altitudeValueView"
-        android:text="@string/unit_m" />
+        app:layout_constraintStart_toEndOf="@id/altitudeValueView" />
 
-    <com.lollipop.wear.widget.GraphView
-        android:id="@+id/pressureGraphView"
-        android:layout_width="0px"
-        android:layout_height="0px"
+    <com.lollipop.wear.widget.CircularTextView
+        android:id="@+id/sensorStatePoint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="center"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/altitudeValueView"
-        app:layout_constraintWidth_percent="0.5"
-        tools:background="#3f00" />
+        tools:background="@color/sensor_status_no_contact"
+        tools:text="@string/sensor_status_no_contact" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

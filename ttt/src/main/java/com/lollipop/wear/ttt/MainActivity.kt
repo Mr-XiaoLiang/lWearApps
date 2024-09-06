@@ -12,6 +12,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.lollipop.wear.basic.Page
+import com.lollipop.wear.basic.PagerAdapter
+import com.lollipop.wear.basic.findTypedFragment
 import com.lollipop.wear.devices.TimeViewDelegate
 import com.lollipop.wear.ttt.databinding.ActivityMainBinding
 import com.lollipop.wear.ttt.game.GameControl
@@ -75,7 +78,7 @@ class MainActivity : AppCompatActivity(),
         init()
 
         val pageList = getPageList()
-        binding.viewPager.adapter = FragmentAdapter(this, pageList)
+        binding.viewPager.adapter = PagerAdapter(this, pageList)
         binding.pageIndicator.indicatorCount = pageList.size
         binding.viewPager.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
@@ -212,32 +215,14 @@ class MainActivity : AppCompatActivity(),
     }
 
     private inline fun <reified T : Fragment> findFragment(): T? {
-        val fragment = supportFragmentManager.fragments.find { it is T }
-        if (fragment != null && fragment is T) {
-            return fragment
-        }
-        return null
+        return supportFragmentManager.findTypedFragment()
     }
 
-    private enum class SubPage(val clazz: Class<out SubpageFragment>) {
+    private enum class SubPage(override val clazz: Class<out SubpageFragment>): Page {
         State(GameStateFragment::class.java),
         Board(GameBoardFragment::class.java),
         Record(GameRecordFragment::class.java),
         Theme(GameThemeFragment::class.java),
-    }
-
-    private class FragmentAdapter(
-        activity: AppCompatActivity,
-        private val fragmentList: List<SubPage>
-    ) : FragmentStateAdapter(activity) {
-
-        override fun getItemCount(): Int {
-            return fragmentList.size
-        }
-
-        override fun createFragment(position: Int): Fragment {
-            return fragmentList[position].clazz.getDeclaredConstructor().newInstance()
-        }
     }
 
 }

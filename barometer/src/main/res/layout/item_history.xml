@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingVertical="8dp">
+
+    <TextView
+        android:id="@+id/timeView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#BFFF"
+        android:textSize="14sp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="2019-08-08 12:00:00" />
+
+    <TextView
+        android:id="@+id/pressureValueView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        tools:text="9000.00hPa" />
+
+    <TextView
+        android:id="@+id/altitudeValueView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        tools:text="190.00m" />
+
+</LinearLayout>

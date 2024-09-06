@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="sensor_status_no_contact">#525252</color>
+    <color name="sensor_status_unreliable">#525252</color>
+    <color name="sensor_status_accuracy_low">#560000</color>
+    <color name="sensor_status_accuracy_medium">#6B6900</color>
+    <color name="sensor_status_accuracy_high">#005D1C</color>
+</resources>

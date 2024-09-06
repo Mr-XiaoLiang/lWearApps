@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">barometer</string>
+    <string name="app_name">气压计</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
@@ -11,4 +11,10 @@
     <string name="alt9000">9000m</string>
     <string name="unit_hpa">hPa</string>
     <string name="unit_m">m</string>
+    <string name="no_sensor">很抱歉，您的设备不支持压力传感器</string>
+    <string name="sensor_status_no_contact">未连接</string>
+    <string name="sensor_status_unreliable">已禁用</string>
+    <string name="sensor_status_accuracy_low">状态很差</string>
+    <string name="sensor_status_accuracy_medium">状态较差</string>
+    <string name="sensor_status_accuracy_high">状态良好</string>
 </resources>
