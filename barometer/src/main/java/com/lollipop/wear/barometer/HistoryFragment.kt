@@ -2,10 +2,18 @@ package com.lollipop.wear.barometer
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Canvas
+import android.graphics.ColorFilter
+import android.graphics.Paint
+import android.graphics.PixelFormat
+import android.graphics.Rect
+import android.graphics.RectF
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -206,6 +214,20 @@ class HistoryFragment : BasicFragment() {
             private val altitudeFormat = DecimalFormat("0.00m")
             private val timeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
+            private val pressureDrawable = ProgressBarDrawable()
+            private val altitudeDrawable = ProgressBarDrawable()
+
+            init {
+                binding.pressureValueView.background = pressureDrawable
+                binding.altitudeValueView.background = altitudeDrawable
+                pressureDrawable.color = ContextCompat.getColor(
+                    itemView.context, R.color.bg_pressure_bar
+                )
+                altitudeDrawable.color = ContextCompat.getColor(
+                    itemView.context, R.color.bg_altitude_bar
+                )
+            }
+
             fun bind(info: PressureInfo) {
                 binding.sensorStateView.setBackgroundResource(
                     BarometerHelper.getSensorStateColor(
@@ -215,6 +237,8 @@ class HistoryFragment : BasicFragment() {
                 binding.pressureValueView.text = pressureFormat.format(info.pressure.toDouble())
                 binding.altitudeValueView.text = altitudeFormat.format(info.altitude.toDouble())
                 binding.timeView.text = timeFormat.format(Date(info.time))
+                pressureDrawable.progress = BarometerHelper.getPressureProgress(info.pressure)
+                altitudeDrawable.progress = BarometerHelper.getAltitudeProgress(info.altitude)
             }
 
         }
@@ -272,6 +296,64 @@ class HistoryFragment : BasicFragment() {
             super.onScrolled(recyclerView, dx, dy)
             check(recyclerView)
         }
+
+    }
+
+    private class ProgressBarDrawable : Drawable() {
+
+        private val paint = Paint().apply {
+            style = Paint.Style.FILL
+            isDither = true
+            isAntiAlias = true
+        }
+
+        var color: Int
+            get() {
+                return paint.color
+            }
+            set(value) {
+                paint.color = value
+            }
+
+        private val barBounds = RectF()
+
+        var progress: Float = 0F
+            set(value) {
+                field = value
+                updateBarBounds()
+            }
+
+        override fun onBoundsChange(bounds: Rect) {
+            super.onBoundsChange(bounds)
+            updateBarBounds()
+        }
+
+        private fun updateBarBounds() {
+            barBounds.set(
+                bounds.left.toFloat() + ((1 - progress) * bounds.width()),
+                bounds.top.toFloat(),
+                bounds.right.toFloat(),
+                bounds.bottom.toFloat()
+            )
+            invalidateSelf()
+        }
+
+        override fun draw(canvas: Canvas) {
+            canvas.drawRect(barBounds, paint)
+        }
+
+        override fun setAlpha(alpha: Int) {
+            paint.alpha = alpha
+        }
+
+        override fun setColorFilter(colorFilter: ColorFilter?) {
+            paint.colorFilter = colorFilter
+        }
+
+        override fun getOpacity(): Int {
+            return PixelFormat.TRANSPARENT
+        }
+
 
     }
 

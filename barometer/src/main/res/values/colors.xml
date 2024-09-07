@@ -5,4 +5,7 @@
     <color name="sensor_status_accuracy_low">#560000</color>
     <color name="sensor_status_accuracy_medium">#6B6900</color>
     <color name="sensor_status_accuracy_high">#005D1C</color>
+
+    <color name="bg_pressure_bar">#006B62</color>
+    <color name="bg_altitude_bar">#618732</color>
 </resources>

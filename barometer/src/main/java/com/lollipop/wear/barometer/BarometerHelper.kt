@@ -4,6 +4,19 @@ import android.hardware.SensorManager
 
 object BarometerHelper {
 
+    const val PRESSURE_MAX = 1100.0
+    const val PRESSURE_MIN = 300.0
+    const val ALTITUDE_MAX = 9000.0
+    const val ALTITUDE_MIN = -800.0
+
+    fun getAltitudeProgress(altitude: Float): Float {
+        return ((altitude - ALTITUDE_MIN) / (ALTITUDE_MAX - ALTITUDE_MIN)).toFloat()
+    }
+
+    fun getPressureProgress(pressure: Float): Float {
+        return ((pressure - PRESSURE_MIN) / (PRESSURE_MAX - PRESSURE_MIN)).toFloat()
+    }
+
     fun getAltitude(pressure: Double): Double {
         return 44330000 * (1 - Math.pow((pressure / 1013.25), 1.0 / 5255.0))
     }

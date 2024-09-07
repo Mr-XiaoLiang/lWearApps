@@ -24,13 +24,6 @@ import java.text.DecimalFormat
  */
 class CurrentFragment : BasicFragment() {
 
-    companion object {
-        const val PRESSURE_MAX = 1100.0
-        const val PRESSURE_MIN = 300.0
-        const val ALTITUDE_MAX = 9000.0
-        const val ALTITUDE_MIN = -800.0
-    }
-
     private var callback: Callback? = null
     private val binding by lazy {
         FragmentCurrentBinding.inflate(layoutInflater)
@@ -105,7 +98,8 @@ class CurrentFragment : BasicFragment() {
         }
         binding.pressureValueView.text = decimalFormat.format(pressure)
         binding.altitudeValueView.text = decimalFormat.format(altitude)
-        var pressureProgress = ((pressure - PRESSURE_MIN) / (PRESSURE_MAX - PRESSURE_MIN)).toFloat()
+        var pressureProgress =
+            ((pressure - BarometerHelper.PRESSURE_MIN) / (BarometerHelper.PRESSURE_MAX - BarometerHelper.PRESSURE_MIN)).toFloat()
         if (pressureProgress < 0) {
             pressureProgress = 0F
         }
@@ -113,7 +107,8 @@ class CurrentFragment : BasicFragment() {
             pressureProgress = 1F
         }
         binding.pressureProgressIndicator.progress = pressureProgress
-        var altitudeProgress = ((altitude - ALTITUDE_MIN) / (ALTITUDE_MAX - ALTITUDE_MIN)).toFloat()
+        var altitudeProgress =
+            ((altitude - BarometerHelper.ALTITUDE_MIN) / (BarometerHelper.ALTITUDE_MAX - BarometerHelper.ALTITUDE_MIN)).toFloat()
         if (altitudeProgress < 0) {
             altitudeProgress = 0F
         }
