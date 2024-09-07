@@ -17,7 +17,8 @@ import com.lollipop.wear.basic.PagerAdapter
 import com.lollipop.wear.basic.findTypedFragment
 
 
-class MainActivity : AppCompatActivity(), SensorEventListener, CurrentFragment.Callback {
+class MainActivity : AppCompatActivity(), SensorEventListener, CurrentFragment.Callback,
+    HistoryFragment.Callback {
 
     // sweepAngle = 140
     // startAngle = 185
@@ -30,11 +31,21 @@ class MainActivity : AppCompatActivity(), SensorEventListener, CurrentFragment.C
     // -800m = 140 * 0.9 + 35 + 90 = 251
     // 9000m = 140 * 0.1 + 35 + 90 = 139
 
+    companion object {
+        private const val SAVE_INTERVAL = 10 * 1000L
+    }
+
     private var currentSensor: Sensor? = null
 
     private var currentSensorState = SensorManager.SENSOR_STATUS_NO_CONTACT
     private var currentPressure = 0F
     private var currentAltitude = 0F
+
+    private var lastSaveTime = 0L
+
+    private val historyDatabase by lazy {
+        HistoryDatabase(this)
+    }
 
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -96,12 +107,37 @@ class MainActivity : AppCompatActivity(), SensorEventListener, CurrentFragment.C
                         it.onPressureChanged(pressure, altitude)
                     }
                 }
+                savePressure(pressure, altitude)
             }
         }
     }
 
     private fun savePressure(pressure: Float, altitude: Float) {
-        // TODO
+
+        val now = System.currentTimeMillis()
+        if (now - lastSaveTime < SAVE_INTERVAL) {
+            return
+        }
+        lastSaveTime = now
+
+        val info = PressureInfo(
+            sensorState = currentSensorState,
+            pressure = pressure,
+            altitude = altitude,
+            time = now
+        )
+        historyDatabase.insert(
+            info
+        )
+        supportFragmentManager.findTypedFragment<HistoryFragment>()?.let {
+            if (it.isResumed) {
+                it.onNewPressure(info)
+            }
+        }
+    }
+
+    private fun resetSaveTime() {
+        lastSaveTime = 0L
     }
 
     /**
@@ -138,6 +174,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener, CurrentFragment.C
         sensor ?: return
         if (s.type == sensor.type) {
             currentSensorState = accuracy
+            // 如果传感器状态发生变化，那么我们需要让它尽快保存，所以清空上一次的保存时间
+            resetSaveTime()
             supportFragmentManager.findTypedFragment<CurrentFragment>()?.let {
                 if (it.isResumed) {
                     it.onSensorStatusChanged(accuracy)
@@ -161,6 +199,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener, CurrentFragment.C
 
     override fun getAltitude(): Float {
         return currentAltitude
+    }
+
+    override fun loadMore(lastTime: Long, callback: (List<PressureInfo>) -> Unit) {
+        historyDatabase.select(lastTime, 100, callback)
     }
 
 }

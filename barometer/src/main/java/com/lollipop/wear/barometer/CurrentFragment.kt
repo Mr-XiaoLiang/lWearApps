@@ -71,34 +71,29 @@ class CurrentFragment : BasicFragment() {
         if (!isResumed) {
             return
         }
+        binding.sensorStatePoint.setBackgroundResource(BarometerHelper.getSensorStateColor(accuracy))
         when (accuracy) {
             SensorManager.SENSOR_STATUS_ACCURACY_HIGH -> {
-                binding.sensorStatePoint.setBackgroundResource(R.color.sensor_status_accuracy_high)
                 binding.sensorStatePoint.setText(R.string.sensor_status_accuracy_high)
             }
 
             SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM -> {
-                binding.sensorStatePoint.setBackgroundResource(R.color.sensor_status_accuracy_medium)
                 binding.sensorStatePoint.setText(R.string.sensor_status_accuracy_medium)
             }
 
             SensorManager.SENSOR_STATUS_ACCURACY_LOW -> {
-                binding.sensorStatePoint.setBackgroundResource(R.color.sensor_status_accuracy_low)
                 binding.sensorStatePoint.setText(R.string.sensor_status_accuracy_low)
             }
 
             SensorManager.SENSOR_STATUS_NO_CONTACT -> {
-                binding.sensorStatePoint.setBackgroundResource(R.color.sensor_status_no_contact)
                 binding.sensorStatePoint.setText(R.string.sensor_status_no_contact)
             }
 
             SensorManager.SENSOR_STATUS_UNRELIABLE -> {
-                binding.sensorStatePoint.setBackgroundResource(R.color.sensor_status_unreliable)
                 binding.sensorStatePoint.setText(R.string.sensor_status_unreliable)
             }
 
             else -> {
-                binding.sensorStatePoint.setBackgroundResource(R.color.sensor_status_no_contact)
                 binding.sensorStatePoint.setText(R.string.sensor_status_no_contact)
             }
         }

@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingVertical="8dp">
+    android:background="@android:color/black"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/sensorStateView"
+        android:layout_width="2dp"
+        android:layout_height="0px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="#f00" />
 
     <TextView
         android:id="@+id/timeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="8dp"
         android:textColor="#BFFF"
         android:textSize="14sp"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,18 +31,24 @@
         android:id="@+id/pressureValueView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
         android:gravity="end"
         android:textColor="@android:color/white"
         android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/timeView"
         tools:text="9000.00hPa" />
 
     <TextView
         android:id="@+id/altitudeValueView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="8dp"
         android:gravity="end"
         android:textColor="@android:color/white"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pressureValueView"
         tools:text="190.00m" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
