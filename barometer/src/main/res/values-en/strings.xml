@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Barometer</string>
+    <string name="hpa950">950hPa</string>
+    <string name="hpa1100">1100hPa</string>
+    <string name="alt_800">-800m</string>
+    <string name="alt9000">9000m</string>
+    <string name="unit_hpa">hPa</string>
+    <string name="unit_m">m</string>
+    <string name="no_sensor">Sorry, your device does not support pressure sensors</string>
+    <string name="sensor_status_no_contact">No Contact</string>
+    <string name="sensor_status_unreliable">Unreliable</string>
+    <string name="sensor_status_accuracy_low">Accuracy Low</string>
+    <string name="sensor_status_accuracy_medium">Accuracy Medium</string>
+    <string name="sensor_status_accuracy_high">Accuracy High</string>
+</resources>
