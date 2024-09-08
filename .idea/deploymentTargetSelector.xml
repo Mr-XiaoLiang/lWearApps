@@ -29,10 +29,10 @@
       </SelectionState>
       <SelectionState runConfigName="flappyBird">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-09-08T14:12:51.866474Z">
+        <DropdownSelection timestamp="2024-09-08T14:33:25.620230800Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="Default" identifier="serial=f1dffe40;connection=3e303ea9" />
+              <DeviceId pluginId="Default" identifier="serial=f1dffe40;connection=1d0171d3" />
             </handle>
           </Target>
         </DropdownSelection>
