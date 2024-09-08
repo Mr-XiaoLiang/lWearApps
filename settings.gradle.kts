@@ -23,5 +23,7 @@ rootProject.name = "LWearApps"
 include(":ttt")
 include(":basic")
 include(":woodenFish")
-include(":petSprite")
+include(":flappyBird")
 include(":barometer")
+include(":gameBase")
+include(":aar:corona")
