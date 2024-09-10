@@ -13,4 +13,6 @@ local text = display.newText({
 -- Set text color to black.
 text:setFillColor(0 / 255, 0 / 255, 0 / 255)
 
+-- 还得学习基础，这个每天的更新就没法写了。哎
+
 
