@@ -39,7 +39,15 @@ local bestTitle
 local silver
 local gold
 
+local soundEnable = false
+
 local pipes = {}
+
+local function playSound(s) 
+    if (soundEnable) then
+        audio.play(s)
+    end
+end
 
 local function loadSounds()
     dieSound = audio.loadSound("Sounds/sfx_die.ogg")
@@ -142,7 +150,7 @@ local function initGame()
     gameOver.alpha = 0
     board.y = 0
     board.alpha = 0
-    audio.play(swooshingSound)
+    playSound(swooshingSound)
     transition.to(bird, { time = 300, x = xBird, y = yBird, rotation = 0 })
     transition.to(getReady, { time = 600, y = yReady, transition = easing.outBounce, onComplete = prompt })
 end
@@ -157,7 +165,7 @@ local function wing()
     if gameStatus == 1 then
         vBird = wBird
         bird:play()
-        audio.play(wingSound)
+        playSound(wingSound)
     end
 
     if gameStatus == 3 then
@@ -214,7 +222,7 @@ end
 
 local function crash()
     gameStatus = 3
-    audio.play(hitSound)
+    playSound(hitSound)
     gameOver.y = 0
     gameOver.alpha = 1
     transition.to(gameOver, { time = 600, y = yReady, transition = easing.outBounce })
@@ -277,13 +285,13 @@ local function gameLoop()
                 title.text = score
                 if score == scoreStep then
                     scoreStep = scoreStep + 5
-                    audio.play(pointSound)
+                    playSound(pointSound)
                 end
             end
             pipes[i].x = x
             if collision(i) == 1 then
                 explosion()
-                audio.play(dieSound)
+                playSound(dieSound)
                 gameStatus = 2
             end
         end
