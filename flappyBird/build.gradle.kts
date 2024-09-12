@@ -57,5 +57,5 @@ android {
 }
 
 dependencies {
-    implementation(project(":gameBase"))
+    implementation(project(":solar2dBase"))
 }
