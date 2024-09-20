@@ -33,5 +33,5 @@ android {
 }
 
 dependencies {
-    implementation(project(":solar2dBase"))
+    implementation(project(":basic"))
 }
