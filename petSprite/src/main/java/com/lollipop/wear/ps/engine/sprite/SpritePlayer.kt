@@ -29,13 +29,17 @@ class SpritePlayer @JvmOverloads constructor(
 
     private var fromIndex = 0
 
-    var frameInterval = 1000L / 25
+    var frameInterval = 1000L / 10
 
     private var lastFrameTime = 0L
 
     private val paint = Paint().apply {
         isAntiAlias = true
         isDither = true
+    }
+
+    fun setFps(fps: Int) {
+        frameInterval = 1000L / fps
     }
 
     fun changedToward(toward: SpriteToward, run: Boolean) {
@@ -120,21 +124,19 @@ class SpritePlayer @JvmOverloads constructor(
             val index = getFrameIndex()
             val viewHeight: Int = height
             val viewWidth: Int = width
-            val scale: Float = frameHeight * 1F / viewHeight
+            val scale: Float = viewHeight * 1F / frameHeight
             val saveCount = canvas.save()
             canvas.scale(scale, scale)
-            val viewScaleWidth = (viewWidth * scale).toInt()
-            if (viewScaleWidth != frameWidth) {
-                val frameOffsetX = (frameWidth - viewScaleWidth) * 0.5F
-                // 宽度不一致，那么需要裁切一下画布，否则可能绘制内容穿帮
-                canvas.translate(frameOffsetX, 0F)
-                canvas.clipRect(0, 0, frameWidth, frameHeight)
-            }
-            canvas.translate(
-                (frame.left + frameWidth * index) * -1F,
-                frame.top * -1F
+            val offsetX = (frame.left + frameWidth * index).toFloat()
+            val offsetY = frame.top.toFloat()
+            canvas.translate(offsetX * -1, offsetY * -1)
+            canvas.drawRect(
+                offsetX,
+                offsetY,
+                offsetX + frameWidth,
+                offsetY + frameHeight,
+                paint
             )
-            canvas.drawRect(0F, 0F, frameWidth.toFloat(), frameHeight.toFloat(), paint)
             canvas.restoreToCount(saveCount)
         } catch (e: Throwable) {
             Log.e("SpritePlayer", "onDrawFrame", e)

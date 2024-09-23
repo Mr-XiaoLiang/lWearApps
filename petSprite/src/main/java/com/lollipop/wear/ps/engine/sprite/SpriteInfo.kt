@@ -4,13 +4,14 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
+import com.lollipop.wear.ps.engine.sprite.SpriteFrame.Line
 import java.io.File
 
 sealed class SpriteInfo(
-    val up: SpriteFrame,
-    val down: SpriteFrame,
     val left: SpriteFrame,
-    val right: SpriteFrame
+    val up: SpriteFrame,
+    val right: SpriteFrame,
+    val down: SpriteFrame
 ) {
 
     abstract fun loadBitmap(context: Context): Bitmap?
@@ -72,11 +73,11 @@ sealed class SpriteInfo(
 
     class FromAssets(
         val path: String,
-        up: SpriteFrame,
-        down: SpriteFrame,
         left: SpriteFrame,
-        right: SpriteFrame
-    ) : SpriteInfo(up, down, left, right) {
+        up: SpriteFrame,
+        right: SpriteFrame,
+        down: SpriteFrame
+    ) : SpriteInfo(left, up, right, down) {
 
         override fun loadBitmap(context: Context): Bitmap? {
             try {
@@ -98,11 +99,11 @@ sealed class SpriteInfo(
 
     class FromResource(
         private val id: Int,
-        up: SpriteFrame,
-        down: SpriteFrame,
         left: SpriteFrame,
-        right: SpriteFrame
-    ) : SpriteInfo(up, down, left, right) {
+        up: SpriteFrame,
+        right: SpriteFrame,
+        down: SpriteFrame
+    ) : SpriteInfo(left, up, right, down) {
         override fun loadBitmap(context: Context): Bitmap? {
             try {
                 return BitmapFactory.decodeResource(context.resources, id)
@@ -122,11 +123,11 @@ sealed class SpriteInfo(
 
     class FromFile(
         private val file: File,
-        up: SpriteFrame,
-        down: SpriteFrame,
         left: SpriteFrame,
-        right: SpriteFrame
-    ) : SpriteInfo(up, down, left, right) {
+        up: SpriteFrame,
+        right: SpriteFrame,
+        down: SpriteFrame
+    ) : SpriteInfo(left, up, right, down) {
         override fun loadBitmap(context: Context): Bitmap? {
             try {
                 return BitmapFactory.decodeFile(file.path)
@@ -146,11 +147,11 @@ sealed class SpriteInfo(
 
     class FromByteArray(
         private val bytes: ByteArray,
-        up: SpriteFrame,
-        down: SpriteFrame,
         left: SpriteFrame,
-        right: SpriteFrame
-    ) : SpriteInfo(up, down, left, right) {
+        up: SpriteFrame,
+        right: SpriteFrame,
+        down: SpriteFrame
+    ) : SpriteInfo(left, up, right, down) {
         override fun loadBitmap(context: Context): Bitmap? {
             try {
                 return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
@@ -167,6 +168,29 @@ sealed class SpriteInfo(
             return false
         }
     }
+
+    companion object {
+        inline fun <reified T : SpriteInfo> createBy4x4(
+            imageWidth: Int,
+            imageHeight: Int = imageWidth,
+            paddingLeft: Int = 0,
+            paddingTop: Int = 0,
+            paddingRight: Int = 0,
+            paddingBottom: Int = 0,
+            result: (left: Line, up: Line, right: Line, down: Line) -> T
+        ): T {
+            val lines = SpriteFrame.createBy4x4(
+                imageWidth,
+                imageHeight,
+                paddingLeft,
+                paddingTop,
+                paddingRight,
+                paddingBottom
+            )
+            return result(lines[0], lines[1], lines[2], lines[3])
+        }
+    }
+
 }
 
 sealed class SpriteFrame {
@@ -180,5 +204,57 @@ sealed class SpriteFrame {
         val frameWidth: Int,
         val frameHeight: Int
     ) : SpriteFrame()
+
+    companion object {
+        /**
+         * @return [left, up, right, down]
+         */
+        fun createBy4x4(
+            imageWidth: Int,
+            imageHeight: Int,
+            paddingLeft: Int = 0,
+            paddingTop: Int = 0,
+            paddingRight: Int = 0,
+            paddingBottom: Int = 0,
+        ): Array<Line> {
+            // 图片一般都是，从上到下依次为：正面、左面、右边、背面
+            // 因此顺序为：下，左，右，上
+            val frameWidth = (imageWidth - paddingLeft - paddingRight) / 4
+            val frameHeight = (imageHeight - paddingTop - paddingBottom) / 4
+            var linTop = paddingTop
+            val down = Line(
+                count = 4,
+                top = linTop,
+                left = paddingLeft,
+                frameWidth = frameWidth,
+                frameHeight = frameHeight
+            )
+            linTop += frameHeight
+            val left = Line(
+                count = 4,
+                top = linTop,
+                left = paddingLeft,
+                frameWidth = frameWidth,
+                frameHeight = frameHeight
+            )
+            linTop += frameHeight
+            val right = Line(
+                count = 4,
+                top = linTop,
+                left = paddingLeft,
+                frameWidth = frameWidth,
+                frameHeight = frameHeight
+            )
+            linTop += frameHeight
+            val up = Line(
+                count = 4,
+                top = linTop,
+                left = paddingLeft,
+                frameWidth = frameWidth,
+                frameHeight = frameHeight
+            )
+            return arrayOf(left, up, right, down)
+        }
+    }
 
 }

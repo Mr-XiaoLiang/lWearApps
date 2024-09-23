@@ -7,6 +7,10 @@ android {
     namespace = "com.lollipop.wear.ps"
     compileSdk = 34
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.lollipop.wear.ps"
         minSdk = 28
