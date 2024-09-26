@@ -16,6 +16,9 @@ class WorldInfo(
 ) {
 
     companion object {
+
+        val EMPTY = WorldInfo(EmptyGaia, emptyList())
+
         fun create(): Builder {
             return Builder()
         }
