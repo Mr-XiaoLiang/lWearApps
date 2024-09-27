@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
+import android.util.Size
+import com.lollipop.wear.ps.engine.base.BitmapInfo
 import java.io.File
 
 
@@ -67,21 +69,30 @@ interface GaiaInfo {
      */
     val fixMode: Boolean
 
+    /**
+     * 获取资源的尺寸
+     */
+    fun getResourceSize(context: Context): Size
+
 }
 
 object EmptyGaia : GaiaInfo {
     override val width: Int = 0
     override val height: Int = 0
     override val fixMode: Boolean = true
+
+    private val emptySize = Size(0, 0)
+
+    override fun getResourceSize(context: Context): Size {
+        return emptySize
+    }
 }
 
 sealed class StaticGaia(
     override val width: Int,
     override val height: Int,
     override val fixMode: Boolean = true
-) : GaiaInfo {
-
-    abstract fun loadBitmap(context: Context): Bitmap?
+) : BitmapInfo(), GaiaInfo {
 
     class FromAssets(
         val path: String,
@@ -180,9 +191,7 @@ sealed class StaticEdifice(
     override val height: Int,
     override val x: Int,
     override val y: Int
-) : EdificeInfo {
-
-    abstract fun loadBitmap(context: Context): Bitmap?
+) : BitmapInfo(), EdificeInfo {
 
     class FromAssets(
         val path: String,
