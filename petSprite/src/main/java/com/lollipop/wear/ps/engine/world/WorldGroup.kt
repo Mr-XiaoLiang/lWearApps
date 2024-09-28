@@ -30,6 +30,9 @@ class WorldGroup @JvmOverloads constructor(
     var gaiaScale = 1F
         private set
 
+    private var maxScrollX = 0
+    private var maxScrollY = 0
+
     private var pendingBuildWorld = true
 
     fun setGridUnitSize(size: Int) {
@@ -47,10 +50,8 @@ class WorldGroup @JvmOverloads constructor(
     }
 
     private fun onWorldChanged() {
-        removeAllViews()
-        gaiaView = null
-        edificeViewList.clear()
         pendingBuildWorld = true
+        requestLayout()
     }
 
     private fun buildWorld() {
@@ -61,7 +62,11 @@ class WorldGroup @JvmOverloads constructor(
             return
         }
         val adapter = worldAdapter ?: return
+
         removeAllViews()
+        edificeViewList.clear()
+        gaiaView = null
+
         val gaia = adapter.createGaia(worldInfo.gaia)
         addView(gaia)
         gaiaView = gaia
@@ -72,7 +77,7 @@ class WorldGroup @JvmOverloads constructor(
             edificeViewList.add(view)
         }
         requestLayout()
-        pendingBuildWorld = true
+        pendingBuildWorld = false
     }
 
     private fun isEmpty(): Boolean {
@@ -93,18 +98,72 @@ class WorldGroup @JvmOverloads constructor(
             super.onMeasure(widthMeasureSpec, heightMeasureSpec)
             return
         }
+        if (pendingBuildWorld) {
+            buildWorld()
+            return
+        }
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
         setMeasuredDimension(widthSize, heightSize)
         updateGridUnitSize(widthSize, heightSize)
-        // TODO 测量每个View
+        gaiaView?.let { view ->
+            val gaia = worldInfo.gaia
+            val gaiaViewHeight = gaia.height * currentGridUnitSize
+            val gaiaViewWidth = gaia.width * currentGridUnitSize
+            view.measure(
+                MeasureSpec.makeMeasureSpec(gaiaViewWidth, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(gaiaViewHeight, MeasureSpec.EXACTLY)
+            )
+        }
+        for (viewIndex in edificeViewList.indices) {
+            val view = edificeViewList[viewIndex]
+            val edifice = worldInfo.edifice[viewIndex]
+            val edificeViewHeight = edifice.height * currentGridUnitSize
+            val edificeViewWidth = edifice.width * currentGridUnitSize
+            view.measure(
+                MeasureSpec.makeMeasureSpec(edificeViewWidth, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(edificeViewHeight, MeasureSpec.EXACTLY)
+            )
+        }
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         if (isEmpty()) {
             super.onLayout(changed, left, top, right, bottom)
         }
-        // TODO
+        if (pendingBuildWorld) {
+            buildWorld()
+            return
+        }
+
+        val viewHeight = height
+        val viewWidth = width
+        updateGridUnitSize(viewWidth, viewHeight)
+
+        gaiaView?.let { view ->
+            val gaia = worldInfo.gaia
+            val gaiaViewHeight = gaia.height * currentGridUnitSize
+            val gaiaViewWidth = gaia.width * currentGridUnitSize
+            view.layout(0, 0, gaiaViewWidth, gaiaViewHeight)
+        }
+        for (viewIndex in edificeViewList.indices) {
+            val view = edificeViewList[viewIndex]
+            val edifice = worldInfo.edifice[viewIndex]
+            val edificeLeft = edifice.x * currentGridUnitSize
+            val edificeTop = edifice.y * currentGridUnitSize
+            val edificeHeight = edifice.height * currentGridUnitSize
+            val edificeWidth = edifice.width * currentGridUnitSize
+            view.layout(
+                edificeLeft,
+                edificeTop,
+                edificeLeft + edificeWidth,
+                edificeTop + edificeHeight
+            )
+        }
+    }
+
+    override fun scrollTo(x: Int, y: Int) {
+        super.scrollTo(x.limit(0, maxScrollX), y.limit(0, maxScrollY))
     }
 
     /**
@@ -144,6 +203,29 @@ class WorldGroup @JvmOverloads constructor(
             currentGridUnitSize = gridUnitSize
             gaiaScale = currentGridUnitSize * gaia.height / gaiaResSize.height.toFloat()
         }
+        limitOffset(w, h)
+    }
+
+    private fun limitOffset(viewWidth: Int, viewHeight: Int) {
+        if (isEmpty()) {
+            maxScrollX = 0
+            maxScrollY = 0
+            return
+        }
+        val gaiaHeight = worldInfo.gaia.height * currentGridUnitSize
+        val gaiaWidth = worldInfo.gaia.width * currentGridUnitSize
+        maxScrollX = gaiaWidth - viewWidth
+        maxScrollY = gaiaHeight - viewHeight
+    }
+
+    private fun Int.limit(min: Int, max: Int): Int {
+        if (this < min) {
+            return min
+        }
+        if (this > max) {
+            return max
+        }
+        return this
     }
 
 }
