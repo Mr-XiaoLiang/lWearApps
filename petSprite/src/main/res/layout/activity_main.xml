@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black">
@@ -14,6 +15,81 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.wear.widget.CurvedTextView
+        android:id="@+id/timeView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/roboto_regular"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        app:anchorAngleDegrees="0"
+        app:clockwise="true"
+        tools:text="12:00" />
+
+    <com.lollipop.wear.widget.CircularProgressIndicator
+        android:id="@+id/moodProgressBar"
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:padding="4dp"
+        app:activeColor="#fff"
+        app:antiClockwise="true"
+        app:inactiveColor="#3fff"
+        app:interval="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:startAngle="300"
+        app:strokeWidth="3dp"
+        app:sweepAngle="60"
+        tools:activeColor="@color/piece_tint_a"
+        tools:indicatorProgress="0.6" />
+
+    <androidx.wear.widget.CurvedTextView
+        android:id="@+id/moodValueView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/roboto_regular"
+        android:padding="8dp"
+        tools:text="@string/mood"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        app:anchorAngleDegrees="60"
+        app:clockwise="true" />
+
+    <com.lollipop.wear.widget.CircularProgressIndicator
+        android:id="@+id/healthProgressBar"
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:padding="4dp"
+        app:activeColor="#fff"
+        app:antiClockwise="false"
+        app:inactiveColor="#3fff"
+        app:interval="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:startAngle="180"
+        app:strokeWidth="3dp"
+        app:sweepAngle="60"
+        tools:activeColor="@color/piece_tint_b"
+        tools:indicatorProgress="0.4" />
+
+    <androidx.wear.widget.CurvedTextView
+        android:id="@+id/healthValueView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/roboto_regular"
+        android:padding="8dp"
+        android:text="@string/health"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        app:anchorAngleDegrees="300"
+        app:clockwise="true" />
 
     <ImageView
         android:id="@+id/upButton"
