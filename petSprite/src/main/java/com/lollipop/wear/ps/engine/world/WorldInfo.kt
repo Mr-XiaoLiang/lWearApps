@@ -67,7 +67,7 @@ interface GaiaInfo {
     /**
      * 是否使用填充模式，如果是的话，地图的横向或者纵向，短边会填充满屏幕并且拉伸
      */
-    val fixMode: Boolean
+    val resMode: GaiaResourceMode
 
     /**
      * 获取资源的尺寸
@@ -76,10 +76,16 @@ interface GaiaInfo {
 
 }
 
+enum class GaiaResourceMode {
+    Fit,
+    Tile,
+    Free
+}
+
 object EmptyGaia : GaiaInfo {
     override val width: Int = 0
     override val height: Int = 0
-    override val fixMode: Boolean = true
+    override val resMode: GaiaResourceMode = GaiaResourceMode.Fit
 
     private val emptySize = Size(0, 0)
 
@@ -91,15 +97,15 @@ object EmptyGaia : GaiaInfo {
 sealed class StaticGaia(
     override val width: Int,
     override val height: Int,
-    override val fixMode: Boolean = true
+    override val resMode: GaiaResourceMode = GaiaResourceMode.Fit
 ) : BitmapInfo(), GaiaInfo {
 
     class FromAssets(
         val path: String,
         width: Int,
         height: Int,
-        fixMode: Boolean = true
-    ) : StaticGaia(width = width, height = height, fixMode = fixMode) {
+        resMode: GaiaResourceMode = GaiaResourceMode.Fit
+    ) : StaticGaia(width = width, height = height, resMode = resMode) {
 
         override fun loadBitmap(context: Context): Bitmap? {
             try {
@@ -116,8 +122,8 @@ sealed class StaticGaia(
         private val id: Int,
         width: Int,
         height: Int,
-        fixMode: Boolean = true
-    ) : StaticGaia(width = width, height = height, fixMode = fixMode) {
+        resMode: GaiaResourceMode = GaiaResourceMode.Fit
+    ) : StaticGaia(width = width, height = height, resMode = resMode) {
         override fun loadBitmap(context: Context): Bitmap? {
             try {
                 return BitmapFactory.decodeResource(context.resources, id)
@@ -132,8 +138,8 @@ sealed class StaticGaia(
         private val file: File,
         width: Int,
         height: Int,
-        fixMode: Boolean = true
-    ) : StaticGaia(width = width, height = height, fixMode = fixMode) {
+        resMode: GaiaResourceMode = GaiaResourceMode.Fit
+    ) : StaticGaia(width = width, height = height, resMode = resMode) {
         override fun loadBitmap(context: Context): Bitmap? {
             try {
                 return BitmapFactory.decodeFile(file.path)
@@ -149,8 +155,8 @@ sealed class StaticGaia(
         private val bytes: ByteArray,
         width: Int,
         height: Int,
-        fixMode: Boolean = true
-    ) : StaticGaia(width = width, height = height, fixMode = fixMode) {
+        resMode: GaiaResourceMode = GaiaResourceMode.Fit
+    ) : StaticGaia(width = width, height = height, resMode = resMode) {
         override fun loadBitmap(context: Context): Bitmap? {
             try {
                 return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
