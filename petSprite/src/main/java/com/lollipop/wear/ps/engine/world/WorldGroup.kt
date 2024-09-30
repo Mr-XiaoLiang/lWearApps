@@ -175,33 +175,44 @@ class WorldGroup @JvmOverloads constructor(
             return
         }
         val gaia = worldInfo.gaia
-        if (gaia.fixMode) {
-            val gaiaResSize = gaia.getResourceSize(context)
-            val gaiaGridXCount = gaia.width
-            val gaiaGridYCount = gaia.height
-            val gaiaWidth = gaiaResSize.width.toFloat()
-            val gaiaHeight = gaiaResSize.height.toFloat()
-            if (gaiaWidth > 0 && gaiaHeight > 0) {
-                val gaiaRatio = gaiaWidth / gaiaHeight
-                val viewRatio = w.toFloat() / h
-                if (gaiaRatio > viewRatio) {
-                    // 如果图片的宽高比，大于了屏幕的宽高比，那么说明图片比屏幕更宽，
-                    // 那么我们应该按照高度来填充，保证充满，然后滑动内容
-                    // 所以格子数量是以高度为基准的
-                    currentGridUnitSize = (h.toFloat() / gaiaGridYCount).toInt()
-                    gaiaScale = h.toFloat() / gaiaHeight
+        when (gaia.resMode) {
+            GaiaResourceMode.Fit -> {
+
+                val gaiaResSize = gaia.getResourceSize(context)
+                val gaiaGridXCount = gaia.width
+                val gaiaGridYCount = gaia.height
+                val gaiaWidth = gaiaResSize.width.toFloat()
+                val gaiaHeight = gaiaResSize.height.toFloat()
+                if (gaiaWidth > 0 && gaiaHeight > 0) {
+                    val gaiaRatio = gaiaWidth / gaiaHeight
+                    val viewRatio = w.toFloat() / h
+                    if (gaiaRatio > viewRatio) {
+                        // 如果图片的宽高比，大于了屏幕的宽高比，那么说明图片比屏幕更宽，
+                        // 那么我们应该按照高度来填充，保证充满，然后滑动内容
+                        // 所以格子数量是以高度为基准的
+                        currentGridUnitSize = (h.toFloat() / gaiaGridYCount).toInt()
+                        gaiaScale = h.toFloat() / gaiaHeight
+                    } else {
+                        currentGridUnitSize = (w.toFloat() / gaiaGridXCount).toInt()
+                        gaiaScale = w.toFloat() / gaiaWidth
+                    }
                 } else {
-                    currentGridUnitSize = (w.toFloat() / gaiaGridXCount).toInt()
-                    gaiaScale = w.toFloat() / gaiaWidth
+                    currentGridUnitSize = 0
+                    gaiaScale = 1F
                 }
-            } else {
-                currentGridUnitSize = 0
-                gaiaScale = 1F
             }
-        } else {
-            val gaiaResSize = gaia.getResourceSize(context)
-            currentGridUnitSize = gridUnitSize
-            gaiaScale = currentGridUnitSize * gaia.height / gaiaResSize.height.toFloat()
+
+            GaiaResourceMode.Tile -> {
+                val gaiaResSize = gaia.getResourceSize(context)
+                currentGridUnitSize = gridUnitSize
+                gaiaScale = currentGridUnitSize / gaiaResSize.height.toFloat()
+            }
+
+            GaiaResourceMode.Free -> {
+                val gaiaResSize = gaia.getResourceSize(context)
+                currentGridUnitSize = gridUnitSize
+                gaiaScale = currentGridUnitSize * gaia.height / gaiaResSize.height.toFloat()
+            }
         }
         limitOffset(w, h)
     }

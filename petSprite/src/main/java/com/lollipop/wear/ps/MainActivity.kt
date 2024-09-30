@@ -23,18 +23,6 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         )
-        binding.upButton.setOnClickListener {
-            updateToward(binding.spritePlayer, SpriteToward.Up)
-        }
-        binding.leftButton.setOnClickListener {
-            updateToward(binding.spritePlayer, SpriteToward.Left)
-        }
-        binding.rightButton.setOnClickListener {
-            updateToward(binding.spritePlayer, SpriteToward.Right)
-        }
-        binding.downButton.setOnClickListener {
-            updateToward(binding.spritePlayer, SpriteToward.Down)
-        }
     }
 
     private fun updateToward(player: SpritePlayer, toward: SpriteToward) {

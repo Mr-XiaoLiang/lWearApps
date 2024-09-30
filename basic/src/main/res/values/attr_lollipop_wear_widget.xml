@@ -20,4 +20,10 @@
         <attr name="indicatorInterval" format="dimension" />
         <attr name="indicatorRadius" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="ArcLayout_Layout">
+        <attr name="layout_arc_angle" format="float" />
+        <attr name="layout_arc_radius" format="dimension" />
+        <attr name="layout_arc_margin" format="dimension" />
+    </declare-styleable>
 </resources>
