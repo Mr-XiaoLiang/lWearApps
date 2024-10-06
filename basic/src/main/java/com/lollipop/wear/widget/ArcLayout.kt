@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.lollipop.wear.basic.R
 import kotlin.math.cos
+import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
 
@@ -51,6 +52,15 @@ class ArcLayout @JvmOverloads constructor(
         }
     }
 
+    private fun getParentRadius(mode: RadiusMode, parentWidth: Int, parentHeight: Int): Float {
+        return when (mode) {
+            RadiusMode.MinEdge -> min(parentWidth, parentHeight) / 2F
+            RadiusMode.MaxEdge -> max(parentWidth, parentHeight) / 2F
+            RadiusMode.Height -> parentHeight / 2F
+            RadiusMode.Width -> parentWidth / 2F
+        }
+    }
+
     private fun layoutChildren(left: Int, top: Int, right: Int, bottom: Int) {
         val count = childCount
 
@@ -60,16 +70,18 @@ class ArcLayout @JvmOverloads constructor(
         val parentWidth = right - left - paddingLeft - paddingRight
         val parentHeight = bottom - top - paddingTop - paddingBottom
 
-        val parentRadius = min(parentWidth, parentHeight) / 2F
-        val centerX = parentLeft + parentRadius
-        val centerY = parentTop + parentRadius
         debugInfoList.clear()
         for (i in 0 until count) {
             val child = getChildAt(i)
             if (child.visibility == GONE) {
                 continue
             }
+
             val lp = child.layoutParams as ArcLayoutParams
+
+            val parentRadius = getParentRadius(lp.radiusMode, parentWidth, parentHeight)
+            val centerX = parentLeft + (parentWidth * 0.5F)
+            val centerY = parentTop + (parentHeight * 0.5F)
 
             val childWidth = child.measuredWidth
             val childHeight = child.measuredHeight
@@ -111,6 +123,7 @@ class ArcLayout @JvmOverloads constructor(
         var angle: Float = 0F
         var edgeMargin: Float = 0F
         var radius: Float = 0F
+        var radiusMode: RadiusMode = RadiusMode.MinEdge
 
         constructor(width: Int, height: Int) : super(width, height)
         constructor(source: ArcLayoutParams) : super(source) {
@@ -124,6 +137,15 @@ class ArcLayout @JvmOverloads constructor(
             angle = a.getFloat(R.styleable.ArcLayout_Layout_layout_arc_angle, 0F)
             edgeMargin = a.getDimension(R.styleable.ArcLayout_Layout_layout_arc_margin, 0F)
             radius = a.getDimension(R.styleable.ArcLayout_Layout_layout_arc_radius, 0F)
+            radiusMode = RadiusMode.MinEdge
+            val mode = a.getInt(
+                R.styleable.ArcLayout_Layout_layout_arc_mode, RadiusMode.MinEdge.declare
+            )
+            RadiusMode.entries.forEach {
+                if (it.declare == mode) {
+                    radiusMode = it
+                }
+            }
             a.recycle()
         }
 
@@ -162,6 +184,13 @@ class ArcLayout @JvmOverloads constructor(
             return ArcLayoutParams(lp)
         }
         return ArcLayoutParams(lp)
+    }
+
+    enum class RadiusMode(val declare: Int) {
+        MinEdge(0),
+        MaxEdge(1),
+        Height(2),
+        Width(3)
     }
 
 }
