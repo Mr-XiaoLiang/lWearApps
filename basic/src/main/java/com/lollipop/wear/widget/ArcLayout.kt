@@ -18,8 +18,6 @@ class ArcLayout @JvmOverloads constructor(
     attributeSet: AttributeSet? = null
 ) : FrameLayout(context, attributeSet) {
 
-    private var isDebug = true
-
     private val debugInfoList = mutableListOf<DebugInfo>()
     private val debugPaint = Paint().apply {
         color = Color.RED
@@ -39,7 +37,7 @@ class ArcLayout @JvmOverloads constructor(
 
     override fun dispatchDraw(canvas: Canvas) {
         super.dispatchDraw(canvas)
-        if (isDebug) {
+        if (isInEditMode) {
             for (info in debugInfoList) {
                 canvas.drawCircle(info.centerX, info.centerY, 10F, debugPaint)
                 canvas.drawLine(
@@ -93,7 +91,7 @@ class ArcLayout @JvmOverloads constructor(
             val childTop = childY - (childHeight / 2)
 
             child.layout(childLeft, childTop, childLeft + childWidth, childTop + childHeight)
-            if (isDebug) {
+            if (isInEditMode) {
                 debugInfoList.add(DebugInfo(childX, childY, centerX, centerY))
             }
         }
