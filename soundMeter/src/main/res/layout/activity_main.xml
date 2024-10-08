@@ -6,33 +6,31 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <com.lollipop.wear.widget.CircularProgressIndicator
-        android:id="@+id/pressureProgressIndicator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="6dp"
         app:activeColor="#fff"
         app:antiClockwise="false"
         app:inactiveColor="#3fff"
-        app:interval="2dp"
-        app:startAngle="95"
+        app:interval="20dp"
+        app:startAngle="90"
         app:strokeWidth="8dp"
-        app:sweepAngle="140"
+        app:sweepAngle="180"
         tools:activeColor="@color/piece_tint_a"
-        tools:indicatorProgress="0.6" />
+        tools:indicatorProgress="0.4" />
 
     <com.lollipop.wear.widget.CircularProgressIndicator
-        android:id="@+id/altitudeProgressIndicator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="6dp"
         app:activeColor="#fff"
         app:antiClockwise="true"
         app:inactiveColor="#3fff"
-        app:interval="2dp"
-        app:startAngle="305"
+        app:interval="20dp"
+        app:startAngle="90"
         app:strokeWidth="8dp"
-        app:sweepAngle="140"
+        app:sweepAngle="180"
         tools:activeColor="@color/piece_tint_a"
-        tools:indicatorProgress="0.6" />
+        tools:indicatorProgress="0.4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

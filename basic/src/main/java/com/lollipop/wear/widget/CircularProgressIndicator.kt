@@ -230,57 +230,70 @@ class CircularProgressIndicator @JvmOverloads constructor(
                 return
             }
             val radius = min(boundsF.width(), boundsF.height()) / 2
-            val intervalAngle = arcDimenToAngle(radius, interval + strokeWidth)
-            var activeSweep = sweepAngle * progress
-            if ((360 - activeSweep) < intervalAngle) {
-                activeSweep = 360 - intervalAngle
+            val intervalAngle = arcDimenToAngle(radius, interval)
+            val capAngle = arcDimenToAngle(radius, strokeWidth / 2)
+
+            var beforeSweep: Float
+            val beforePaint: Paint
+            val afterPaint: Paint
+            val arcStart: Float
+
+            val endSpace = 360F - sweepAngle
+            val maxSweep: Float = if (endSpace < intervalAngle) {
+                sweepAngle - intervalAngle + endSpace
+            } else {
+                sweepAngle
             }
-            val activeEnable = progress >= 0.009
-            val inactiveEnable = progress <= 0.991
+
             when (direction) {
                 Direction.Clockwise -> {
-                    if (activeEnable) {
-                        canvas.drawArc(boundsF, startAngle, activeSweep, false, activePaint)
+                    beforeSweep = maxSweep * progress
+                    if (maxSweep - beforeSweep < intervalAngle) {
+                        beforeSweep = maxSweep
+                    } else if (beforeSweep < intervalAngle) {
+                        beforeSweep = 0F
                     }
-                    var inactiveSweep = sweepAngle - activeSweep
-                    if ((360 - inactiveSweep) < intervalAngle) {
-                        inactiveSweep = 360 - intervalAngle
-                    }
-                    var inactiveStart = startAngle + activeSweep
-                    if (activeEnable) {
-                        // 如果上面还有，那就再减一次，因为有2个断口
-                        inactiveStart += intervalAngle
-                    }
-                    if (inactiveEnable) {
-                        if ((360 - sweepAngle) < intervalAngle && activeEnable) {
-                            inactiveSweep -= intervalAngle
-                            inactiveSweep -= intervalAngle
-                        }
-                        canvas.drawArc(boundsF, inactiveStart, inactiveSweep, false, inactivePaint)
-                    }
+                    beforePaint = activePaint
+                    afterPaint = inactivePaint
+                    arcStart = startAngle
                 }
 
                 Direction.AntiClockwise -> {
-                    if (activeEnable) {
-                        val activeStart = startAngle + sweepAngle - activeSweep
-                        canvas.drawArc(boundsF, activeStart, activeSweep, false, activePaint)
+                    var afterSweep = maxSweep * progress
+                    if (maxSweep - afterSweep < intervalAngle) {
+                        afterSweep = maxSweep
+                    } else if (afterSweep < intervalAngle) {
+                        afterSweep = 0F
                     }
-                    var inactiveSweep = sweepAngle - activeSweep
-                    if ((360 - inactiveSweep) < intervalAngle) {
-                        inactiveSweep = 360 - intervalAngle
+                    beforeSweep = maxSweep - afterSweep
+                    if (afterSweep >= 1) {
+                        beforeSweep -= intervalAngle
                     }
-                    if (activeEnable) {
-                        inactiveSweep -= intervalAngle
-                    }
-                    var inactiveStart = startAngle
-                    if (inactiveEnable) {
-                        if ((360 - sweepAngle) < intervalAngle && activeEnable) {
-                            inactiveStart += intervalAngle
-                            inactiveSweep -= intervalAngle
-                        }
-                        canvas.drawArc(boundsF, inactiveStart, inactiveSweep, false, inactivePaint)
-                    }
+                    beforePaint = inactivePaint
+                    afterPaint = activePaint
+                    val offset = sweepAngle - maxSweep
+                    arcStart = (360 - startAngle) + offset
                 }
+            }
+
+            beforeSweep -= (capAngle * 2)
+            val beforeEnable = beforeSweep >= 1
+            if (beforeEnable) {
+                canvas.drawArc(boundsF, arcStart + capAngle, beforeSweep, false, beforePaint)
+            }
+            var afterOffset = 0F
+            if (beforeEnable) {
+                // 上一个的圆角
+                afterOffset += (capAngle * 2)
+                // 上一个的实际扇形
+                afterOffset += beforeSweep
+                // 两个之间的间距
+                afterOffset += intervalAngle
+            }
+            val afterSweep = maxSweep - afterOffset - (capAngle * 2)
+            if (afterSweep >= 1) {
+                val afterStart = arcStart + afterOffset + capAngle
+                canvas.drawArc(boundsF, afterStart, afterSweep, false, afterPaint)
             }
         }
 
@@ -301,7 +314,14 @@ class CircularProgressIndicator @JvmOverloads constructor(
     }
 
     enum class Direction {
+        /**
+         * 顺时针
+         */
         Clockwise,
+
+        /**
+         * 逆时针
+         */
         AntiClockwise
     }
 
