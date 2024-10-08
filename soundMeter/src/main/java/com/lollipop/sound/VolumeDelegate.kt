@@ -12,11 +12,12 @@ import android.os.Looper
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import kotlin.math.log10
+import kotlin.math.min
 
 
 class VolumeDelegate(
     private val activity: Activity,
-    private val volumeCallback: (dB: Double) -> Unit
+    private val volumeCallback: VolumeCallback
 ) {
 
     companion object {
@@ -30,7 +31,12 @@ class VolumeDelegate(
             Log.e("VolumeDelegate", e.message, e)
         }
 
-        private const val SAMPLE_RATE_IN_HZ = 8000;
+        private const val SAMPLE_RATE_IN_HZ = 8000
+
+        /**
+         * Short.MAX_VALUE * Short.MAX_VALUE
+         */
+        private const val MAX_PCM_MEAN = 1073676289L
 
     }
 
@@ -162,20 +168,32 @@ class VolumeDelegate(
         val buffer = ShortArray(bufferSize)
         //r是实际读取的数据长度，一般而言r会小于bufferSize
         val r: Int = record.read(buffer, 0, bufferSize)
+        if (r <= 0) {
+            postNextRecordTask()
+            return
+        }
         var v: Long = 0
+        // 读到多少算多少
+        val max = min(r, bufferSize)
         // 将 buffer 内容取出，进行平方和运算
-        for (value in buffer) {
-            v += (value * value).toLong()
+        for (index in 0 until max) {
+            val value = buffer[index].toLong()
+            v += value * value
         }
         // 平方和除以数据总长度，得到音量大小。
-        val mean = v / r.toDouble()
-        val volume = 10 * log10(mean)
+        val mean = v / (r.toDouble())
+        val volume = (10 * log10(mean)).toFloat()
+        val pcm = (mean / MAX_PCM_MEAN).toFloat()
         postMain {
-            volumeCallback(volume)
+            volumeCallback.onVolumeUpdate(pcm, volume)
         }
         if (isEnable && isActive) {
             postNextRecordTask()
         }
+    }
+
+    fun interface VolumeCallback {
+        fun onVolumeUpdate(pcm: Float, volume: Float)
     }
 
 }

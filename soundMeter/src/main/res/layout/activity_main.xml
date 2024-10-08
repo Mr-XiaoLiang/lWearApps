@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.lollipop.wear.widget.CircularProgressIndicator
+        android:id="@+id/pressureProgressIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="6dp"
+        app:activeColor="#fff"
+        app:antiClockwise="false"
+        app:inactiveColor="#3fff"
+        app:interval="2dp"
+        app:startAngle="95"
+        app:strokeWidth="8dp"
+        app:sweepAngle="140"
+        tools:activeColor="@color/piece_tint_a"
+        tools:indicatorProgress="0.6" />
+
+    <com.lollipop.wear.widget.CircularProgressIndicator
+        android:id="@+id/altitudeProgressIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="6dp"
+        app:activeColor="#fff"
+        app:antiClockwise="true"
+        app:inactiveColor="#3fff"
+        app:interval="2dp"
+        app:startAngle="305"
+        app:strokeWidth="8dp"
+        app:sweepAngle="140"
+        tools:activeColor="@color/piece_tint_a"
+        tools:indicatorProgress="0.6" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,6 +7,10 @@ android {
     namespace = "com.lollipop.sound"
     compileSdk = 34
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.lollipop.sound"
         minSdk = 28
@@ -35,5 +39,7 @@ android {
 }
 
 dependencies {
-implementation(project(":basic"))
+    implementation(libs.core.splashscreen)
+    implementation(libs.appcompat)
+    implementation(project(":basic"))
 }
