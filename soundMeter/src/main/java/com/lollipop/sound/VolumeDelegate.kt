@@ -12,6 +12,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import kotlin.math.log10
+import kotlin.math.max
 import kotlin.math.min
 
 
@@ -38,6 +39,19 @@ class VolumeDelegate(
          */
         private const val MAX_PCM_MEAN = 1073676289L
 
+        /**
+         * 10 * log10(MAX_PCM_MEAN.toDouble())
+         */
+        private const val MAX_VOLUME = 90F
+
+        fun getPcmProgress(pcm: Float): Float {
+            return max(0f, min(1f, pcm / MAX_PCM_MEAN))
+        }
+
+        fun getVolumeProgress(volume: Float): Float {
+            return max(0f, min(1f, volume / MAX_VOLUME))
+        }
+
     }
 
     private var audioRecord: AudioRecord? = null
@@ -49,7 +63,7 @@ class VolumeDelegate(
         android.os.Handler(Looper.getMainLooper())
     }
 
-    private fun hasPermission(): Boolean {
+    fun hasPermission(): Boolean {
         return ActivityCompat.checkSelfPermission(
             activity,
             Manifest.permission.RECORD_AUDIO
@@ -65,7 +79,7 @@ class VolumeDelegate(
 
     private fun postNextRecordTask() {
         asyncHandler.removeCallbacks(recordTask)
-        asyncHandler.postDelayed(recordTask, 100)
+        asyncHandler.postDelayed(recordTask, 50)
     }
 
     fun setEnable(enable: Boolean) {
@@ -108,6 +122,12 @@ class VolumeDelegate(
             logE(e)
         }
         asyncHandler.removeCallbacks(recordTask)
+    }
+
+    fun onDestroy() {
+        asyncHandler.removeCallbacksAndMessages(null)
+        audioRecord?.release()
+        audioRecord = null
     }
 
     private fun getMinBufferSize(): Int {
@@ -183,9 +203,9 @@ class VolumeDelegate(
         // 平方和除以数据总长度，得到音量大小。
         val mean = v / (r.toDouble())
         val volume = (10 * log10(mean)).toFloat()
-        val pcm = (mean / MAX_PCM_MEAN).toFloat()
+        val pcm = mean.toFloat()
         postMain {
-            volumeCallback.onVolumeUpdate(pcm, volume)
+            volumeCallback.onVolumeUpdate(max(0F, pcm), max(0F, volume))
         }
         if (isEnable && isActive) {
             postNextRecordTask()

@@ -1,36 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:background="@android:color/black">
 
     <com.lollipop.wear.widget.CircularProgressIndicator
+        android:id="@+id/dbProgressIndicator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="6dp"
         app:activeColor="#fff"
         app:antiClockwise="false"
         app:inactiveColor="#3fff"
-        app:interval="20dp"
-        app:startAngle="90"
+        app:interval="2dp"
+        app:startAngle="105"
         app:strokeWidth="8dp"
-        app:sweepAngle="180"
-        tools:activeColor="@color/piece_tint_a"
+        app:sweepAngle="330"
         tools:indicatorProgress="0.4" />
 
-    <com.lollipop.wear.widget.CircularProgressIndicator
+    <androidx.wear.widget.CurvedTextView
+        android:id="@+id/timeView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fontFamily="@font/roboto_regular"
+        android:padding="2dp"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        app:anchorAngleDegrees="180"
+        app:clockwise="false"
+        tools:text="12:00" />
+
+    <TextView
+        android:id="@+id/pcmValueView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/dbValueView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="9000.00" />
+
+    <TextView
+        android:id="@+id/dbValueView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pcmValueView"
+        tools:text="190.00" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
+        android:text="@string/unit_db"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/dbValueView"
+        app:layout_constraintStart_toEndOf="@id/dbValueView" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/infoButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:padding="6dp"
-        app:activeColor="#fff"
-        app:antiClockwise="true"
-        app:inactiveColor="#3fff"
-        app:interval="20dp"
-        app:startAngle="90"
-        app:strokeWidth="8dp"
-        app:sweepAngle="180"
-        tools:activeColor="@color/piece_tint_a"
-        tools:indicatorProgress="0.4" />
+        android:src="@drawable/outline_info_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dbValueView"
+        app:tint="@android:color/white" />
+
+    <androidx.wear.widget.BoxInsetLayout
+        android:id="@+id/hintPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:boxedEdges="left|right">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingVertical="40dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/volume_hint"
+                    android:textColor="#EEE"
+                    android:textSize="14sp" />
+
+                <com.lollipop.wear.widget.CircularImageView
+                    android:id="@+id/hintCloseButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="#0DACC7"
+                    android:gravity="center"
+                    android:paddingVertical="6dp"
+                    android:src="@drawable/baseline_close_24"
+                    android:textSize="16sp"
+                    app:tint="@android:color/white" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.wear.widget.BoxInsetLayout>
+
+    <androidx.wear.widget.BoxInsetLayout
+        android:id="@+id/permissionPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        tools:visibility="gone">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:boxedEdges="left|right">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingVertical="40dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/permission_mic_alert"
+                    android:textColor="#EEE"
+                    android:textSize="14sp" />
+
+                <com.lollipop.wear.widget.CircularTextView
+                    android:id="@+id/permissionAllowButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="#0DACC7"
+                    android:gravity="center"
+                    android:paddingVertical="6dp"
+                    android:text="@string/allow"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.wear.widget.BoxInsetLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
