@@ -34,7 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:startAngle="315"
+        app:startAngle="45"
         app:strokeWidth="3dp"
         app:sweepAngle="90"
         tools:activeColor="@color/piece_tint_a"
@@ -155,7 +155,7 @@
         android:layout_height="match_parent"
         android:background="@android:color/black"
         android:visibility="gone"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <LinearLayout
             android:id="@+id/winnerGroup"
