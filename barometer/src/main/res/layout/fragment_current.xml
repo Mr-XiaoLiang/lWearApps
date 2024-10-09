@@ -39,7 +39,7 @@
         app:antiClockwise="true"
         app:inactiveColor="#3fff"
         app:interval="2dp"
-        app:startAngle="35"
+        app:startAngle="175"
         app:strokeWidth="8dp"
         app:sweepAngle="140"
         tools:activeColor="@color/piece_tint_a"

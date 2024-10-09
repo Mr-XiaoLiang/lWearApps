@@ -272,7 +272,7 @@ class CircularProgressIndicator @JvmOverloads constructor(
                     beforePaint = inactivePaint
                     afterPaint = activePaint
                     val offset = sweepAngle - maxSweep
-                    arcStart = (360 - startAngle) + offset
+                    arcStart = (startAngle - sweepAngle) + offset
                 }
             }
 
