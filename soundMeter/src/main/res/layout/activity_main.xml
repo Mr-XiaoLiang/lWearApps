@@ -71,6 +71,20 @@
         app:layout_constraintBaseline_toBaselineOf="@id/dbValueView"
         app:layout_constraintStart_toEndOf="@id/dbValueView" />
 
+    <com.lollipop.sound.VolumeSpectrumView
+        android:id="@+id/volumeSpectrumView"
+        android:layout_width="0px"
+        android:layout_height="20dp"
+        app:layout_constraintBottom_toTopOf="@id/pcmValueView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintWidth_percent="0.5"
+        app:vs_color="@android:color/white"
+        app:vs_interval="2dp"
+        app:vs_lineWidth="2dp" />
+
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/infoButton"
         android:layout_width="24dp"

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Sound Meter</string>
+    <string name="unit_db">Db</string>
+    <string name="permission_mic_alert">To obtain the loudness of the sound, it requires support from the microphone. \nTherefore, in order to use this application normally, microphone permission needs to be granted.</string>
+    <string name="allow">Allow</string>
+    <string name="volume_hint">Decibel (Db) is a relative unit that represents the magnitude of different sound levels that a person can hear, starting from the smallest sound they can hear.\nThis also results in inaccurate description of decibel values on non professional equipment. Due to hardware limitations and the location of the microphone, it is impossible to accurately calculate the current noise level.\nTherefore, the data in this application is for reference only.</string>
+</resources>

@@ -2,6 +2,7 @@ package com.lollipop.sound
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.ColorFilter
 import android.graphics.Paint
 import android.graphics.PixelFormat
@@ -22,6 +23,33 @@ class VolumeSpectrumView @JvmOverloads constructor(
 
     init {
         setImageDrawable(volumeDrawable)
+        attributeSet?.let { attr ->
+            val typedArray = context.obtainStyledAttributes(
+                attr, R.styleable.VolumeSpectrumView
+            )
+            val lineWidth = typedArray.getDimensionPixelSize(
+                R.styleable.VolumeSpectrumView_vs_lineWidth,
+                1
+            )
+            val interval = typedArray.getDimensionPixelSize(
+                R.styleable.VolumeSpectrumView_vs_interval,
+                1
+            )
+            val color = typedArray.getColor(
+                R.styleable.VolumeSpectrumView_vs_color,
+                Color.GRAY
+            )
+            setColor(color)
+            setLineInfo(lineWidth, interval)
+            typedArray.recycle()
+        }
+        if (isInEditMode) {
+            volumeDrawable.addNode(0.2F)
+            volumeDrawable.addNode(0.5F)
+            volumeDrawable.addNode(0.7F)
+            volumeDrawable.addNode(0.4F)
+            volumeDrawable.addNode(0.3F)
+        }
     }
 
     fun push(value: Float) {
@@ -30,7 +58,7 @@ class VolumeSpectrumView @JvmOverloads constructor(
         }
     }
 
-    fun setLineInfo(lineWidth: Float, interval: Float) {
+    fun setLineInfo(lineWidth: Int, interval: Int) {
         volumeDrawable.setLineInfo(lineWidth, interval)
     }
 
@@ -49,8 +77,8 @@ class VolumeSpectrumView @JvmOverloads constructor(
             isDither = true
             strokeCap = Paint.Cap.ROUND
         }
-        private var lineWidth: Float = 1F
-        private var interval: Float = 1F
+        private var lineWidth: Int = 1
+        private var interval: Int = 1
         private var maxCount = 0
         private var volumeNode: VolumeNode? = null
 
@@ -61,7 +89,7 @@ class VolumeSpectrumView @JvmOverloads constructor(
             invalidateSelf()
         }
 
-        fun setLineInfo(lineWidth: Float, interval: Float) {
+        fun setLineInfo(lineWidth: Int, interval: Int) {
             this.lineWidth = lineWidth
             this.interval = interval
             buildParams()
@@ -84,10 +112,15 @@ class VolumeSpectrumView @JvmOverloads constructor(
             if (bounds.isEmpty) {
                 maxCount = 0
             } else {
-                maxCount = (bounds.width() / (lineWidth + interval)).toInt()
-                maxCount += 1
+                val step = lineWidth + interval
+                val width = bounds.width()
+                maxCount = width / step
+                // 还能显示下一个，就显示一下
+                if ((width - (maxCount * step)) >= lineWidth) {
+                    maxCount += 1
+                }
             }
-            paint.strokeWidth = lineWidth
+            paint.strokeWidth = lineWidth.toFloat()
             invalidateSelf()
         }
 

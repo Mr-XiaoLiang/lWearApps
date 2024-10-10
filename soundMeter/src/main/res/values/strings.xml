@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Sound Meter</string>
+    <string name="app_name">噪音计</string>
     <string name="unit_db">Db</string>
     <string name="permission_mic_alert">获取声音的响度，需要从麦克风的支持。\n因此，为了能正常使用本应用，需要授予麦克风权限。</string>
     <string name="allow">允许</string>
-    <string name="volume_hint">分贝(Db)是一个相对的单位，它表示了人从能听到的最小声音开始，不同声音大小的量级。\\n这也造成了在非专业设备上，无法准确的描述分贝值。同时受到硬件限制以及麦克风的位置影响，无法准确计算当前的噪音大小。\\n因此本应用的数据仅作参考。</string>
+    <string name="volume_hint">分贝(Db)是一个相对的单位，它表示了人从能听到的最小声音开始，不同声音大小的量级。\n这也造成了在非专业设备上，无法准确的描述分贝值。同时受到硬件限制以及麦克风的位置影响，无法准确计算当前的噪音大小。\n因此本应用的数据仅作参考。</string>
 </resources>

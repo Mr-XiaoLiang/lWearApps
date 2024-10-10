@@ -75,7 +75,9 @@ class MainActivity : AppCompatActivity() {
     private fun updateVolume(pcm: Float, volume: Float) {
         binding.dbValueView.text = decimalFormat.format(volume)
         binding.pcmValueView.text = decimalFormat.format(pcm)
-        binding.dbProgressIndicator.progress = VolumeDelegate.getVolumeProgress(volume)
+        val volumeProgress = VolumeDelegate.getVolumeProgress(volume)
+        binding.dbProgressIndicator.progress = volumeProgress
+        binding.volumeSpectrumView.push(volumeProgress)
     }
 
 }
