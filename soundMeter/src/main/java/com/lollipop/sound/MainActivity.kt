@@ -2,6 +2,7 @@ package com.lollipop.sound
 
 import android.Manifest
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
@@ -35,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         volumeDelegate.setEnable(true)
         binding.permissionPanel.setOnClickListener { }
         binding.permissionAllowButton.setOnClickListener {

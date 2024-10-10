@@ -43,10 +43,10 @@
       </SelectionState>
       <SelectionState runConfigName="soundMeter">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-10-10T13:35:45.322651800Z">
+        <DropdownSelection timestamp="2024-10-10T14:43:11.589634600Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="Default" identifier="serial=f1dffe40;connection=eef19c34" />
+              <DeviceId pluginId="Default" identifier="serial=f1dffe40;connection=5a4f1810" />
             </handle>
           </Target>
         </DropdownSelection>

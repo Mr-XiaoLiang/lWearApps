@@ -32,21 +32,15 @@ class VolumeDelegate(
             Log.e("VolumeDelegate", e.message, e)
         }
 
-        private const val SAMPLE_RATE_IN_HZ = 8000
-
-        /**
-         * Short.MAX_VALUE * Short.MAX_VALUE
-         */
-        private const val MAX_PCM_MEAN = 1073676289L
+        private const val SAMPLE_RATE_IN_HZ = 4000
 
         /**
          * 10 * log10(MAX_PCM_MEAN.toDouble())
          */
         private const val MAX_VOLUME = 90F
 
-        fun getPcmProgress(pcm: Float): Float {
-            return max(0f, min(1f, pcm / MAX_PCM_MEAN))
-        }
+        private const val UPDATE_HZ = 20
+        private const val TASK_INTERVAL = 1000L / UPDATE_HZ
 
         fun getVolumeProgress(volume: Float): Float {
             return max(0f, min(1f, volume / MAX_VOLUME))
@@ -55,6 +49,8 @@ class VolumeDelegate(
     }
 
     private var audioRecord: AudioRecord? = null
+    private var bufferSize = SAMPLE_RATE_IN_HZ
+    private var bufferWeight = 1
 
     private val asyncHandler by lazy {
         android.os.Handler(asyncThread.looper)
@@ -74,12 +70,73 @@ class VolumeDelegate(
     private var isEnable = true
 
     private val recordTask = Runnable {
-        getNoiseLevel()
+        getNoiseLevelAsync()
     }
 
-    private fun postNextRecordTask() {
+    private fun postNextRecordTask(delay: Long) {
         asyncHandler.removeCallbacks(recordTask)
-        asyncHandler.postDelayed(recordTask, 50)
+        asyncHandler.postDelayed(recordTask, delay)
+    }
+
+    private fun getNoiseLevelAsync() {
+
+        if (!isEnable || !isActive) {
+            return
+        }
+        val record = getAudioRecord() ?: return
+        if (record.state != AudioRecord.STATE_INITIALIZED) {
+            postNextRecordTask(TASK_INTERVAL)
+            return
+        }
+        if (record.recordingState != AudioRecord.RECORDSTATE_RECORDING) {
+            try {
+                record.startRecording()
+                postNextRecordTask(TASK_INTERVAL)
+            } catch (e: Throwable) {
+                logE(e)
+            }
+            return
+        }
+
+        val begin = System.currentTimeMillis()
+
+        val buffer = ShortArray(bufferSize)
+        //r是实际读取的数据长度，一般而言r会小于bufferSize
+        val requestLength = bufferSize / bufferWeight
+        val readLength = record.read(buffer, 0, requestLength)
+
+        if (readLength > 0) {
+            var v: Long = 0
+            // 读到多少算多少
+            val max = min(readLength, bufferSize)
+            // 将 buffer 内容取出，进行平方和运算
+            for (index in 0 until max) {
+                val value = buffer[index].toLong()
+                v += value * value
+            }
+            // 平方和除以数据总长度，得到音量大小。
+            val mean = v / (max.toDouble())
+            val volume = (10 * log10(mean)).toFloat()
+            val pcm = mean.toFloat()
+            postMain {
+                volumeCallback.onVolumeUpdate(max(0F, pcm), max(0F, volume))
+            }
+        }
+
+        if (isEnable && isActive) {
+            val now = System.currentTimeMillis()
+
+            val delay = now - begin
+            if (delay > TASK_INTERVAL) {
+                bufferWeight++
+                if (bufferWeight > bufferSize) {
+                    bufferWeight = bufferSize
+                }
+                postNextRecordTask(0)
+            } else {
+                postNextRecordTask(TASK_INTERVAL - delay)
+            }
+        }
     }
 
     fun setEnable(enable: Boolean) {
@@ -102,7 +159,7 @@ class VolumeDelegate(
         } catch (e: Throwable) {
             logE(e)
         }
-        postNextRecordTask()
+        postNextRecordTask(TASK_INTERVAL)
     }
 
     fun onStop() {
@@ -133,7 +190,8 @@ class VolumeDelegate(
     private fun getMinBufferSize(): Int {
         return AudioRecord.getMinBufferSize(
             SAMPLE_RATE_IN_HZ,
-            AudioFormat.CHANNEL_IN_DEFAULT, AudioFormat.ENCODING_PCM_16BIT
+            AudioFormat.CHANNEL_IN_DEFAULT,
+            AudioFormat.ENCODING_PCM_16BIT
         )
     }
 
@@ -159,57 +217,12 @@ class VolumeDelegate(
             getMinBufferSize()
         )
         audioRecord = newRecord
+        bufferSize = getMinBufferSize()
         return newRecord
     }
 
     private fun postMain(runnable: Runnable) {
         mainHandler.post(runnable)
-    }
-
-    private fun getNoiseLevel() {
-        if (!isEnable || !isActive) {
-            return
-        }
-        val record = getAudioRecord() ?: return
-        if (record.state != AudioRecord.STATE_INITIALIZED) {
-            postNextRecordTask()
-            return
-        }
-        if (record.recordingState != AudioRecord.RECORDSTATE_RECORDING) {
-            try {
-                record.startRecording()
-                postNextRecordTask()
-            } catch (e: Throwable) {
-                logE(e)
-            }
-            return
-        }
-        val bufferSize = getMinBufferSize()
-        val buffer = ShortArray(bufferSize)
-        //r是实际读取的数据长度，一般而言r会小于bufferSize
-        val r: Int = record.read(buffer, 0, bufferSize)
-        if (r <= 0) {
-            postNextRecordTask()
-            return
-        }
-        var v: Long = 0
-        // 读到多少算多少
-        val max = min(r, bufferSize)
-        // 将 buffer 内容取出，进行平方和运算
-        for (index in 0 until max) {
-            val value = buffer[index].toLong()
-            v += value * value
-        }
-        // 平方和除以数据总长度，得到音量大小。
-        val mean = v / (r.toDouble())
-        val volume = (10 * log10(mean)).toFloat()
-        val pcm = mean.toFloat()
-        postMain {
-            volumeCallback.onVolumeUpdate(max(0F, pcm), max(0F, volume))
-        }
-        if (isEnable && isActive) {
-            postNextRecordTask()
-        }
     }
 
     fun interface VolumeCallback {

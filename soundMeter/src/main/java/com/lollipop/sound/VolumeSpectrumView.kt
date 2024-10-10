@@ -125,7 +125,7 @@ class VolumeSpectrumView @JvmOverloads constructor(
         }
 
         private fun traverse(maxCount: Int, callback: (VolumeNode) -> Unit) {
-            var index = 0
+            var index = 1
             var node = volumeNode
             while (node != null) {
                 callback(node)
