@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">File Browser</string>
+    <string name="permission_file_alert">需要您授予文件的读写访问权限</string>
+    <string name="allow">同意</string>
 </resources>

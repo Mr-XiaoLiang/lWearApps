@@ -7,13 +7,16 @@ android {
     namespace = "com.lollipop.filebrowser"
     compileSdk = 34
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.lollipop.filebrowser"
         minSdk = 28
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
     }
 
     buildTypes {
