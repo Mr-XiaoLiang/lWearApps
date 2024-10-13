@@ -13,20 +13,7 @@ class CircularTextView @JvmOverloads constructor(
 ) : AppCompatTextView(context, attributeSet) {
 
     init {
-        clipToOutline = true
-        outlineProvider = object : android.view.ViewOutlineProvider() {
-            override fun getOutline(view: View?, outline: Outline?) {
-                if (view != null && outline != null) {
-                    outline.setRoundRect(
-                        0,
-                        0,
-                        view.width,
-                        view.height,
-                        min(view.width, view.height) * 0.5F
-                    )
-                }
-            }
-        }
+        CircularOutlineHelper.bind(this)
     }
 
 }

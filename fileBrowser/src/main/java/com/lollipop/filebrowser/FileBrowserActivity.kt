@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Outline
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +19,9 @@ import androidx.viewbinding.ViewBinding
 import com.lollipop.filebrowser.databinding.ActivityFileBrowserBinding
 import com.lollipop.filebrowser.databinding.ItemFileBinding
 import com.lollipop.filebrowser.databinding.ItemSpaceBinding
+import com.lollipop.wear.widget.CircularOutlineHelper
 import java.io.File
+import kotlin.math.min
 
 class FileBrowserActivity : AppCompatActivity() {
 
@@ -195,7 +199,7 @@ class FileBrowserActivity : AppCompatActivity() {
                 is ItemHolder.FileItem -> {
                     val item = list[position]
                     if (item is Item.FileItem) {
-                        holder.bind(item.file)
+                        holder.bind(item)
                     }
                 }
 
@@ -206,7 +210,11 @@ class FileBrowserActivity : AppCompatActivity() {
     }
 
     private sealed class Item {
-        data class FileItem(val file: File) : Item()
+
+        data class FileItem(val file: File) : Item() {
+            val type = FileType.find(file)
+        }
+
         data object SpaceItem : Item()
     }
 
@@ -219,7 +227,8 @@ class FileBrowserActivity : AppCompatActivity() {
         ) : ItemHolder(binding) {
 
             init {
-                binding.fileNameView.setOnClickListener {
+                CircularOutlineHelper.bind(binding.fileItemView)
+                binding.fileItemView.setOnClickListener {
                     onClick()
                 }
             }
@@ -228,8 +237,9 @@ class FileBrowserActivity : AppCompatActivity() {
                 onClickCallback(adapterPosition)
             }
 
-            fun bind(file: File) {
-                binding.fileNameView.text = file.name
+            fun bind(item: Item.FileItem) {
+                binding.fileNameView.text = item.file.name
+                binding.fileTypeView.setImageResource(item.type.icon)
             }
 
         }

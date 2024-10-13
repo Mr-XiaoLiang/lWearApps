@@ -1,18 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
-    <com.lollipop.wear.widget.CircularTextView
-        android:id="@+id/fileNameView"
+    <LinearLayout
+        android:id="@+id/fileItemView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="2dp"
         android:background="#454545"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="8dp"
-        android:text="@string/app_name"
-        android:textColor="@android:color/white"
-        android:textSize="12sp" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="4dp"
+        android:paddingVertical="8dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/fileTypeView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="start|center_vertical"
+            android:padding="4dp"
+            android:tint="@android:color/white"
+            tools:src="@drawable/baseline_insert_drive_file_24" />
+
+        <TextView
+            android:id="@+id/fileNameView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="2dp"
+            android:paddingEnd="4dp"
+            android:text="@string/app_name"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
 
 </FrameLayout>
