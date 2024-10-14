@@ -1,5 +1,6 @@
-package com.lollipop.filebrowser
+package com.lollipop.filebrowser.file
 
+import com.lollipop.filebrowser.R
 import java.io.File
 
 sealed class FileType(

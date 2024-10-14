@@ -1,13 +1,11 @@
-package com.lollipop.filebrowser
+package com.lollipop.filebrowser.page
 
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Outline
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -16,12 +14,14 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.lollipop.filebrowser.file.ExternalStoragePermissionHelper
+import com.lollipop.filebrowser.file.FileOpenHelper
+import com.lollipop.filebrowser.file.FileType
 import com.lollipop.filebrowser.databinding.ActivityFileBrowserBinding
 import com.lollipop.filebrowser.databinding.ItemFileBinding
 import com.lollipop.filebrowser.databinding.ItemSpaceBinding
 import com.lollipop.wear.widget.CircularOutlineHelper
 import java.io.File
-import kotlin.math.min
 
 class FileBrowserActivity : AppCompatActivity() {
 

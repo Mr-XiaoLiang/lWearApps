@@ -1,4 +1,4 @@
-package com.lollipop.filebrowser
+package com.lollipop.filebrowser.file
 
 sealed class FileMime {
 
