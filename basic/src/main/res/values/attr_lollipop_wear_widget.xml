@@ -3,6 +3,7 @@
 
     <attr name="activeColor" format="color" />
     <attr name="inactiveColor" format="color" />
+    <attr name="circularMaxRadius" format="dimension" />
 
     <declare-styleable name="CircularProgressIndicator">
         <attr name="activeColor" />
@@ -30,6 +31,24 @@
             <enum name="maxEdge" value="1" />
             <enum name="height" value="2" />
             <enum name="width" value="3" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="CircularTextView">
+        <attr name="circularMaxRadius" />
+    </declare-styleable>
+
+    <declare-styleable name="CircularImageView">
+        <attr name="circularMaxRadius" />
+    </declare-styleable>
+
+    <declare-styleable name="RectProgressView">
+        <attr name="rectProgress" format="float" />
+        <attr name="rectMode" format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+            <enum name="horizontalReversal" value="2" />
+            <enum name="verticalReversal" value="3" />
         </attr>
     </declare-styleable>
 </resources>

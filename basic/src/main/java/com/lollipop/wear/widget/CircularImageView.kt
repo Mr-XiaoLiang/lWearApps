@@ -1,11 +1,9 @@
 package com.lollipop.wear.widget
 
 import android.content.Context
-import android.graphics.Outline
 import android.util.AttributeSet
-import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
-import kotlin.math.min
+import com.lollipop.wear.basic.R
 
 class CircularImageView @JvmOverloads constructor(
     context: Context,
@@ -13,7 +11,12 @@ class CircularImageView @JvmOverloads constructor(
 ) : AppCompatImageView(context, attributeSet) {
 
     init {
-        CircularOutlineHelper.bind(this)
+        CircularOutlineHelper.bind(
+            this,
+            attributeSet,
+            R.styleable.CircularImageView,
+            R.styleable.CircularImageView_circularMaxRadius
+        )
     }
 
 }
