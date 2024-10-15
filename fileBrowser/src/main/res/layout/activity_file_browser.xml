@@ -19,52 +19,11 @@
 
     <androidx.wear.widget.CurvedTextView
         android:id="@+id/pathView"
+        android:fontFamily="@font/roboto_regular"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textColor="@android:color/white"
         android:textSize="11sp"
         tools:text="/storage/emulated/0/Android/media" />
-
-    <androidx.wear.widget.BoxInsetLayout
-        android:id="@+id/permissionPanel"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/black"
-        tools:visibility="gone">
-
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:boxedEdges="left|right">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:paddingVertical="60dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/permission_file_alert"
-                    android:textColor="#EEE"
-                    android:textSize="14sp" />
-
-                <com.lollipop.wear.widget.CircularTextView
-                    android:id="@+id/permissionAllowButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:background="#0DACC7"
-                    android:gravity="center"
-                    android:paddingVertical="6dp"
-                    android:text="@string/allow"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
-    </androidx.wear.widget.BoxInsetLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

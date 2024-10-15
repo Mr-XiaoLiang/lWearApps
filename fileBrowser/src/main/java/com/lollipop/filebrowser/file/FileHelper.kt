@@ -3,15 +3,23 @@ package com.lollipop.filebrowser.file
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.icu.text.DecimalFormat
 import android.os.Environment
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.io.File
 
 
-object ExternalStoragePermissionHelper {
+object FileHelper {
 
     private const val REQUEST_CODE = 233
+
+    private val FILE_SIZE_UNIT = arrayOf(
+        "Byte", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"
+    )
+    private val decimalFormat by lazy {
+        DecimalFormat("0.00")
+    }
 
     fun getRootDirectory(): File {
         return Environment.getExternalStorageDirectory()
@@ -62,6 +70,18 @@ object ExternalStoragePermissionHelper {
             ),
             REQUEST_CODE
         )
+    }
+
+    fun getFileSizeDisplay(size: Long): String {
+        var unitIndex = 0
+        var unitSize = 1
+        val unitMaxIndex = FILE_SIZE_UNIT.size - 1
+        while (size / unitSize >= 1024 && unitIndex < unitMaxIndex) {
+            unitSize *= 1024
+            unitIndex++
+        }
+        val result = decimalFormat.format(size.toDouble() / unitSize)
+        return "$result ${FILE_SIZE_UNIT[unitIndex]}"
     }
 
 }

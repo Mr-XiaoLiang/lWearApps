@@ -16,13 +16,14 @@
             android:id="@+id/timeView"
             android:layout_width="match_parent"
             android:layout_height="0px"
+            android:fontFamily="@font/roboto_regular"
             android:textColor="@android:color/white"
             android:textSize="11sp"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="/storage/emulated/0/Android/media" />
+            tools:text="12:12" />
 
         <Space
             android:id="@+id/headerSpace"
@@ -32,6 +33,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/storageButton"
             android:layout_width="0px"
             android:layout_height="100dp"
             app:cardBackgroundColor="@color/item_background"
@@ -49,6 +51,17 @@
                 app:rectMode="horizontal"
                 app:rectProgress="0.3" />
 
+            <TextView
+                android:id="@+id/storageSizeView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="end|bottom"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="8dp"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                tools:text="存储空间\n50GB / 100GB" />
 
         </androidx.cardview.widget.CardView>
 

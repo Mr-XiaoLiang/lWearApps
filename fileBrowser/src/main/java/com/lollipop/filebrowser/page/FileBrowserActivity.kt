@@ -7,23 +7,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.lollipop.filebrowser.file.ExternalStoragePermissionHelper
-import com.lollipop.filebrowser.file.FileOpenHelper
-import com.lollipop.filebrowser.file.FileType
 import com.lollipop.filebrowser.databinding.ActivityFileBrowserBinding
 import com.lollipop.filebrowser.databinding.ItemFileBinding
 import com.lollipop.filebrowser.databinding.ItemSpaceBinding
+import com.lollipop.filebrowser.file.FileOpenHelper
+import com.lollipop.filebrowser.file.FileType
 import com.lollipop.wear.widget.CircularOutlineHelper
 import java.io.File
 
-class FileBrowserActivity : AppCompatActivity() {
+class FileBrowserActivity : FilePermissionActivity() {
 
     companion object {
         private const val SDCARD = "SDCard"
@@ -50,14 +45,8 @@ class FileBrowserActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        currentPath = intent.getStringExtra(PARAMS_CURRENT_DIRECTORY) ?: ""
-        binding.permissionAllowButton.setOnClickListener {
-            ExternalStoragePermissionHelper.requestPermission(this)
-        }
+        setContent(binding.root)
         binding.recyclerView.adapter = fileAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
     }
@@ -70,10 +59,7 @@ class FileBrowserActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        val hasPermission = ExternalStoragePermissionHelper.hasPermission(this)
-        binding.permissionPanel.isVisible = !hasPermission
+    override fun onResume(hasPermission: Boolean) {
         if (hasPermission) {
             updateFileInfo()
         }
@@ -82,7 +68,7 @@ class FileBrowserActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     private fun updateFileInfo() {
         if (rootPath.isEmpty()) {
-            rootPath = ExternalStoragePermissionHelper.getRootDirectory().path
+            rootPath = getRootDirectory().path
         }
         if (currentPath.isEmpty()) {
             currentPath = rootPath
