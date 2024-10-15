@@ -47,6 +47,7 @@ class FileBrowserActivity : FilePermissionActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent(binding.root)
+        currentPath = intent.getStringExtra(PARAMS_CURRENT_DIRECTORY) ?: ""
         binding.recyclerView.adapter = fileAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
     }
