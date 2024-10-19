@@ -3,12 +3,15 @@ package com.lollipop.wifip2p
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.wifi.p2p.WifiP2pConfig
+import android.net.wifi.p2p.WifiP2pDevice
 import android.net.wifi.p2p.WifiP2pDeviceList
 import android.net.wifi.p2p.WifiP2pManager
 import androidx.core.content.ContextCompat
 
 class WPActivityDelegate(
-    val activity: Activity
+    val activity: Activity,
+    val callback: Callback
 ) : WPStateListener, WifiP2pManager.ChannelListener {
 
     private val receiver = WiFiDirectBroadcastReceiver(this)
@@ -18,6 +21,29 @@ class WPActivityDelegate(
     }
 
     private var channel: WifiP2pManager.Channel? = null
+
+    /**
+     * 默认认为是支持的
+     */
+    private var isP2pSupport = true
+
+    /**
+     * 设备列表
+     */
+    private val peerListListener = WifiP2pManager.PeerListListener { peers ->
+        deviceList = peers
+        callback.onPeersChanged(peers)
+    }
+
+    /**
+     * 是否激活状态
+     */
+    private var isResumed = false
+
+    /**
+     * 最新的设备列表
+     */
+    private var deviceList: WifiP2pDeviceList? = null
 
     /**
      * 生命周期函数，在Activity的onCreate中调用
@@ -32,6 +58,7 @@ class WPActivityDelegate(
      * 用于激活广播
      */
     fun onResume() {
+        isResumed = true
         ContextCompat.registerReceiver(
             activity,
             receiver,
@@ -45,6 +72,7 @@ class WPActivityDelegate(
      * 用于取消激活
      */
     fun onPause() {
+        isResumed = false
         activity.unregisterReceiver(receiver)
     }
 
@@ -67,27 +95,50 @@ class WPActivityDelegate(
         )
     }
 
-    fun requestPeers(callback: (success: Boolean) -> Unit) {
-        manager?.requestPeers(
+    fun requestPeers() {
+        manager?.requestPeers(channel, peerListListener)
+    }
+
+    /**
+     * 设备连接
+     */
+    fun connect(info: WifiP2pDevice, result: (Boolean) -> Unit) {
+        val m = manager ?: return
+        m.connect(
             channel,
-            object : WifiP2pManager.PeerListListener {
-                override fun onPeersAvailable(peers: WifiP2pDeviceList) {
-                    callback(true)
+            WifiP2pConfig().apply {
+                deviceAddress = info.deviceAddress
+            },
+            object : WifiP2pManager.ActionListener {
+
+                override fun onSuccess() {
+                    result(true)
                 }
+
+                override fun onFailure(reason: Int) {
+                    result(false)
+                }
+
             }
         )
     }
 
+    /**
+     * 当接口链接断开
+     */
     override fun onChannelDisconnected() {
         TODO("Not yet implemented")
     }
 
     override fun onStateChanged(intent: Intent, enable: Boolean) {
-        TODO("Not yet implemented")
+        isP2pSupport = enable
+        callback.onStateChanged(enable)
     }
 
     override fun onPeersChanged(intent: Intent) {
-        TODO("Not yet implemented")
+        if (isResumed) {
+            requestPeers()
+        }
     }
 
     override fun onConnectionChanged(intent: Intent) {
@@ -96,6 +147,15 @@ class WPActivityDelegate(
 
     override fun onDeviceChanged(intent: Intent) {
         TODO("Not yet implemented")
+    }
+
+    interface Callback {
+
+        fun onStateChanged(supported: Boolean)
+
+        fun onPeersChanged(peers: WifiP2pDeviceList?)
+
+
     }
 
 }
