@@ -127,7 +127,7 @@ class WPActivityDelegate(
      * 当接口链接断开
      */
     override fun onChannelDisconnected() {
-        TODO("Not yet implemented")
+        callback.onChannelDisconnected()
     }
 
     override fun onStateChanged(intent: Intent, enable: Boolean) {
@@ -142,11 +142,11 @@ class WPActivityDelegate(
     }
 
     override fun onConnectionChanged(intent: Intent) {
-        TODO("Not yet implemented")
+        callback.onConnectionChanged()
     }
 
     override fun onDeviceChanged(intent: Intent) {
-        TODO("Not yet implemented")
+        callback.onDeviceChanged()
     }
 
     interface Callback {
@@ -155,6 +155,11 @@ class WPActivityDelegate(
 
         fun onPeersChanged(peers: WifiP2pDeviceList?)
 
+        fun onChannelDisconnected()
+
+        fun onConnectionChanged()
+
+        fun onDeviceChanged()
 
     }
 
