@@ -123,6 +123,18 @@ class WPActivityDelegate(
         )
     }
 
+    fun removeGroup(result: (Boolean) -> Unit) {
+        manager?.removeGroup(channel, object : WifiP2pManager.ActionListener {
+            override fun onSuccess() {
+                result(true)
+            }
+
+            override fun onFailure(reason: Int) {
+                result(false)
+            }
+        })
+    }
+
     /**
      * 当接口链接断开
      */
