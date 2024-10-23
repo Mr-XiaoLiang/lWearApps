@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.lollipop.wear.phone"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.lollipop.wear.phone"
         minSdk = 25
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1_00_00
         versionName = "1.0.0"
     }
@@ -41,4 +41,8 @@ dependencies {
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.appcompat)
     implementation(project(":basic"))
+    implementation(project(":wifiP2p"))
+    implementation(libs.material)
+    implementation(libs.activity)
+    implementation(libs.constraintlayout)
 }

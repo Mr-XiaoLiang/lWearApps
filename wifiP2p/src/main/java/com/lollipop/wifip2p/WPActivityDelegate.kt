@@ -6,13 +6,14 @@ import android.content.Intent
 import android.net.wifi.p2p.WifiP2pConfig
 import android.net.wifi.p2p.WifiP2pDevice
 import android.net.wifi.p2p.WifiP2pDeviceList
+import android.net.wifi.p2p.WifiP2pInfo
 import android.net.wifi.p2p.WifiP2pManager
 import androidx.core.content.ContextCompat
 
 class WPActivityDelegate(
     val activity: Activity,
     val callback: Callback
-) : WPStateListener, WifiP2pManager.ChannelListener {
+) : WPStateListener, WifiP2pManager.ChannelListener, WifiP2pManager.ConnectionInfoListener {
 
     private val receiver = WiFiDirectBroadcastReceiver(this)
 
@@ -161,6 +162,11 @@ class WPActivityDelegate(
         callback.onDeviceChanged()
     }
 
+    override fun onConnectionInfoAvailable(info: WifiP2pInfo?) {
+        info ?: return
+        callback.onConnectionAvailable(info)
+    }
+
     interface Callback {
 
         fun onStateChanged(supported: Boolean)
@@ -172,6 +178,8 @@ class WPActivityDelegate(
         fun onConnectionChanged()
 
         fun onDeviceChanged()
+
+        fun onConnectionAvailable(info: WifiP2pInfo)
 
     }
 

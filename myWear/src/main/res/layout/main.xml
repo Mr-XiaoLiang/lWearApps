@@ -12,7 +12,7 @@
 
         <fragment
             android:id="@+id/frag_list"
-            class="com.lollipop.wear.phone.send.DeviceListFragment"
+            class="com.lollipop.wear.phone.send.temp.DeviceListFragment"
             android:layout_width="match_parent"
             android:layout_height="200dp">
             <!-- Preview: layout=@layout/row_devices -->
@@ -20,7 +20,7 @@
 
         <fragment
             android:id="@+id/frag_detail"
-            class="com.lollipop.wear.phone.send.DeviceDetailFragment"
+            class="com.lollipop.wear.phone.send.temp.DeviceDetailFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <!-- Preview: layout=@layout/device_detail -->

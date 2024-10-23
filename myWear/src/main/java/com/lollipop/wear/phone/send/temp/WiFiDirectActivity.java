@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lollipop.wear.phone.send;
+package com.lollipop.wear.phone.send.temp;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;

@@ -1,6 +1,6 @@
 // Copyright 2011 Google Inc. All Rights Reserved.
 
-package com.lollipop.wear.phone.send;
+package com.lollipop.wear.phone.send.temp;
 
 import android.app.IntentService;
 import android.content.ContentResolver;

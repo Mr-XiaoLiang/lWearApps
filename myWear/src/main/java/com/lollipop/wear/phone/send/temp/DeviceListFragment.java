@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lollipop.wear.phone.send;
+package com.lollipop.wear.phone.send.temp;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -32,7 +32,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.ListFragment;
 
 import com.lollipop.wear.phone.R;
