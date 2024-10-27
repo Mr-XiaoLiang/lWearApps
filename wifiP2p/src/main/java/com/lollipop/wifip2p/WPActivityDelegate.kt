@@ -47,6 +47,11 @@ class WPActivityDelegate(
     private var deviceList: WifiP2pDeviceList? = null
 
     /**
+     * 已连接的设备（只保证连接时不报错）
+     */
+    val connectedDeviceList = mutableMapOf<String, WifiP2pDevice>()
+
+    /**
      * 生命周期函数，在Activity的onCreate中调用
      * 用于初始化操作
      */
@@ -100,6 +105,30 @@ class WPActivityDelegate(
         manager?.requestPeers(channel, peerListListener)
     }
 
+    fun isConnected(address: String): Boolean {
+        return connectedDeviceList.containsKey(address)
+    }
+
+    fun isConnected(device: WifiP2pDevice): Boolean {
+        return isConnected(device.deviceAddress)
+    }
+
+    fun saveConnectedDevice(device: WifiP2pDevice) {
+        connectedDeviceList[device.deviceAddress] = device
+    }
+
+    fun clearConnectedDevice() {
+        connectedDeviceList.clear()
+    }
+
+    fun removeConnectedDevice(address: String) {
+        connectedDeviceList.remove(address)
+    }
+
+    fun removeConnectedDevice(device: WifiP2pDevice) {
+        removeConnectedDevice(device.deviceAddress)
+    }
+
     /**
      * 设备连接
      */
@@ -113,6 +142,7 @@ class WPActivityDelegate(
             object : WifiP2pManager.ActionListener {
 
                 override fun onSuccess() {
+                    saveConnectedDevice(info)
                     result(true)
                 }
 

@@ -41,7 +41,7 @@
             android:name=".send.WifiP2pActivity"
             android:exported="false" />
         <activity
-            android:name=".send.temp.WiFiDirectActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.LWearApps" >
