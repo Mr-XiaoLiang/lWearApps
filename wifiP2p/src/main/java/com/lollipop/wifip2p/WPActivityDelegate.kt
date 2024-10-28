@@ -154,6 +154,9 @@ class WPActivityDelegate(
         )
     }
 
+    /**
+     * 移除分组
+     */
     fun removeGroup(result: (Boolean) -> Unit) {
         manager?.removeGroup(channel, object : WifiP2pManager.ActionListener {
             override fun onSuccess() {
@@ -164,6 +167,13 @@ class WPActivityDelegate(
                 result(false)
             }
         })
+    }
+
+    /**
+     * 尝试获取连接
+     */
+    fun requestConnection() {
+        manager?.requestConnectionInfo(channel, this)
     }
 
     /**
