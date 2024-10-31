@@ -44,8 +44,6 @@ dependencies {
     implementation(project(":basic"))
     implementation(project(":wifiP2p"))
     implementation(libs.material)
-    implementation(files("libs/ftplet-api-1.2.0.jar"))
-    implementation(files("libs/ftpserver-core-1.2.0.jar"))
 //    implementation(libs.activity)
 //    implementation(libs.constraintlayout)
 }
