@@ -1,4 +1,4 @@
-package com.lollipop.wifip2p.stp
+package com.lollipop.wifip2p.stp.data
 
 import android.util.Xml.Encoding
 
