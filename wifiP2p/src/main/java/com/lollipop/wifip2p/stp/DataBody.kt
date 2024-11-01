@@ -5,9 +5,11 @@ import java.io.OutputStream
 import java.nio.charset.Charset
 import kotlin.math.min
 
-sealed class DataBody {
+sealed class DataBody(val packet: DataPacket) {
 
-    class Text(val packet: DataPacket) {
+    class HeartBeat(packet: DataPacket): DataBody(packet)
+
+    class Text(packet: DataPacket): DataBody(packet) {
 
         fun getText(charset: Charset = Charsets.UTF_8): String {
             return String(packet.textInfo, charset)
@@ -15,7 +17,7 @@ sealed class DataBody {
 
     }
 
-    class File(val packet: DataPacket, val inputStream: InputStream) {
+    class File(packet: DataPacket, val inputStream: InputStream): DataBody(packet) {
 
         fun getFileSize(): Long {
             return packet.fileLength
