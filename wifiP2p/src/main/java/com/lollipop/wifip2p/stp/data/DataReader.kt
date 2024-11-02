@@ -1,7 +1,6 @@
 package com.lollipop.wifip2p.stp.data
 
 import java.io.DataInputStream
-import java.io.InputStream
 
 object DataReader {
 

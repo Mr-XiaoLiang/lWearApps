@@ -23,7 +23,7 @@ class StpHandler(
 
     }
 
-    private var isClosed = false
+    var isClosed = false
         private set
 
     fun stop() {
@@ -42,6 +42,22 @@ class StpHandler(
                 }
             }
         }
+    }
+
+    private class WriteTask(
+        val handler: StpHandler,
+        val listener: () -> Unit
+    ) : Runnable {
+        override fun run() {
+            while (!handler.isClosed) {
+                listener()
+            }
+        }
+    }
+
+
+    interface ReaderListener {
+        fun onRead(data: DataBody)
     }
 
 }
