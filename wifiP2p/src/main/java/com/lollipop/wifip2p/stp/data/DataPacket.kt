@@ -20,8 +20,10 @@ class DataPacket {
     companion object {
         val ENCODE = Encoding.UTF_8.name
 
-        const val FLAG_CLIENT: Byte = 0x00
-        const val FLAG_SERVER: Byte = 0x01
+        const val FLAG_NONE: Byte = 0x00
+
+        const val FLAG_CLIENT: Byte = 0x01
+        const val FLAG_SERVER: Byte = 0x02
 
         const val FLAG_PACKET_END: Byte = 0x0A
 
@@ -34,7 +36,7 @@ class DataPacket {
     /**
      * 标志位，标识发送方是客户端还是服务端
      */
-    var flag: Byte = FLAG_CLIENT
+    var flag: Byte = FLAG_NONE
 
     /**
      * 数据包类型
@@ -65,6 +67,20 @@ class DataPacket {
      * 文件长度，用于读写文件时使用
      */
     var fileLength: Long = 0
+        get() {
+            // 如果类型不对，强行返回0
+            if (type != TYPE_FILE) {
+                return 0
+            }
+            return field
+        }
 
+    /**
+     * 内容长度
+     */
+    fun contentLength(): Long {
+        // 1 + 1 + 4 + 8 + 4 + textLength + 8 + fileLength
+        return 1 + 1 + 4 + 8 + 4 + textLength + 8 + fileLength
+    }
 
 }

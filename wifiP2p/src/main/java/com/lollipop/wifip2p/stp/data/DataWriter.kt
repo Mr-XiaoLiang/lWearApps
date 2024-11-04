@@ -17,27 +17,50 @@ object DataWriter {
      * fileInfo: ByteArray 文件信息，它不会出现在数据包内，需要以流的形式读取
      * endFlag: Byte 结束标志，用于标识数据包是否已经读取完毕，也用于重置数据包
      */
-    fun writeData(output: DataOutputStream, data: DataBody) {
+    fun writeData(output: DataOutputStream, data: DataBody, progressListener: (Long) -> Unit) {
         val packet = data.packet
+        val baseSize = output.size().toLong()
         output.writeByte(packet.flag.toInt())
+        output.getProgress(baseSize, progressListener)
         output.writeByte(packet.type.toInt())
+        output.getProgress(baseSize, progressListener)
         output.writeInt(packet.command)
+        output.getProgress(baseSize, progressListener)
         output.writeLong(packet.serialNumber)
+        output.getProgress(baseSize, progressListener)
         output.writeInt(packet.textLength)
+        output.getProgress(baseSize, progressListener)
         output.write(packet.textInfo)
+        output.getProgress(baseSize, progressListener)
         output.writeLong(packet.fileLength)
+        output.getProgress(baseSize, progressListener)
         when (data) {
             is DataBody.File -> {
                 // 直接拷贝出去
                 val fileInput = MaxSizedInputStream(data.inputStream, data.getFileSize())
-                fileInput.copyTo(output)
+                val buffer = ByteArray(8 * 1024)
+                var bytes = fileInput.read(buffer)
+                while (bytes >= 0) {
+                    output.write(buffer, 0, bytes)
+                    output.getProgress(baseSize, progressListener)
+                    bytes = fileInput.read(buffer)
+                }
             }
 
-            is DataBody.HeartBeat -> {}
-            is DataBody.Text -> {}
+            is DataBody.HeartBeat -> {
+                // 不写其他的了
+            }
+            is DataBody.Text -> {
+                // 不写其他的了
+            }
         }
         output.writeByte(DataPacket.FLAG_PACKET_END.toInt())
+        output.getProgress(baseSize, progressListener)
         output.flush()
+    }
+
+    private fun DataOutputStream.getProgress(baseSize: Long, output: (Long) -> Unit) {
+        output(size().toLong() - baseSize)
     }
 
 }
