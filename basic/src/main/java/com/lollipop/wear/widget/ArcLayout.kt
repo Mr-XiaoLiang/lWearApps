@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.lollipop.wear.basic.R
@@ -14,7 +15,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
 
-class ArcLayout @JvmOverloads constructor(
+open class ArcLayout @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null
 ) : FrameLayout(context, attributeSet) {
@@ -31,6 +32,10 @@ class ArcLayout @JvmOverloads constructor(
         val centerX: Float,
         val centerY: Float
     )
+
+    override fun addView(child: View?) {
+        super.addView(child)
+    }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         layoutChildren(left, top, right, bottom)
@@ -129,6 +134,8 @@ class ArcLayout @JvmOverloads constructor(
         constructor(source: ArcLayoutParams) : super(source) {
             angle = source.angle
             edgeMargin = source.edgeMargin
+            radius = source.radius
+            radiusMode = source.radiusMode
         }
 
         constructor(source: ViewGroup.LayoutParams) : super(source)

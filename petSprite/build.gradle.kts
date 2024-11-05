@@ -38,4 +38,5 @@ android {
 
 dependencies {
     implementation(project(":basic"))
+    implementation(project(":wearBasic"))
 }
