@@ -130,66 +130,85 @@
         <com.lollipop.wear.widget.ArcLinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:arc_intervalAngle="13"
+            app:arc_antiClockwise="true"
+            app:arc_intervalAngle="10"
             app:arc_margin="10dp"
-            app:arc_startAngle="50">
+            app:arc_startAngle="160">
 
             <com.lollipop.wear.widget.CircularImageView
                 android:id="@+id/bowlIconView"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:src="@drawable/bowl_30px"
-                app:tint="@android:color/white" />
+                android:visibility="gone"
+                app:tint="@android:color/white"
+                tools:visibility="visible" />
 
             <com.lollipop.wear.widget.CircularImageView
                 android:id="@+id/dollIconView"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:src="@drawable/doll_24px"
-                app:tint="@android:color/white" />
+                android:visibility="gone"
+                app:tint="@android:color/white"
+                tools:visibility="visible" />
 
             <com.lollipop.wear.widget.CircularImageView
                 android:id="@+id/syringeIconView"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:src="@drawable/syringe_24px"
-                app:tint="@android:color/white" />
+                android:visibility="gone"
+                app:tint="@android:color/white"
+                tools:visibility="visible" />
 
             <com.lollipop.wear.widget.CircularImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:src="@drawable/syringe_24px"
-                app:tint="@android:color/white" />
+                android:visibility="gone"
+                app:tint="@android:color/white"
+                tools:visibility="visible" />
 
             <com.lollipop.wear.widget.CircularImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:src="@drawable/syringe_24px"
-                app:tint="@android:color/white" />
+                android:visibility="gone"
+                app:tint="@android:color/white"
+                tools:visibility="visible" />
 
             <com.lollipop.wear.widget.CircularImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:src="@drawable/syringe_24px"
-                app:tint="@android:color/white" />
+                android:visibility="gone"
+                app:tint="@android:color/white"
+                tools:visibility="visible" />
 
             <com.lollipop.wear.widget.CircularImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:src="@drawable/syringe_24px"
-                app:tint="@android:color/white" />
+                android:visibility="gone"
+                app:tint="@android:color/white"
+                tools:visibility="visible" />
 
             <com.lollipop.wear.widget.CircularImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:src="@drawable/syringe_24px"
-                app:tint="@android:color/white" />
+                android:visibility="gone"
+                app:tint="@android:color/white"
+                tools:visibility="visible" />
 
             <com.lollipop.wear.widget.CircularImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
                 android:src="@drawable/syringe_24px"
-                app:tint="@android:color/white" />
+                android:visibility="gone"
+                app:tint="@android:color/white"
+                tools:visibility="visible" />
         </com.lollipop.wear.widget.ArcLinearLayout>
     </FrameLayout>
 

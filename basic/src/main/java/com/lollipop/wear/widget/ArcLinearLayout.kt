@@ -3,6 +3,7 @@ package com.lollipop.wear.widget
 import android.content.Context
 import android.util.AttributeSet
 import com.lollipop.wear.basic.R
+import com.lollipop.wear.widget.CircularProgressIndicator.Direction
 
 open class ArcLinearLayout @JvmOverloads constructor(
     context: Context,
@@ -14,6 +15,7 @@ open class ArcLinearLayout @JvmOverloads constructor(
     var intervalAngle: Float = 10F
     var radius: Float = 0F
     var radiusMode: RadiusMode = RadiusMode.MinEdge
+    var direction: Direction = Direction.Clockwise
 
     init {
         attributeSet?.let { attr ->
@@ -45,6 +47,15 @@ open class ArcLinearLayout @JvmOverloads constructor(
                     radiusMode = it
                 }
             }
+            val isAntiClockwise = typedArray.getBoolean(
+                R.styleable.ArcLinearLayout_arc_antiClockwise,
+                false
+            )
+            direction = if (isAntiClockwise) {
+                Direction.AntiClockwise
+            } else {
+                Direction.Clockwise
+            }
             typedArray.recycle()
         }
     }
@@ -55,20 +66,42 @@ open class ArcLinearLayout @JvmOverloads constructor(
         val interval = intervalAngle
         val r = radius
         val mode = radiusMode
+        val isAnti = direction == Direction.AntiClockwise
+        var childAngle = start
         for (i in 0 until count) {
             val child = getChildAt(i)
             if (child.visibility == GONE) {
                 continue
             }
             val lp = child.layoutParams as ArcLayoutParams
-            lp.angle = interval * i + start
+            lp.angle = childAngle
             lp.edgeMargin = edgeMargin
             if (r > 1) {
                 lp.radius = r
             }
             lp.radiusMode = mode
+
+            // 等他计算过后，我们为下一个做偏移
+            // 用累计的原因是可以跳过被隐藏的View
+            if (isAnti) {
+                childAngle -= interval
+            } else {
+                childAngle += interval
+            }
         }
         super.onLayout(changed, left, top, right, bottom)
+    }
+
+    enum class Direction {
+        /**
+         * 顺时针
+         */
+        Clockwise,
+
+        /**
+         * 逆时针
+         */
+        AntiClockwise
     }
 
 }
