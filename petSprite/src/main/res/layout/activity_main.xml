@@ -1,164 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black">
 
-    <FrameLayout
-        android:id="@+id/spriteContainer"
+    <include
+        layout="@layout/panel_game"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" />
 
-        <com.lollipop.wear.ps.engine.sprite.SpritePlayer
-            android:id="@+id/spritePlayer"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="#FFF"
-            tools:layout_gravity="center" />
-    </FrameLayout>
-
-    <androidx.wear.widget.CurvedTextView
-        android:id="@+id/timeView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fontFamily="@font/roboto_regular"
-        android:textColor="@android:color/white"
-        android:textSize="11sp"
-        app:anchorAngleDegrees="120"
-        app:clockwise="false"
-        tools:text="12:00" />
-
-    <com.lollipop.wear.widget.CircularProgressIndicator
-        android:id="@+id/moodProgressBar"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/sheetGroup"
         android:layout_width="0px"
         android:layout_height="0px"
-        android:padding="4dp"
-        app:activeColor="#fff"
-        app:antiClockwise="true"
-        app:inactiveColor="#3fff"
-        app:interval="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:startAngle="310"
-        app:strokeWidth="3dp"
-        app:sweepAngle="60"
-        tools:activeColor="@color/piece_tint_a"
-        tools:indicatorProgress="0.6" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.wear.widget.CurvedTextView
-        android:id="@+id/moodValueView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fontFamily="@font/roboto_regular"
-        android:padding="8dp"
-        android:textColor="@android:color/white"
-        android:textSize="11sp"
-        app:anchorAngleDegrees="70"
-        app:clockwise="true"
-        tools:text="@string/mood" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <com.lollipop.wear.widget.CircularProgressIndicator
-        android:id="@+id/healthProgressBar"
-        android:layout_width="0px"
-        android:layout_height="0px"
-        android:padding="4dp"
-        app:activeColor="#fff"
-        app:antiClockwise="false"
-        app:inactiveColor="#3fff"
-        app:interval="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:startAngle="170"
-        app:strokeWidth="3dp"
-        app:sweepAngle="60"
-        tools:activeColor="@color/piece_tint_b"
-        tools:indicatorProgress="0.4" />
+            <Space
+                android:id="@+id/topSpace"
+                android:layout_width="match_parent"
+                android:layout_height="0px"
+                app:layout_constraintDimensionRatio="2:1"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.wear.widget.CurvedTextView
-        android:id="@+id/healthValueView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fontFamily="@font/roboto_regular"
-        android:padding="8dp"
-        android:text="@string/health"
-        android:textColor="@android:color/white"
-        android:textSize="11sp"
-        app:anchorAngleDegrees="290"
-        app:clockwise="true" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0px"
+                android:background="#A000"
+                android:importantForAccessibility="no"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="2:1" />
 
-    <com.lollipop.wear.widget.CircularProgressIndicator
-        android:id="@+id/hungerProgressBar"
-        android:layout_width="0px"
-        android:layout_height="0px"
-        android:padding="4dp"
-        app:activeColor="#fff"
-        app:antiClockwise="false"
-        app:inactiveColor="#3fff"
-        app:interval="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:startAngle="240"
-        app:strokeWidth="3dp"
-        app:sweepAngle="60"
-        tools:activeColor="@color/piece_tint_a"
-        tools:indicatorProgress="0.9" />
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/optionGroup"
+                android:layout_width="match_parent"
+                android:layout_height="0px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintTop_toBottomOf="@id/topSpace" />
 
-    <androidx.wear.widget.CurvedTextView
-        android:id="@+id/hungerValueView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fontFamily="@font/roboto_regular"
-        android:padding="8dp"
-        android:textColor="@android:color/white"
-        android:textSize="11sp"
-        app:clockwise="true"
-        tools:text="@string/hunger" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <com.lollipop.wear.widget.ArcLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.lollipop.wear.widget.CircularImageView
-            android:id="@+id/bowlIconView"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:padding="2dp"
-            android:src="@drawable/bowl_30px"
-            app:layout_arc_angle="100"
-            app:layout_arc_margin="8dp"
-            app:tint="@android:color/white" />
-
-        <com.lollipop.wear.widget.CircularImageView
-            android:id="@+id/dollIconView"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:padding="2dp"
-            android:src="@drawable/doll_24px"
-            app:layout_arc_angle="90"
-            app:layout_arc_margin="8dp"
-            app:tint="@android:color/white" />
-
-        <com.lollipop.wear.widget.CircularImageView
-            android:id="@+id/syringeIconView"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:padding="2dp"
-            android:src="@drawable/syringe_24px"
-            app:layout_arc_angle="80"
-            app:layout_arc_margin="8dp"
-            app:tint="@android:color/white" />
-    </com.lollipop.wear.widget.ArcLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
