@@ -26,6 +26,11 @@
         <attr name="layout_arc_angle" format="float" />
         <attr name="layout_arc_radius" format="dimension" />
         <attr name="layout_arc_margin" format="dimension" />
+        <attr name="layout_arc_circleCenter" format="enum">
+            <enum name="center" value="0" />
+            <enum name="left" value="1" />
+            <enum name="right" value="2" />
+        </attr>
         <attr name="layout_arc_mode" format="enum">
             <enum name="minEdge" value="0" />
             <enum name="maxEdge" value="1" />

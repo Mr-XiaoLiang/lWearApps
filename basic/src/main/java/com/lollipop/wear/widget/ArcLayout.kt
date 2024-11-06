@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -83,10 +84,10 @@ open class ArcLayout @JvmOverloads constructor(
             }
 
             val lp = child.layoutParams as ArcLayoutParams
-
+            val circleCenter = lp.getCircleCenter(parentWidth, parentHeight)
             val parentRadius = getParentRadius(lp.radiusMode, parentWidth, parentHeight)
-            val centerX = parentLeft + (parentWidth * 0.5F)
-            val centerY = parentTop + (parentHeight * 0.5F)
+            val centerX = parentLeft + circleCenter[0]
+            val centerY = parentTop + circleCenter[1]
 
             val childWidth = child.measuredWidth
             val childHeight = child.measuredHeight
@@ -154,6 +155,42 @@ open class ArcLayout @JvmOverloads constructor(
                 }
             }
             a.recycle()
+        }
+
+        fun getCircleCenter(parentWidth: Int, parentHeight: Int): FloatArray {
+            var childGravity = gravity
+            if (childGravity == -1) {
+                childGravity = Gravity.CENTER
+            }
+            val absoluteGravity = Gravity.getAbsoluteGravity(childGravity, layoutDirection)
+            val x = when (absoluteGravity and Gravity.HORIZONTAL_GRAVITY_MASK) {
+                Gravity.RIGHT -> {
+                    parentWidth.toFloat()
+                }
+
+                Gravity.LEFT -> {
+                    0F
+                }
+
+                else -> {
+                    parentWidth * 0.5F
+                }
+            }
+
+            val y = when (childGravity and Gravity.VERTICAL_GRAVITY_MASK) {
+                Gravity.TOP -> {
+                    0F
+                }
+
+                Gravity.BOTTOM -> {
+                    parentHeight.toFloat()
+                }
+
+                else -> {
+                    parentHeight * 0.5F
+                }
+            }
+            return floatArrayOf(x, y)
         }
 
         fun optRadius(def: Float): Float {

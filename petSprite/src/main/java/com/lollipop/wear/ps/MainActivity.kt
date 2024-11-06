@@ -12,17 +12,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.spritePlayer.setSpriteInfo(
-            SpriteInfo.createBy4x4(256) { left, up, right, down ->
-                SpriteInfo.FromAssets(
-                    "sprite/PIKACHU.png",
-                    up = up,
-                    down = down,
-                    left = left,
-                    right = right
-                )
-            }
-        )
+//        binding.spritePlayer.setSpriteInfo(
+//            SpriteInfo.createBy4x4(256) { left, up, right, down ->
+//                SpriteInfo.FromAssets(
+//                    "sprite/PIKACHU.png",
+//                    up = up,
+//                    down = down,
+//                    left = left,
+//                    right = right
+//                )
+//            }
+//        )
     }
 
     private fun updateToward(player: SpritePlayer, toward: SpriteToward) {
