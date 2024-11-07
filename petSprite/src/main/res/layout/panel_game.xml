@@ -163,9 +163,28 @@
                 tools:visibility="visible" />
 
             <com.lollipop.wear.widget.CircularImageView
+                android:id="@+id/toiletIconView"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:src="@drawable/syringe_24px"
+                android:src="@drawable/toilet_24px"
+                android:visibility="gone"
+                app:tint="@android:color/white"
+                tools:visibility="visible" />
+
+            <com.lollipop.wear.widget.CircularImageView
+                android:id="@+id/computerIconView"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@drawable/computer_24px"
+                android:visibility="gone"
+                app:tint="@android:color/white"
+                tools:visibility="visible" />
+
+            <com.lollipop.wear.widget.CircularImageView
+                android:id="@+id/briefcaseIconView"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@drawable/briefcase_24px"
                 android:visibility="gone"
                 app:tint="@android:color/white"
                 tools:visibility="visible" />
@@ -173,42 +192,11 @@
             <com.lollipop.wear.widget.CircularImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:src="@drawable/syringe_24px"
+                android:src="@android:drawable/ic_dialog_email"
                 android:visibility="gone"
                 app:tint="@android:color/white"
                 tools:visibility="visible" />
 
-            <com.lollipop.wear.widget.CircularImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:src="@drawable/syringe_24px"
-                android:visibility="gone"
-                app:tint="@android:color/white"
-                tools:visibility="visible" />
-
-            <com.lollipop.wear.widget.CircularImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:src="@drawable/syringe_24px"
-                android:visibility="gone"
-                app:tint="@android:color/white"
-                tools:visibility="visible" />
-
-            <com.lollipop.wear.widget.CircularImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:src="@drawable/syringe_24px"
-                android:visibility="gone"
-                app:tint="@android:color/white"
-                tools:visibility="visible" />
-
-            <com.lollipop.wear.widget.CircularImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:src="@drawable/syringe_24px"
-                android:visibility="gone"
-                app:tint="@android:color/white"
-                tools:visibility="visible" />
         </com.lollipop.wear.widget.ArcLinearLayout>
     </FrameLayout>
 
