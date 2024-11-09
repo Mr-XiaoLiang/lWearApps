@@ -14,14 +14,22 @@ interface GameState {
 
 }
 
-abstract class IntGameState : GameState {
+abstract class SingleGameState : GameState {
+
+    companion object {
+        const val KEY_VALUE = "value"
+    }
+
+}
+
+abstract class IntGameState : SingleGameState() {
 
     open val maxValue: Int = Int.MAX_VALUE
 
     open val minValue: Int = 0
 
     var current: Int = 0
-        protected set
+        private set
 
     protected fun putValue(newValue: Int) {
         current += newValue
@@ -33,25 +41,13 @@ abstract class IntGameState : GameState {
         }
     }
 
-}
+    override fun parse(json: JSONObject) {
+        current = json.optInt(KEY_VALUE, current)
+    }
 
-abstract class FloatGameState : GameState {
-
-    open val maxValue: Float = Float.MAX_VALUE
-
-    open val minValue: Float = 0F
-
-    var current: Float = 0F
-        protected set
-
-    protected fun putValue(newValue: Float) {
-        current += newValue
-        if (current > maxValue) {
-            current = minValue
-        }
-        if (current < minValue) {
-            current = maxValue
-        }
+    override fun save(json: JSONObject) {
+        json.put(KEY_VALUE, current)
     }
 
 }
+

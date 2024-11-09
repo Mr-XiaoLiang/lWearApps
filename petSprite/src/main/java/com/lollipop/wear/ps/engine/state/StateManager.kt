@@ -9,6 +9,7 @@ object StateManager {
     val stateList = ArraySet<GameState>()
 
     private val optionListenerList = ListenerManager<OnOptionListener>()
+    private val optionFilterList = ListenerManager<GameOptionFilter>()
 
     inline fun <reified T : GameState> getState(): GameState? {
         stateList.forEach {
@@ -31,11 +32,28 @@ object StateManager {
         optionListenerList.remove(listener)
     }
 
-    fun onOption(option: GameOption) {
-        stateList.forEach {
-            it.onOption(option)
+    fun addOptionFilter(filter: GameOptionFilter) {
+        optionFilterList.add(filter)
+    }
+
+    fun removeOptionFilter(filter: GameOptionFilter) {
+        optionFilterList.remove(filter)
+    }
+
+    private fun filterOption(option: GameOption): GameOption {
+        var resultOption = option
+        optionFilterList.invoke {
+            resultOption = it.filter(resultOption)
         }
-        optionListenerList.invoke { it.onOption(option) }
+        return resultOption
+    }
+
+    fun onOption(option: GameOption) {
+        val realOption = filterOption(option)
+        stateList.forEach {
+            it.onOption(realOption)
+        }
+        optionListenerList.invoke { it.onOption(realOption) }
     }
 
     fun parse(json: JSONObject) {
