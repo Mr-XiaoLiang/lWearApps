@@ -10,6 +10,11 @@ import com.lollipop.wear.ps.engine.state.impl.SatiationState
 object GameInit {
 
     fun init(app: Application) {
+        registerState()
+        StateManager.initState(app)
+    }
+
+    private fun registerState() {
         StateManager.apply {
             register(RichState)
             register(HealthState)

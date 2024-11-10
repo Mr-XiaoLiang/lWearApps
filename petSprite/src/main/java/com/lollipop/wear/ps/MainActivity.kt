@@ -1,17 +1,25 @@
 package com.lollipop.wear.ps
 
 import androidx.appcompat.app.AppCompatActivity
+import com.lollipop.wear.ps.business.MainDashboardDelegate
 import com.lollipop.wear.ps.databinding.ActivityMainBinding
-import com.lollipop.wear.ps.engine.sprite.SpriteInfo
 import com.lollipop.wear.ps.engine.sprite.SpritePlayer
 import com.lollipop.wear.ps.engine.sprite.SpriteToward
 
 class MainActivity : AppCompatActivity() {
 
+    private val binding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
+
+    private val dashboardDelegate by lazy {
+        MainDashboardDelegate(binding.gamePanel)
+    }
+
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        dashboardDelegate.updateState()
 //        binding.spritePlayer.setSpriteInfo(
 //            SpriteInfo.createBy4x4(256) { left, up, right, down ->
 //                SpriteInfo.FromAssets(
@@ -23,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 //                )
 //            }
 //        )
+
     }
 
     private fun updateToward(player: SpritePlayer, toward: SpriteToward) {

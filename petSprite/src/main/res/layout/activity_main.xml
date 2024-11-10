@@ -6,6 +6,7 @@
     android:background="@android:color/black">
 
     <include
+        android:id="@+id/gamePanel"
         layout="@layout/panel_game"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
