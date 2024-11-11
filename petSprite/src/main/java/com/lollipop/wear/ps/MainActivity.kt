@@ -34,6 +34,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        dashboardDelegate.updateState()
+    }
+
     private fun updateToward(player: SpritePlayer, toward: SpriteToward) {
         if (player.spriteToward == toward) {
             player.changedToward(toward, !player.isRunning)
