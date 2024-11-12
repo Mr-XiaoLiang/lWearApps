@@ -18,6 +18,9 @@ abstract class DatabaseHelper(
         val COLUMN_ID = IntColumn(BaseColumns._ID, 0)
     }
 
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+    }
+
     protected fun createTable(
         tableName: String,
         primaryKey: Column<Int>? = COLUMN_ID,
@@ -90,7 +93,7 @@ abstract class DatabaseHelper(
             return cursor.getString(columnIndex)
         }
 
-        override fun putValue(value: String): ColumnValue<String> {
+        override fun valueOf(value: String): ColumnValue<String> {
             return TextColumnValue(this, value)
         }
     }
@@ -113,7 +116,7 @@ abstract class DatabaseHelper(
             return cursor.getInt(columnIndex) == 1
         }
 
-        override fun putValue(value: Boolean): ColumnValue<Boolean> {
+        override fun valueOf(value: Boolean): ColumnValue<Boolean> {
             return BooleanColumnValue(this, value)
         }
 
@@ -144,7 +147,7 @@ abstract class DatabaseHelper(
             return cursor.getInt(columnIndex)
         }
 
-        override fun putValue(value: Int): ColumnValue<Int> {
+        override fun valueOf(value: Int): ColumnValue<Int> {
             return IntColumnValue(this, value)
         }
 
@@ -168,7 +171,7 @@ abstract class DatabaseHelper(
             return cursor.getLong(columnIndex)
         }
 
-        override fun putValue(value: Long): ColumnValue<Long> {
+        override fun valueOf(value: Long): ColumnValue<Long> {
             return LongColumnValue(this, value)
         }
     }
@@ -191,7 +194,7 @@ abstract class DatabaseHelper(
             return cursor.getDouble(columnIndex)
         }
 
-        override fun putValue(value: Double): ColumnValue<Double> {
+        override fun valueOf(value: Double): ColumnValue<Double> {
             return DoubleColumnValue(this, value)
         }
     }
@@ -208,7 +211,7 @@ abstract class DatabaseHelper(
         val name: String
         val type: ColumnsType
         fun getValue(cursor: Cursor): T
-        fun putValue(value: T): ColumnValue<T>
+        fun valueOf(value: T): ColumnValue<T>
     }
 
     abstract class BasicColumnValue<T>(
