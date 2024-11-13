@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val dashboardDelegate by lazy {
-        MainDashboardDelegate(binding.gamePanel)
+        MainDashboardDelegate(this, binding.gamePanel)
     }
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {

@@ -19,6 +19,9 @@ object StateManager {
 
     val stateList = ArraySet<GameState>()
 
+    var currentSprite: String = ""
+        private set
+
     private val optionListenerList = ListenerManager<OnOptionListener>()
     private val optionFilterList = ListenerManager<GameOptionFilter>()
 
