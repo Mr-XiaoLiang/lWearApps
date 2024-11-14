@@ -19,8 +19,8 @@ import com.lollipop.wear.widget.CircularProgressIndicator
 import java.util.concurrent.Executors
 
 class MainDashboardDelegate(
-    val activity: AppCompatActivity,
-    val binding: PanelGameBinding
+    private val activity: AppCompatActivity,
+    private val binding: PanelGameBinding
 ) : LifecycleEventObserver, StateManager.OnOptionListener {
 
     companion object {
@@ -40,6 +40,10 @@ class MainDashboardDelegate(
     init {
         activity.lifecycle.addObserver(this)
         StateManager.addOptionListener(this)
+    }
+
+    fun onCreate() {
+        updateState()
     }
 
     fun updateState() {

@@ -95,7 +95,7 @@
             android:layout_height="match_parent"
             android:fontFamily="@font/roboto_regular"
             android:padding="8dp"
-            android:text="@string/health"
+            tools:text="@string/health"
             android:textColor="@android:color/white"
             android:textSize="11sp"
             app:anchorAngleDegrees="290"

@@ -1,5 +1,7 @@
 package com.lollipop.wear.ps
 
+import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.lollipop.wear.ps.business.MainDashboardDelegate
 import com.lollipop.wear.ps.databinding.ActivityMainBinding
@@ -16,10 +18,11 @@ class MainActivity : AppCompatActivity() {
         MainDashboardDelegate(this, binding.gamePanel)
     }
 
-    override fun onCreate(savedInstanceState: android.os.Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        dashboardDelegate.updateState()
+        dashboardDelegate.onCreate()
+        Log.w("Test", "onCreate")
 //        binding.spritePlayer.setSpriteInfo(
 //            SpriteInfo.createBy4x4(256) { left, up, right, down ->
 //                SpriteInfo.FromAssets(
@@ -32,11 +35,6 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        )
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        dashboardDelegate.updateState()
     }
 
     private fun updateToward(player: SpritePlayer, toward: SpriteToward) {
