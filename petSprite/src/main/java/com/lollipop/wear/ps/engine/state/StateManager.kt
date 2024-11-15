@@ -2,16 +2,15 @@ package com.lollipop.wear.ps.engine.state
 
 import android.app.Application
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.collection.ArraySet
 import com.lollipop.wear.basic.ListenerManager
 import com.lollipop.wear.data.FileHelper
+import com.lollipop.wear.ps.utils.doAsync
+import com.lollipop.wear.ps.utils.onUI
 import com.lollipop.wear.ps.engine.option.SignalOption
 import org.json.JSONObject
 import java.io.File
-import java.util.concurrent.Executors
 
 object StateManager {
 
@@ -25,14 +24,6 @@ object StateManager {
     private val optionListenerList = ListenerManager<OnOptionListener>()
     private val optionFilterList = ListenerManager<GameOptionFilter>()
 
-    private val executor by lazy {
-        Executors.newCachedThreadPool()
-    }
-
-    private val uiThread by lazy {
-        Handler(Looper.getMainLooper())
-    }
-
     inline fun <reified T : GameState> getState(): GameState? {
         stateList.forEach {
             if (it is T) {
@@ -43,18 +34,18 @@ object StateManager {
     }
 
     fun initState(app: Application) {
-        work {
+        doAsync {
             when (val result = FileHelper.readJson(File(app.filesDir, STATE_FILE))) {
                 is FileHelper.FileResult.Success -> {
                     parse(result.data)
-                    ui {
+                    onUI {
                         onOption(SignalOption)
                     }
                 }
 
                 is FileHelper.FileResult.Failure -> {
                     parse(JSONObject())
-                    ui {
+                    onUI {
                         onOption(SignalOption)
                     }
                     Log.e("StateManager", "initState error", result.error)
@@ -65,7 +56,7 @@ object StateManager {
 
     fun saveState(context: Context) {
         val app = context.applicationContext
-        work {
+        doAsync {
             val json = JSONObject()
             save(json)
             val result = FileHelper.write(File(app.filesDir, STATE_FILE), json)
@@ -123,26 +114,6 @@ object StateManager {
             val obj = JSONObject()
             state.save(obj)
             json.put(state.key, obj)
-        }
-    }
-
-    fun work(block: () -> Unit) {
-        executor.submit {
-            try {
-                block()
-            } catch (e: Throwable) {
-                Log.e("StateManager", "work error", e)
-            }
-        }
-    }
-
-    fun ui(block: () -> Unit) {
-        uiThread.post {
-            try {
-                block()
-            } catch (e: Throwable) {
-                Log.e("StateManager", "ui error", e)
-            }
         }
     }
 

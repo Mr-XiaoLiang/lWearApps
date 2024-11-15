@@ -3,4 +3,6 @@
     <string name="health">健康: %1$d</string>
     <string name="mood">心情: %1$d</string>
     <string name="hunger">饥饿: %1$d</string>
+
+    <string name="food_forage">饲料</string>
 </resources>
