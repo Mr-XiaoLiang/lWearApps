@@ -1,20 +1,14 @@
 package com.lollipop.wear.ps.engine.state
 
-import android.app.Application
-import android.content.Context
-import android.util.Log
 import androidx.collection.ArraySet
 import com.lollipop.wear.basic.ListenerManager
-import com.lollipop.wear.data.FileHelper
-import com.lollipop.wear.ps.utils.doAsync
-import com.lollipop.wear.ps.utils.onUI
+import com.lollipop.wear.basic.doAsync
+import com.lollipop.wear.basic.onUI
 import com.lollipop.wear.ps.engine.option.SignalOption
+import com.lollipop.wear.ps.utils.BasicDataManager
 import org.json.JSONObject
-import java.io.File
 
-object StateManager {
-
-    private const val STATE_FILE = "PS_State.lf"
+object StateManager : BasicDataManager("PS_State.lf") {
 
     val stateList = ArraySet<GameState>()
 
@@ -33,36 +27,26 @@ object StateManager {
         return null
     }
 
-    fun initState(app: Application) {
+    override fun parseData(json: JSONObject) {
+        super.parseData(json)
         doAsync {
-            when (val result = FileHelper.readJson(File(app.filesDir, STATE_FILE))) {
-                is FileHelper.FileResult.Success -> {
-                    parse(result.data)
-                    onUI {
-                        onOption(SignalOption)
-                    }
-                }
-
-                is FileHelper.FileResult.Failure -> {
-                    parse(JSONObject())
-                    onUI {
-                        onOption(SignalOption)
-                    }
-                    Log.e("StateManager", "initState error", result.error)
-                }
+            stateList.forEach { state ->
+                val obj = json.optJSONObject(state.key) ?: JSONObject()
+                state.parse(obj)
+            }
+            onUI {
+                // 更新数据之后，发起一次刷新
+                onOption(SignalOption)
             }
         }
     }
 
-    fun saveState(context: Context) {
-        val app = context.applicationContext
-        doAsync {
-            val json = JSONObject()
-            save(json)
-            val result = FileHelper.write(File(app.filesDir, STATE_FILE), json)
-            if (result is FileHelper.FileResult.Failure) {
-                Log.e("StateManager", "saveState error", result.error)
-            }
+    override fun saveData(out: JSONObject) {
+        super.saveData(out)
+        stateList.forEach { state ->
+            val obj = JSONObject()
+            state.save(obj)
+            out.put(state.key, obj)
         }
     }
 
@@ -100,21 +84,6 @@ object StateManager {
             it.onOption(realOption)
         }
         optionListenerList.invoke { it.onOption(realOption) }
-    }
-
-    fun parse(json: JSONObject) {
-        stateList.forEach { state ->
-            val obj = json.optJSONObject(state.key) ?: JSONObject()
-            state.parse(obj)
-        }
-    }
-
-    fun save(json: JSONObject) {
-        stateList.forEach { state ->
-            val obj = JSONObject()
-            state.save(obj)
-            json.put(state.key, obj)
-        }
     }
 
     fun interface OnOptionListener {

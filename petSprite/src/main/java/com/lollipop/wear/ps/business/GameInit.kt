@@ -2,6 +2,7 @@ package com.lollipop.wear.ps.business
 
 import android.app.Application
 import com.lollipop.wear.ps.engine.log.GameLogDelegate
+import com.lollipop.wear.ps.engine.state.BackpackManager
 import com.lollipop.wear.ps.engine.state.StateManager
 import com.lollipop.wear.ps.engine.state.impl.HealthState
 import com.lollipop.wear.ps.engine.state.impl.MoodState
@@ -18,7 +19,8 @@ object GameInit {
         }
         isInit = true
         registerState()
-        StateManager.initState(app)
+        StateManager.init(app)
+        BackpackManager.init(app)
         StateManager.addOptionListener(GameLogDelegate(app))
     }
 
