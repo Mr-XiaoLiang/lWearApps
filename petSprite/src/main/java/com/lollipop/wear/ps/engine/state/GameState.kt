@@ -6,7 +6,7 @@ interface GameState {
 
     val key: String
 
-    fun onOption(option: GameOption)
+    fun onOption(things: GameSomeThings)
 
     fun parse(json: JSONObject)
 

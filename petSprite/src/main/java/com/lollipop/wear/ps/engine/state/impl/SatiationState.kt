@@ -1,6 +1,6 @@
 package com.lollipop.wear.ps.engine.state.impl
 
-import com.lollipop.wear.ps.engine.state.GameOption
+import com.lollipop.wear.ps.engine.state.GameSomeThings
 import com.lollipop.wear.ps.engine.state.IntGameState
 import com.lollipop.wear.ps.engine.state.type.Food
 
@@ -15,7 +15,8 @@ object SatiationState : IntGameState() {
 
     override val minValue: Int = 0
 
-    override fun onOption(option: GameOption) {
+    override fun onOption(things: GameSomeThings) {
+        val option = things.option
         if (option is Food) {
             putValue(option.kcal)
         }

@@ -11,6 +11,7 @@ import androidx.wear.widget.CurvedTextView
 import com.lollipop.wear.ps.R
 import com.lollipop.wear.ps.databinding.PanelGameBinding
 import com.lollipop.wear.ps.engine.state.GameOption
+import com.lollipop.wear.ps.engine.state.GameSomeThings
 import com.lollipop.wear.ps.engine.state.StateManager
 import com.lollipop.wear.ps.engine.state.impl.HealthState
 import com.lollipop.wear.ps.engine.state.impl.MoodState
@@ -70,7 +71,7 @@ class MainDashboardDelegate(
         )
     }
 
-    override fun onOption(option: GameOption) {
+    override fun onOption(things: GameSomeThings) {
         if (currentLifecycleState.isAtLeast(Lifecycle.State.RESUMED)) {
             updateState()
         }

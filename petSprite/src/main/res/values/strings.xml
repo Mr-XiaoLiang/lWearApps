@@ -5,4 +5,11 @@
     <string name="hunger">饥饿: %1$d</string>
 
     <string name="food_forage">饲料</string>
+    <string name="action_used">使用了 %1$s</string>
+    <string name="action_ate">吃了 %1$s</string>
+    <string name="action_got">获得了 %1$s</string>
+    <string name="action_lost">失去了 %1$s</string>
+    <string name="action_discarded">丢弃了 %1$s</string>
+    <string name="action_started">开始了 %1$s</string>
+    <string name="action_done">完成了 %1$s</string>
 </resources>

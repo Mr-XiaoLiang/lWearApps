@@ -36,7 +36,7 @@ object StateManager : BasicDataManager("PS_State.lf") {
             }
             onUI {
                 // 更新数据之后，发起一次刷新
-                onOption(SignalOption)
+                onOption(GameOptionAction.DONE, SignalOption)
             }
         }
     }
@@ -70,16 +70,16 @@ object StateManager : BasicDataManager("PS_State.lf") {
         optionFilterList.remove(filter)
     }
 
-    private fun filterOption(option: GameOption): GameOption {
-        var resultOption = option
+    private fun filterOption(things: GameSomeThings): GameSomeThings {
+        var resultOption = things
         optionFilterList.invoke {
             resultOption = it.filter(resultOption)
         }
         return resultOption
     }
 
-    fun onOption(option: GameOption) {
-        val realOption = filterOption(option)
+    fun onOption(action: GameOptionAction, option: GameOption) {
+        val realOption = filterOption(GameSomeThings(action, option))
         stateList.forEach {
             it.onOption(realOption)
         }
@@ -87,7 +87,7 @@ object StateManager : BasicDataManager("PS_State.lf") {
     }
 
     fun interface OnOptionListener {
-        fun onOption(option: GameOption)
+        fun onOption(things: GameSomeThings)
     }
 
 }

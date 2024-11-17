@@ -1,6 +1,5 @@
 package com.lollipop.wear.ps.engine.option
 
-import android.content.Context
 import com.lollipop.wear.ps.engine.state.GameOption
 
 /**
@@ -9,8 +8,4 @@ import com.lollipop.wear.ps.engine.state.GameOption
 object SignalOption : GameOption {
     override val key: String = ""
     override val name: Int = 0
-
-    override fun getLogInfo(context: Context): String {
-        return ""
-    }
 }

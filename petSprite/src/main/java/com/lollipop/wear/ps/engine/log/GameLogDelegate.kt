@@ -3,7 +3,7 @@ package com.lollipop.wear.ps.engine.log
 import android.content.Context
 import android.util.Log
 import com.lollipop.wear.ps.engine.option.SignalOption
-import com.lollipop.wear.ps.engine.state.GameOption
+import com.lollipop.wear.ps.engine.state.GameSomeThings
 import com.lollipop.wear.ps.engine.state.StateManager
 import java.util.concurrent.Executors
 
@@ -17,12 +17,13 @@ class GameLogDelegate(private val context: Context) : StateManager.OnOptionListe
         Executors.newSingleThreadExecutor()
     }
 
-    override fun onOption(option: GameOption) {
+    override fun onOption(things: GameSomeThings) {
         try {
-            if (option is SignalOption) {
+            if (things.option is SignalOption) {
                 return
             }
-            putCurrentLog(what = option.getLogInfo(context), option = option::class.java.simpleName)
+            val what = context.getString(things.action.resId, context.getString(things.option.name))
+            putCurrentLog(what = what, option = things::class.java.simpleName)
         } catch (e: Throwable) {
             Log.e("GameLogDelegate", "onOption error", e)
         }
