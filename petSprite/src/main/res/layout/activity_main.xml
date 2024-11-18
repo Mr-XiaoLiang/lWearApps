@@ -49,21 +49,31 @@
             android:id="@+id/contentPanel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#E000">
+            android:background="#E000"
+            android:padding="21dp"
+            android:visibility="invisible"
+            tools:visibility="visible">
 
             <com.lollipop.wear.widget.CircularFrameLayout
-                android:id="@+id/contentContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="21dp"
-                android:background="@android:color/black"
-                tools:background="#005900">
+                android:background="@android:color/black">
 
-                <androidx.recyclerview.widget.RecyclerView
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/contentViewPager"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    tools:background="#005900" />
 
             </com.lollipop.wear.widget.CircularFrameLayout>
+
+            <com.lollipop.wear.widget.HorizontalPageIndicator
+                android:id="@+id/contentPageIndicator"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp"
+                app:indicatorInterval="4dp"
+                app:indicatorRadius="2dp" />
 
         </FrameLayout>
 
