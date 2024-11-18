@@ -9,8 +9,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.wear.widget.CurvedTextView
 import com.lollipop.wear.ps.R
-import com.lollipop.wear.ps.databinding.PanelGameBinding
-import com.lollipop.wear.ps.engine.state.GameOption
+import com.lollipop.wear.ps.databinding.PanelDashboardBinding
 import com.lollipop.wear.ps.engine.state.GameSomeThings
 import com.lollipop.wear.ps.engine.state.StateManager
 import com.lollipop.wear.ps.engine.state.impl.HealthState
@@ -21,7 +20,7 @@ import java.util.concurrent.Executors
 
 class MainDashboardDelegate(
     private val activity: AppCompatActivity,
-    private val binding: PanelGameBinding
+    private val binding: PanelDashboardBinding
 ) : LifecycleEventObserver, StateManager.OnOptionListener {
 
     companion object {

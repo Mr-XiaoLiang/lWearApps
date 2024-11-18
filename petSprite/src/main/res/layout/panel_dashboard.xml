@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintDimensionRatio="1:1"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <androidx.wear.widget.CurvedTextView
+        android:id="@+id/timeView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/roboto_regular"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        app:anchorAngleDegrees="120"
+        app:clockwise="false"
+        tools:text="12:34" />
+
+    <com.lollipop.wear.widget.CircularProgressIndicator
+        android:id="@+id/moodProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="4dp"
+        app:activeColor="#fff"
+        app:antiClockwise="true"
+        app:inactiveColor="#3fff"
+        app:interval="2dp"
+        app:startAngle="10"
+        app:strokeWidth="3dp"
+        app:sweepAngle="60"
+        tools:activeColor="@color/piece_tint_a"
+        tools:indicatorProgress="0.6" />
+
+    <androidx.wear.widget.CurvedTextView
+        android:id="@+id/moodValueView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/roboto_regular"
+        android:padding="8dp"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        app:anchorAngleDegrees="70"
+        app:clockwise="true"
+        tools:text="@string/mood" />
+
+    <com.lollipop.wear.widget.CircularProgressIndicator
+        android:id="@+id/healthProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="4dp"
+        app:activeColor="#fff"
+        app:antiClockwise="false"
+        app:inactiveColor="#3fff"
+        app:interval="2dp"
+        app:startAngle="170"
+        app:strokeWidth="3dp"
+        app:sweepAngle="60"
+        tools:activeColor="@color/piece_tint_b"
+        tools:indicatorProgress="0.4" />
+
+    <androidx.wear.widget.CurvedTextView
+        android:id="@+id/healthValueView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/roboto_regular"
+        android:padding="8dp"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        app:anchorAngleDegrees="290"
+        app:clockwise="true"
+        tools:text="@string/health" />
+
+    <com.lollipop.wear.widget.CircularProgressIndicator
+        android:id="@+id/hungerProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="4dp"
+        app:activeColor="#fff"
+        app:antiClockwise="false"
+        app:inactiveColor="#3fff"
+        app:interval="2dp"
+        app:startAngle="240"
+        app:strokeWidth="3dp"
+        app:sweepAngle="60"
+        tools:activeColor="@color/piece_tint_a"
+        tools:indicatorProgress="0.9" />
+
+    <androidx.wear.widget.CurvedTextView
+        android:id="@+id/hungerValueView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/roboto_regular"
+        android:padding="8dp"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        app:clockwise="true"
+        tools:text="@string/hunger" />
+
+</FrameLayout>

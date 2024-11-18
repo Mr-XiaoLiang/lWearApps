@@ -1,73 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black">
 
-    <include
-        android:id="@+id/gamePanel"
-        layout="@layout/panel_game"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/sheetGroup"
+    <FrameLayout
         android:layout_width="0px"
         android:layout_height="0px"
+        android:background="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <include
+            android:id="@+id/gamePanel"
+            layout="@layout/panel_game"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent" />
 
-            <Space
-                android:id="@+id/topSpace"
+        <com.lollipop.wear.widget.ArcLayout
+            android:id="@+id/mainOptionPanel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/backpackButton"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                app:layout_arc_angle="60"
+                app:layout_arc_margin="16dp">
+
+                <com.lollipop.wear.widget.CircularImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:background="#000"
+                    android:padding="5dp"
+                    android:src="@drawable/backpack_48px"
+                    app:tint="@android:color/white" />
+            </FrameLayout>
+        </com.lollipop.wear.widget.ArcLayout>
+
+        <FrameLayout
+            android:id="@+id/contentPanel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#E000">
+
+            <com.lollipop.wear.widget.CircularFrameLayout
+                android:id="@+id/contentContainer"
                 android:layout_width="match_parent"
-                android:layout_height="0px"
-                app:layout_constraintDimensionRatio="2:1"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="match_parent"
+                android:layout_margin="21dp"
+                android:background="@android:color/black"
+                tools:background="#005900">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="0px"
-                android:background="#A000"
-                android:importantForAccessibility="no"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="2:1" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/optionGroup"
-                android:layout_width="match_parent"
-                android:layout_height="0px"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintTop_toBottomOf="@id/topSpace" />
+            </com.lollipop.wear.widget.CircularFrameLayout>
 
-            <ImageView
-                android:id="@+id/closePanel"
-                android:layout_width="match_parent"
-                android:layout_height="0px"
-                android:importantForAccessibility="no"
-                app:layout_constraintDimensionRatio="2:1"
-                app:layout_constraintTop_toTopOf="@id/optionGroup" />
+        </FrameLayout>
 
-            <com.lollipop.wear.widget.HorizontalPageIndicator
-                android:id="@+id/pageIndicator"
-                android:layout_width="match_parent"
-                android:layout_height="0px"
-                android:padding="2dp"
-                app:indicatorInterval="2dp"
-                app:indicatorRadius="2dp"
-                app:layout_constraintBottom_toBottomOf="@id/optionGroup"
-                app:layout_constraintDimensionRatio="1:1" />
+        <include
+            android:id="@+id/statePanel"
+            layout="@layout/panel_state"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <include
+            android:id="@+id/dashboardPanel"
+            layout="@layout/panel_dashboard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-    </androidx.core.widget.NestedScrollView>
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
