@@ -27,37 +27,46 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <FrameLayout
-                android:id="@+id/backpackButton"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+            <View
+                android:id="@+id/backpackButtonClickDelegate"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 app:layout_arc_angle="60"
-                app:layout_arc_margin="16dp">
+                app:layout_arc_margin="16dp" />
 
-                <com.lollipop.wear.widget.CircularImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:background="#000"
-                    android:padding="5dp"
-                    android:src="@drawable/backpack_48px"
-                    app:tint="@android:color/white" />
-            </FrameLayout>
+            <com.lollipop.wear.widget.CircularImageView
+                android:id="@+id/backpackButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:background="#000"
+                android:padding="5dp"
+                android:src="@drawable/backpack_48px"
+                app:layout_arc_angle="60"
+                app:layout_arc_margin="16dp"
+                app:tint="@android:color/white" />
         </com.lollipop.wear.widget.ArcLayout>
 
         <FrameLayout
-            android:id="@+id/contentPanel"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#E000"
-            android:padding="21dp"
-            android:visibility="invisible"
-            tools:visibility="visible">
+            android:layout_height="match_parent">
 
-            <com.lollipop.wear.widget.CircularFrameLayout
+            <ImageView
+                android:id="@+id/contentPanelBackground"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/black">
+                android:background="#E000"
+                android:visibility="invisible"
+                tools:visibility="visible" />
+
+            <com.lollipop.wear.widget.CircularFrameLayout
+                android:id="@+id/contentPanel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="21dp"
+                android:background="@android:color/black"
+                android:visibility="invisible"
+                tools:visibility="visible">
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/contentViewPager"
@@ -65,15 +74,15 @@
                     android:layout_height="match_parent"
                     tools:background="#005900" />
 
-            </com.lollipop.wear.widget.CircularFrameLayout>
+                <com.lollipop.wear.widget.HorizontalPageIndicator
+                    android:id="@+id/contentPageIndicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="2dp"
+                    app:indicatorInterval="4dp"
+                    app:indicatorRadius="2dp" />
 
-            <com.lollipop.wear.widget.HorizontalPageIndicator
-                android:id="@+id/contentPageIndicator"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="2dp"
-                app:indicatorInterval="4dp"
-                app:indicatorRadius="2dp" />
+            </com.lollipop.wear.widget.CircularFrameLayout>
 
         </FrameLayout>
 
