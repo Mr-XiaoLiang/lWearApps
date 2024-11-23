@@ -6,6 +6,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isInvisible
+import com.lollipop.wear.animation.AnimationHelper
+import com.lollipop.wear.animation.converter.Alpha
+import com.lollipop.wear.animation.converter.TranslationX
+import com.lollipop.wear.animation.dsl.logOnDebug
+import com.lollipop.wear.animation.dsl.withView
+import com.lollipop.wear.animation.end.HideOnClose
+import com.lollipop.wear.animation.start.ShowOnStart
 import com.lollipop.wear.ps.business.MainDashboardDelegate
 import com.lollipop.wear.ps.databinding.ActivityMainBinding
 import com.lollipop.wear.ps.engine.sprite.SpritePlayer
@@ -21,10 +29,15 @@ class MainActivity : AppCompatActivity() {
         MainDashboardDelegate(this, binding.dashboardPanel)
     }
 
+    private val contentPanelController by lazy {
+        AnimationHelper()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         dashboardDelegate.onCreate()
+        initContentPanelController()
         Log.w("Test", "onCreate")
 //        binding.spritePlayer.setSpriteInfo(
 //            SpriteInfo.createBy4x4(256) { left, up, right, down ->
@@ -38,6 +51,30 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        )
 
+    }
+
+    private fun initContentPanelController() {
+        contentPanelController.build {
+            withView(binding.contentPanel) {
+                HideOnClose()
+                ShowOnStart()
+                TranslationX()
+            }
+            withView(binding.contentPanelBackground) {
+                HideOnClose()
+                ShowOnStart()
+                Alpha()
+            }
+        }
+        binding.contentPanel.isInvisible = true
+        binding.contentPanelBackground.isInvisible = true
+        binding.contentPanelBackground.setOnClickListener {
+            contentPanelController.close()
+        }
+        binding.contentPanel.setOnClickListener { }
+        binding.backpackButton.setOnClickListener {
+            contentPanelController.expand()
+        }
     }
 
     private fun updateToward(player: SpritePlayer, toward: SpriteToward) {
