@@ -65,13 +65,18 @@ class MainActivity : AppCompatActivity() {
                 ShowOnStart()
                 Alpha()
             }
+            withView(binding.contentPanelBackgroundRing) {
+                HideOnClose()
+                ShowOnStart()
+                Alpha()
+            }
         }
         binding.contentPanel.isInvisible = true
         binding.contentPanelBackground.isInvisible = true
-        binding.contentPanelBackground.setOnClickListener {
+        binding.contentPanelBackgroundRing.isInvisible = true
+        binding.contentPanelBackgroundRing.setOnClickListener {
             contentPanelController.close()
         }
-        binding.contentPanel.setOnClickListener { }
         binding.backpackButton.setOnClickListener {
             contentPanelController.expand()
         }
@@ -83,61 +88,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             player.changedToward(toward, true)
         }
-    }
-
-    private class ContentPanelController(
-        private val contentPanel: View,
-        private val contentPanelBackground: View,
-        private val openButton: View
-    ) : ValueAnimator.AnimatorUpdateListener, Animator.AnimatorListener {
-
-        companion object {
-            private const val ANIMATOR_DURATION = 300L
-            private const val ANIMATOR_VALUE_MIN = 0F
-            private const val ANIMATOR_VALUE_MAX = 1F
-        }
-
-        private val valueAnimator by lazy {
-            ValueAnimator().apply {
-                addUpdateListener(this@ContentPanelController)
-                addListener(this@ContentPanelController)
-            }
-        }
-
-        init {
-            openButton.setOnClickListener {
-                open()
-            }
-        }
-
-        fun close() {
-            TODO("Not yet implemented")
-        }
-
-        fun open() {
-            TODO("Not yet implemented")
-        }
-
-        override fun onAnimationUpdate(animation: ValueAnimator) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onAnimationStart(animation: Animator) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onAnimationEnd(animation: Animator) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onAnimationCancel(animation: Animator) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onAnimationRepeat(animation: Animator) {
-            TODO("Not yet implemented")
-        }
-
     }
 
 }

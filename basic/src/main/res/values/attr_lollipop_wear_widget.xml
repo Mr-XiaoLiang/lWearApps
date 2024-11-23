@@ -70,4 +70,9 @@
             <enum name="width" value="3" />
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="RingTouchLayout">
+        <attr name="ring_margin" format="dimension" />
+        <attr name="ring_width" format="dimension" />
+    </declare-styleable>
 </resources>

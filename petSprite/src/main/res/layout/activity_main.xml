@@ -55,7 +55,7 @@
                 android:id="@+id/contentPanelBackground"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#E0F0"
+                android:background="#E000"
                 android:visibility="invisible"
                 tools:visibility="visible" />
 
@@ -83,6 +83,13 @@
                     app:indicatorRadius="2dp" />
 
             </com.lollipop.wear.widget.CircularFrameLayout>
+
+            <com.lollipop.wear.widget.RingTouchLayout
+                android:id="@+id/contentPanelBackgroundRing"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                app:ring_width="21dp" />
 
         </FrameLayout>
 
