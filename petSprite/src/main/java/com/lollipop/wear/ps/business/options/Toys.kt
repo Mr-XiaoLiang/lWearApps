@@ -2,7 +2,7 @@ package com.lollipop.wear.ps.business.options
 
 import com.lollipop.wear.ps.engine.state.GameOption
 
-object FoodOptions : OptionList {
+object Toys : OptionList {
 
     private val options = listOf<GameOption>(
 

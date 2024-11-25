@@ -1,17 +1,58 @@
 package com.lollipop.wear.ps.business.page
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.lollipop.wear.ps.databinding.ItemOptionBinding
+import com.lollipop.wear.ps.engine.state.BackpackItem
+import com.lollipop.wear.ps.engine.state.BackpackManager
 import com.lollipop.wear.ps.engine.state.GameOption
+import com.lollipop.wear.ps.engine.state.type.Commodity
+import java.text.DecimalFormat
 
-class OptionListPageFragment : ListContentPageFragment() {
+open class OptionListPageFragment : ListContentPageFragment() {
 
-    override fun createAdapter(): RecyclerView.Adapter<*> {
-        TODO("Not yet implemented")
+    private val dataList = ArrayList<Any>()
+
+    private val adapter = OptionAdapter(dataList, ::onOptionClick)
+
+    private var callback: Callback? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = findCallback(context)
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        callback = null
+    }
+
+    override fun getListAdapter(): RecyclerView.Adapter<*> {
+        return adapter
+    }
+
+    private fun onOptionClick(option: GameOption) {
+        callback?.onOptionClick(option)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onResume() {
+        super.onResume()
+        view?.let {
+            adapter.setParentHeight(it.height / 2)
+        }
+        dataList.clear()
+        dataList.add(SpaceInfo)
+        callback?.let {
+            dataList.addAll(it.getOptionList(getPageId(this)))
+        }
+        dataList.add(SpaceInfo)
+        adapter.notifyDataSetChanged()
+    }
 
     protected class OptionAdapter(
         private val dataList: List<Any>,
@@ -27,9 +68,9 @@ class OptionListPageFragment : ListContentPageFragment() {
 
         private var layoutInflaterImpl: LayoutInflater? = null
 
+        @SuppressLint("NotifyDataSetChanged")
         fun setParentHeight(height: Int) {
             parentHeight = height
-            notifyDataSetChanged()
         }
 
         private fun getLayoutInflater(parent: ViewGroup): LayoutInflater {
@@ -103,8 +144,26 @@ class OptionListPageFragment : ListContentPageFragment() {
             clickCallback(adapterPosition)
         }
 
+        @SuppressLint("SetTextI18n")
         fun bind(option: GameOption) {
             binding.nameView.setText(option.name)
+            if (option is BackpackItem) {
+                val count = BackpackManager.getItemCount(option)
+                binding.countView.text = "x$count"
+                binding.countView.isVisible = true
+            } else {
+                binding.countView.isVisible = false
+            }
+            if (option is Commodity) {
+                binding.priceView.text = formatPrice(option.price)
+                binding.priceView.isVisible = true
+            } else {
+                binding.priceView.isVisible = false
+            }
+        }
+
+        private fun formatPrice(price: Int): String {
+            return "${price}.00"
         }
     }
 

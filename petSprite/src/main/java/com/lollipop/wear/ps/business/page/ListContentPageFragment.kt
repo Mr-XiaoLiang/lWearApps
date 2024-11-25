@@ -10,9 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 
 abstract class ListContentPageFragment : ContentPageFragment() {
 
-    protected var adapter: RecyclerView.Adapter<*>? = null
-        private set
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -23,15 +20,14 @@ abstract class ListContentPageFragment : ContentPageFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         if (view is RecyclerView) {
-            adapter = createAdapter()
-            view.adapter = adapter
+            view.adapter = getListAdapter()
             view.layoutManager = LinearLayoutManager(
                 view.context, LinearLayoutManager.VERTICAL, false
             )
         }
     }
 
-    protected abstract fun createAdapter(): RecyclerView.Adapter<*>
+    protected abstract fun getListAdapter(): RecyclerView.Adapter<*>
 
     protected object SpaceInfo
 
