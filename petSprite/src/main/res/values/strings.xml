@@ -14,5 +14,47 @@
 
     <!--  食物  -->
     <string name="food_cookie">🍪饼干</string>
+    <!--  水果  -->
     <string name="food_grape">🍇葡萄</string>
+    <string name="food_melon">🍈甜瓜</string>
+    <string name="food_watermelon">🍉西瓜</string>
+    <string name="food_orange">🍊橘子</string>
+    <string name="food_lemon">🍋柠檬</string>
+    <string name="food_banana">🍌香蕉</string>
+    <string name="food_mango">🥭芒果</string>
+    <string name="food_pineapple">🍍菠萝</string>
+    <string name="food_cherry">🍒樱桃</string>
+    <string name="food_red_apple">🍎红苹果</string>
+    <string name="food_green_apple">🍏绿苹果</string>
+    <string name="food_pear">🍐梨</string>
+    <string name="food_peach">🍑桃</string>
+    <string name="food_strawberry">🍓草莓</string>
+    <string name="food_blueberry">🫐蓝莓</string>
+    <string name="food_kiwi">🥝猕猴桃</string>
+    <string name="food_persimmon">🍅柿子</string>
+    <string name="food_olive">🫒橄榄</string>
+    <string name="food_coconut">🥥椰子</string>
+    <string name="food_avocado">🥑鳄梨</string>
+    <!--  蔬菜  -->
+    <string name="food_eggplant">🍆茄子</string>
+    <string name="food_potato">🥔土豆</string>
+    <string name="food_broccoli">🥦西兰花</string>
+    <string name="food_carrot">🥕胡萝卜</string>
+    <string name="food_corn">🌽玉米</string>
+    <string name="food_red_pepper">🌶️红辣椒</string>
+    <string name="food_bell_pepper">🫑灯笼椒</string>
+    <string name="food_cucumber">🥒黄瓜</string>
+    <string name="food_greengrocery">🥬青菜</string>
+    <string name="food_garlic">🧄蒜</string>
+    <string name="food_onion">🧅洋葱</string>
+    <string name="food_mushroom">🍄蘑菇</string>
+    <string name="food_peanut">🥜花生</string>
+    <string name="food_bean">🫘豆子</string>
+    <string name="food_chestnut">🌰栗子</string>
+    <!--  熟食  -->
+    <string name="food_toast">🍞吐司</string>
+    <string name="food_croissant">🥐牛角面包</string>
+    <string name="food_baguette">🥖法式长棍面包</string>
+
+
 </resources>

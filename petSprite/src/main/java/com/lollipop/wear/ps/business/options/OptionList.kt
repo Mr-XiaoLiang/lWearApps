@@ -4,6 +4,6 @@ import com.lollipop.wear.ps.engine.state.GameOption
 
 interface OptionList {
 
-    fun getOptionList(): List<GameOption>
+    val options: Array<GameOption>
 
 }
