@@ -514,9 +514,371 @@ object Foods : OptionList {
             price = 5
         )
 
-        // TODO
+        /**
+         * 🫓扁面包
+         */
+        object Flatbread : FoodsOption(
+            key = "food_flatbread",
+            name = R.string.food_flatbread,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
 
-        override val options = arrayOf<GameOption>()
+        /**
+         * 🥨椒盐脆饼
+         */
+        object Pretzels : FoodsOption(
+            key = "food_pretzels",
+            name = R.string.food_pretzels,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🥯面包圈
+         */
+        object Bagels : FoodsOption(
+            key = "food_bagels",
+            name = R.string.food_bagels,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🥞烙饼
+         */
+        object Pancakes : FoodsOption(
+            key = "food_pancakes",
+            name = R.string.food_pancakes,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🧇华夫饼
+         */
+        object Waffles : FoodsOption(
+            key = "food_waffles",
+            name = R.string.food_waffles,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🧀奶酪
+         */
+        object Cheese : FoodsOption(
+            key = "food_cheese",
+            name = R.string.food_cheese,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍖排骨
+         */
+        object Ribs : FoodsOption(
+            key = "food_ribs",
+            name = R.string.food_ribs,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍗鸡腿
+         */
+        object PoultryLegs : FoodsOption(
+            key = "food_poultry_legs",
+            name = R.string.food_poultry_legs,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🥩牛排
+         */
+        object Steak : FoodsOption(
+            key = "food_steak",
+            name = R.string.food_steak,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🥓培根
+         */
+        object Bacon : FoodsOption(
+            key = "food_bacon",
+            name = R.string.food_bacon,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍔汉堡
+         */
+        object Hamburger : FoodsOption(
+            key = "food_hamburger",
+            name = R.string.food_hamburger,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍟薯条
+         */
+        object FrenchFries : FoodsOption(
+            key = "food_french_fries",
+            name = R.string.food_french_fries,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍕披萨
+         */
+        object Pizza : FoodsOption(
+            key = "food_pizza",
+            name = R.string.food_pizza,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🌭热狗
+         */
+        object HotDog : FoodsOption(
+            key = "food_hot_dog",
+            name = R.string.food_hot_dog,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🥪三明治
+         */
+        object Sandwich : FoodsOption(
+            key = "food_sandwich",
+            name = R.string.food_sandwich,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🌮墨西哥卷饼
+         */
+        object Burritos : FoodsOption(
+            key = "food_burritos",
+            name = R.string.food_burritos,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🌯墨西哥玉米卷
+         */
+        object MexicanTacos : FoodsOption(
+            key = "food_mexican_tacos",
+            name = R.string.food_mexican_tacos,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🫔墨西哥粽子
+         */
+        object MexicanTamales : FoodsOption(
+            key = "food_mexican_tamales",
+            name = R.string.food_mexican_tamales,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🥙墨西哥卷饼
+         */
+        object MexicanTortilla : FoodsOption(
+            key = "food_mexican_tortilla",
+            name = R.string.food_mexican_tortilla,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🧆油炸豆丸子
+         */
+        object FriedBeanBalls : FoodsOption(
+            key = "food_fried_bean_balls",
+            name = R.string.food_fried_bean_balls,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🥚蛋
+         */
+        object Egg : FoodsOption(
+            key = "food_egg",
+            name = R.string.food_egg,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍳煎蛋
+         */
+        object FriedEgg : FoodsOption(
+            key = "food_fried_egg",
+            name = R.string.food_fried_egg,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🥘汤
+         */
+        object Soup : FoodsOption(
+            key = "food_soup",
+            name = R.string.food_soup,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🥣粥
+         */
+        object Porridge : FoodsOption(
+            key = "food_porridge",
+            name = R.string.food_porridge,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍲炖菜
+         */
+        object Stew : FoodsOption(
+            key = "food_stew",
+            name = R.string.food_stew,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🫕奶酪火锅
+         */
+        object CheeseHotpot : FoodsOption(
+            key = "food_cheese_hotpot",
+            name = R.string.food_cheese_hotpot,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🥗沙拉
+         */
+        object Salad : FoodsOption(
+            key = "food_salad",
+            name = R.string.food_salad,
+            kcal = 2,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍿爆米花
+         */
+        object Popcorn : FoodsOption(
+            key = "food_popcorn",
+            name = R.string.food_popcorn,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🧈黄油
+         */
+        object Butter : FoodsOption(
+            key = "food_butter",
+            name = R.string.food_butter,
+            kcal = 20,
+            dopamine = 1,
+            price = 5
+        )
+
+        /**
+         * 🥫罐头
+         */
+        object CannedFood : FoodsOption(
+            key = "food_canned_food",
+            name = R.string.food_canned_food,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        override val options = arrayOf<GameOption>(
+            Toast,
+            Hamburger,
+            FrenchFries,
+            Pizza,
+            HotDog,
+            Sandwich,
+            Burritos,
+            MexicanTacos,
+            MexicanTamales,
+            MexicanTortilla,
+            FriedBeanBalls,
+            Egg,
+            FriedEgg,
+            Soup,
+            Porridge,
+            Stew,
+            CheeseHotpot,
+            Salad,
+            Popcorn,
+            Butter,
+            CannedFood,
+            Croissant,
+            Baguette,
+            Flatbread,
+            Pretzels,
+            Bacon,
+            Steak,
+            PoultryLegs,
+            Cheese,
+            Ribs,
+            Bagels,
+            Pancakes,
+            Waffles
+        )
     }
 
     /**

@@ -55,6 +55,37 @@
     <string name="food_toast">🍞吐司</string>
     <string name="food_croissant">🥐牛角面包</string>
     <string name="food_baguette">🥖法式长棍面包</string>
+    <string name="food_flatbread">🫓扁面包</string>
+    <string name="food_pretzels">🥨椒盐脆饼</string>
+    <string name="food_bagels">🥯面包圈</string>
+    <string name="food_pancakes">🥞烙饼</string>
+    <string name="food_waffles">🧇华夫饼</string>
+    <string name="food_cheese">🧀奶酪</string>
+    <string name="food_ribs">🍖排骨</string>
+    <string name="food_poultry_legs">🍗鸡腿</string>
+    <string name="food_steak">🥩牛排</string>
+    <string name="food_bacon">🥓培根</string>
+    <string name="food_hamburger">🍔汉堡</string>
+    <string name="food_french_fries">🍟薯条</string>
+    <string name="food_pizza">🍕披萨</string>
+    <string name="food_hot_dog">🌭热狗</string>
+    <string name="food_sandwich">🥪三明治</string>
+    <string name="food_burritos">🌮墨西哥卷饼</string>
+    <string name="food_mexican_tacos">🌯墨西哥玉米卷</string>
+    <string name="food_mexican_tamales">🫔墨西哥粽子</string>
+    <string name="food_mexican_tortilla">🥙墨西哥卷饼</string>
+    <string name="food_fried_bean_balls">🧆油炸豆丸子</string>
+    <string name="food_egg">🥚蛋</string>
+    <string name="food_fried_egg">🍳煎蛋</string>
+    <string name="food_soup">🥘汤</string>
+    <string name="food_porridge">🥣粥</string>
+    <string name="food_stew">🍲炖菜</string>
+    <string name="food_cheese_hotpot">🫕奶酪火锅</string>
+    <string name="food_popcorn">🍿爆米花</string>
+    <string name="food_salad">🥗沙拉</string>
+    <string name="food_butter">🧈黄油</string>
+    <string name="food_canned_food">🥫罐头</string>
 
+    <!--  亚洲食物  -->
 
 </resources>
