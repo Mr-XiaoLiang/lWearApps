@@ -99,7 +99,11 @@
     <string name="food_sushi">🍣寿司</string>
     <string name="food_fried_shrimp">🍤天妇罗</string>
     <string name="food_fish_pan">鱼板</string>
-    <string name="food_moon_cake">🥮月饼</string>
+    <string name="food_yue_bing">🥮月饼</string>
+    <string name="food_dango">🍡团子</string>
+    <string name="food_jiao_zi">🥟饺子</string>
+    <string name="food_lucky_cookie">🥠幸运饼干</string>
+    <string name="food_takeout">🥡外卖</string>
 
 
 </resources>

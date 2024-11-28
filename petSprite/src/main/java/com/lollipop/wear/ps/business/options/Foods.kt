@@ -1021,15 +1021,57 @@ object Foods : OptionList {
         /**
          * 🥮月饼
          */
-        object MoonCake : FoodsOption(
-            key = "food_moon_cake",
-            name = R.string.food_moon_cake,
+        object YueBing : FoodsOption(
+            key = "food_yue_bing",
+            name = R.string.food_yue_bing,
             kcal = 10,
             dopamine = 4,
             price = 5
         )
 
+        /**
+         * 🍡团子
+         */
+        object Dango : FoodsOption(
+            key = "food_dango",
+            name = R.string.food_dango,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
 
+        /**
+         * 🥟饺子
+         */
+        object JiaoZi : FoodsOption(
+            key = "food_jiao_zi",
+            name = R.string.food_jiao_zi,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🥠幸运饼干
+         */
+        object LuckyCookie : FoodsOption(
+            key = "food_lucky_cookie",
+            name = R.string.food_lucky_cookie,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🥡外卖
+         */
+        object Takeout : FoodsOption(
+            key = "food_takeout",
+            name = R.string.food_takeout,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
 
         override val options = arrayOf<GameOption>(
             BoxLunch,
@@ -1044,8 +1086,11 @@ object Foods : OptionList {
             Sushi,
             FriedShrimp,
             FishPan,
-            MoonCake,
-
+            YueBing,
+            Dango,
+            JiaoZi,
+            LuckyCookie,
+            Takeout
         )
     }
 
