@@ -885,7 +885,168 @@ object Foods : OptionList {
      * 亚洲食物
      */
     object Asian : OptionList {
-        override val options = arrayOf<GameOption>()
+
+        /**
+         * 🍱盒饭
+         */
+        object BoxLunch : FoodsOption(
+            key = "food_box_lunch",
+            name = R.string.food_box_lunch,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍘米饼
+         */
+        object RiceCake : FoodsOption(
+            key = "food_rice_cake",
+            name = R.string.food_rice_cake,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍙饭团
+         */
+        object RiceBall : FoodsOption(
+            key = "food_rice_ball",
+            name = R.string.food_rice_ball,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍚米饭
+         */
+        object Rice : FoodsOption(
+            key = "food_rice",
+            name = R.string.food_rice,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍛咖喱饭
+         */
+        object CurryRice : FoodsOption(
+            key = "food_curry_rice",
+            name = R.string.food_curry_rice,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍜面条
+         */
+        object Noodle : FoodsOption(
+            key = "food_noodle",
+            name = R.string.food_noodle,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍝意大利面
+         */
+        object Pasta : FoodsOption(
+            key = "food_pasta",
+            name = R.string.food_pasta,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍠烤红薯
+         */
+        object BakedSweetPotatoes : FoodsOption(
+            key = "food_baked_sweet_potatoes",
+            name = R.string.food_baked_sweet_potatoes,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍢关东煮
+         */
+        object Oden : FoodsOption(
+            key = "food_oden",
+            name = R.string.food_oden,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍣寿司
+         */
+        object Sushi : FoodsOption(
+            key = "food_sushi",
+            name = R.string.food_sushi,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍤天妇罗
+         */
+        object FriedShrimp : FoodsOption(
+            key = "food_fried_shrimp",
+            name = R.string.food_fried_shrimp,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍥鱼板
+         */
+        object FishPan : FoodsOption(
+            key = "food_fish_pan",
+            name = R.string.food_fish_pan,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🥮月饼
+         */
+        object MoonCake : FoodsOption(
+            key = "food_moon_cake",
+            name = R.string.food_moon_cake,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+
+
+        override val options = arrayOf<GameOption>(
+            BoxLunch,
+            RiceCake,
+            RiceBall,
+            Rice,
+            CurryRice,
+            Noodle,
+            Pasta,
+            BakedSweetPotatoes,
+            Oden,
+            Sushi,
+            FriedShrimp,
+            FishPan,
+            MoonCake,
+
+        )
     }
 
     /**

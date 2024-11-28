@@ -87,5 +87,19 @@
     <string name="food_canned_food">🥫罐头</string>
 
     <!--  亚洲食物  -->
+    <string name="food_box_lunch">🍱盒饭</string>
+    <string name="food_rice_cake">🍘米饼</string>
+    <string name="food_rice_ball">🍙饭团</string>
+    <string name="food_rice">🍚米饭</string>
+    <string name="food_curry_rice">🍛咖喱饭</string>
+    <string name="food_noodle">🍜面条</string>
+    <string name="food_pasta">🍝意大利面</string>
+    <string name="food_baked_sweet_potatoes">🍠烤红薯</string>
+    <string name="food_oden">🍢关东煮</string>
+    <string name="food_sushi">🍣寿司</string>
+    <string name="food_fried_shrimp">🍤天妇罗</string>
+    <string name="food_fish_pan">鱼板</string>
+    <string name="food_moon_cake">🥮月饼</string>
+
 
 </resources>
