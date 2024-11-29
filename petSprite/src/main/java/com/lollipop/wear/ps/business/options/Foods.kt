@@ -1098,7 +1098,69 @@ object Foods : OptionList {
      * 海鲜
      */
     object Seafood : OptionList {
-        override val options = arrayOf<GameOption>()
+
+        /**
+         * 🦀螃蟹
+         */
+        object Crab : FoodsOption(
+            key = "food_crab",
+            name = R.string.food_crab,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🦞龙虾
+         */
+        object Lobster : FoodsOption(
+            key = "food_lobster",
+            name = R.string.food_lobster,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🦐虾
+         */
+        object Shrimp : FoodsOption(
+            key = "food_shrimp",
+            name = R.string.food_shrimp,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🦑鱿鱼
+         */
+        object Squid : FoodsOption(
+            key = "food_squid",
+            name = R.string.food_squid,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🦪牡蛎
+         */
+        object Oyster : FoodsOption(
+            key = "food_oyster",
+            name = R.string.food_oyster,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        override val options = arrayOf<GameOption>(
+            Crab,
+            Lobster,
+            Shrimp,
+            Squid,
+            Oyster
+        )
     }
 
     /**

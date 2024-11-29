@@ -104,6 +104,11 @@
     <string name="food_jiao_zi">🥟饺子</string>
     <string name="food_lucky_cookie">🥠幸运饼干</string>
     <string name="food_takeout">🥡外卖</string>
+    <string name="food_crab">🦀螃蟹</string>
+    <string name="food_lobster">🦞龙虾</string>
+    <string name="food_shrimp">🦐虾</string>
+    <string name="food_squid">🦑鱿鱼</string>
+    <string name="food_oyster">🦪牡蛎</string>
 
 
 </resources>
