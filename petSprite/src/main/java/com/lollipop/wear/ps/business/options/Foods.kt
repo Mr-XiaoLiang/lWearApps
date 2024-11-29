@@ -10,7 +10,6 @@ import com.lollipop.wear.ps.engine.state.type.Toy
 object Foods : OptionList {
 
     override val options = arrayOf(
-        Cookie,
         *Fruit.options,
         *Vegetable.options,
         *Cooked.options,
@@ -27,14 +26,6 @@ object Foods : OptionList {
         override val dopamine: Int,
         override val price: Int
     ) : GameOption, Food, BackpackItem, Toy, Commodity
-
-    object Cookie : FoodsOption(
-        key = "food_cookie",
-        name = R.string.food_cookie,
-        kcal = 5,
-        dopamine = 5,
-        price = 3
-    )
 
     /**
      * 水果
@@ -1167,14 +1158,354 @@ object Foods : OptionList {
      * 甜点
      */
     object Dessert : OptionList {
-        override val options = arrayOf<GameOption>()
+
+        /**
+         * 🍦甜筒冰淇淋
+         */
+        object IceCreamCone : FoodsOption(
+            key = "food_ice_cream_cone",
+            name = R.string.food_ice_cream_cone,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍧刨冰
+         */
+        object ShavedIce : FoodsOption(
+            key = "food_shaved_ice",
+            name = R.string.food_shaved_ice,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍨冰淇淋
+         */
+        object IceCream : FoodsOption(
+            key = "food_ice_cream",
+            name = R.string.food_ice_cream,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍩甜甜圈
+         */
+        object Donut : FoodsOption(
+            key = "food_donut",
+            name = R.string.food_donut,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍪曲奇饼
+         */
+        object Cookie : FoodsOption(
+            key = "food_cookie",
+            name = R.string.food_cookie,
+            kcal = 5,
+            dopamine = 5,
+            price = 3
+        )
+
+        /**
+         * 🎂生日蛋糕
+         */
+        object BirthdayCake : FoodsOption(
+            key = "food_birthday_cake",
+            name = R.string.food_birthday_cake,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍰水果蛋糕
+         */
+        object FruitCake : FoodsOption(
+            key = "food_fruit_cake",
+            name = R.string.food_fruit_cake,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🧁纸杯蛋糕
+         */
+        object Cupcakes : FoodsOption(
+            key = "food_cupcakes",
+            name = R.string.food_cupcakes,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🥧派
+         */
+        object Pie : FoodsOption(
+            key = "food_pie",
+            name = R.string.food_pie,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍫巧克力
+         */
+        object Chocolate : FoodsOption(
+            key = "food_chocolate",
+            name = R.string.food_chocolate,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍬糖果
+         */
+        object Candy : FoodsOption(
+            key = "food_candy",
+            name = R.string.food_candy,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍭棒棒糖
+         */
+        object Lollipop : FoodsOption(
+            key = "food_lollipop",
+            name = R.string.food_lollipop,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍮布丁
+         */
+        object Pudding : FoodsOption(
+            key = "food_pudding",
+            name = R.string.food_pudding,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍯蜂蜜
+         */
+        object Honey : FoodsOption(
+            key = "food_honey",
+            name = R.string.food_honey,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        override val options = arrayOf<GameOption>(
+            IceCreamCone,
+            ShavedIce,
+            IceCream,
+            Donut,
+            Cookie,
+            BirthdayCake,
+            FruitCake,
+            Cupcakes,
+            Pie,
+            Chocolate,
+            Candy,
+            Lollipop,
+            Pudding,
+            Honey
+        )
     }
 
     /**
      * 饮料
      */
     object Drink : OptionList {
-        override val options = arrayOf<GameOption>()
+
+        /**
+         * 🍼奶
+         */
+        object Bottle : FoodsOption(
+            key = "food_bottle",
+            name = R.string.food_bottle,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🥛牛奶
+         */
+        object Milk : FoodsOption(
+            key = "food_milk",
+            name = R.string.food_milk,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * ☕咖啡
+         */
+        object Coffee : FoodsOption(
+            key = "food_coffee",
+            name = R.string.food_coffee,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🫖红茶
+         */
+        object Tea : FoodsOption(
+            key = "food_tea",
+            name = R.string.food_tea,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍵绿茶
+         */
+        object GreenTea : FoodsOption(
+            key = "food_green_tea",
+            name = R.string.food_green_tea,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍶清酒
+         */
+        object Sake : FoodsOption(
+            key = "food_sake",
+            name = R.string.food_sake,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍾香槟
+         */
+        object Champagne : FoodsOption(
+            key = "food_champagne",
+            name = R.string.food_champagne,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍷红酒
+         */
+        object RedWine : FoodsOption(
+            key = "food_red_wine",
+            name = R.string.food_red_wine,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍸鸡尾酒
+         */
+        object Cocktail : FoodsOption(
+            key = "food_cocktail",
+            name = R.string.food_cocktail,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍹水果饮料
+         */
+        object FruitDrink : FoodsOption(
+            key = "food_fruit_drink",
+            name = R.string.food_fruit_drink,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🍺啤酒
+         */
+        object Beer : FoodsOption(
+            key = "food_beer",
+            name = R.string.food_beer,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🧋珍珠奶茶
+         */
+        object MilkTea : FoodsOption(
+            key = "food_milk_tea",
+            name = R.string.food_milk_tea,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🧃果汁
+         */
+        object Juice : FoodsOption(
+            key = "food_juice",
+            name = R.string.food_juice,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        /**
+         * 🧉马黛茶
+         */
+        object YerbaMate : FoodsOption(
+            key = "food_yerba_mate",
+            name = R.string.food_yerba_mate,
+            kcal = 10,
+            dopamine = 4,
+            price = 5
+        )
+
+        override val options = arrayOf<GameOption>(
+            Bottle,
+            Milk,
+            Coffee,
+            Tea,
+            GreenTea,
+            Sake,
+            Champagne,
+            RedWine,
+            Cocktail,
+            FruitDrink,
+            Beer,
+            MilkTea,
+            Juice,
+            YerbaMate
+        )
     }
 
 }

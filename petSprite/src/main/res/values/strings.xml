@@ -13,7 +13,7 @@
     <string name="action_done">完成了 %1$s</string>
 
     <!--  食物  -->
-    <string name="food_cookie">🍪饼干</string>
+
     <!--  水果  -->
     <string name="food_grape">🍇葡萄</string>
     <string name="food_melon">🍈甜瓜</string>
@@ -109,6 +109,38 @@
     <string name="food_shrimp">🦐虾</string>
     <string name="food_squid">🦑鱿鱼</string>
     <string name="food_oyster">🦪牡蛎</string>
+
+    <!--  甜点  -->
+    <string name="food_ice_cream_cone">🍦甜筒冰淇淋</string>
+    <string name="food_shaved_ice">🍧刨冰</string>
+    <string name="food_ice_cream">🍨冰淇淋</string>
+    <string name="food_donut">🍩甜甜圈</string>
+    <string name="food_cookie">🍪曲奇饼</string>
+    <string name="food_birthday_cake">🎂生日蛋糕</string>
+    <string name="food_fruit_cake">🍰水果蛋糕</string>
+    <string name="food_cupcakes">🧁纸杯蛋糕</string>
+    <string name="food_pie">🥧派</string>
+    <string name="food_chocolate">🍫巧克力</string>
+    <string name="food_candy">🍬糖果</string>
+    <string name="food_lollipop">🍭棒棒糖</string>
+    <string name="food_pudding">🍮布丁</string>
+    <string name="food_honey">🍯蜂蜜</string>
+
+    <!--  饮料  -->
+    <string name="food_bottle">🍼奶</string>
+    <string name="food_milk">🥛牛奶</string>
+    <string name="food_coffee">☕咖啡</string>
+    <string name="food_tea">🫖红茶</string>
+    <string name="food_green_tea">🍵绿茶</string>
+    <string name="food_sake">🍶清酒</string>
+    <string name="food_champagne">🍾香槟</string>
+    <string name="food_red_wine">🍷红酒</string>
+    <string name="food_cocktail">🍸鸡尾酒</string>
+    <string name="food_fruit_drink">🍹水果饮料</string>
+    <string name="food_beer">🍺啤酒</string>
+    <string name="food_milk_tea">🧋珍珠奶茶</string>
+    <string name="food_juice">🧃果汁</string>
+    <string name="food_yerba_mate">🧉马黛茶</string>
 
 
 </resources>
