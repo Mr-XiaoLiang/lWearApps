@@ -11,7 +11,6 @@ import com.lollipop.wear.ps.engine.state.BackpackItem
 import com.lollipop.wear.ps.engine.state.BackpackManager
 import com.lollipop.wear.ps.engine.state.GameOption
 import com.lollipop.wear.ps.engine.state.type.Commodity
-import java.text.DecimalFormat
 
 open class OptionListPageFragment : ListContentPageFragment() {
 

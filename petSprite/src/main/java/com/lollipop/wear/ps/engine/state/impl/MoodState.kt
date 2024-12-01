@@ -19,7 +19,7 @@ object MoodState : IntGameState() {
     override fun onOption(things: GameSomeThings) {
         val option = things.option
         if (option is Toy) {
-            putValue(option.hormone)
+            putValue(option.dopamine)
         }
     }
 
