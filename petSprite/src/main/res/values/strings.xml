@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">petSprite</string>
-    <string name="health">💊: %1$d</string>
-    <string name="mood">🎮: %1$d</string>
-    <string name="hunger">🍚: %1$d</string>
+    <string name="health">💊 %1$d</string>
+    <string name="mood">🎮 %1$d</string>
+    <string name="hunger">🍚 %1$d</string>
 
     <string name="action_used">使用了 %1$s</string>
     <string name="action_ate">吃了 %1$s</string>

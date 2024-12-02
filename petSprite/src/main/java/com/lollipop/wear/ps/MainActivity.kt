@@ -1,7 +1,6 @@
 package com.lollipop.wear.ps
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
@@ -12,10 +11,10 @@ import com.lollipop.wear.animation.converter.TranslationX
 import com.lollipop.wear.animation.dsl.withView
 import com.lollipop.wear.animation.end.HideOnClose
 import com.lollipop.wear.animation.start.ShowOnStart
+import com.lollipop.wear.devices.TimeViewDelegate
 import com.lollipop.wear.ps.business.MainDashboardDelegate
 import com.lollipop.wear.ps.business.options.Foods
 import com.lollipop.wear.ps.business.page.ContentPageFragment
-import com.lollipop.wear.ps.business.page.ListContentPageFragment
 import com.lollipop.wear.ps.business.page.OptionListPageFragment
 import com.lollipop.wear.ps.business.page.StatePageFragment
 import com.lollipop.wear.ps.databinding.ActivityMainBinding
@@ -35,6 +34,12 @@ class MainActivity : AppCompatActivity(), OptionListPageFragment.Callback {
 
     private val contentPanelController by lazy {
         AnimationHelper()
+    }
+
+    private val timeViewDelegate by lazy {
+        TimeViewDelegate {
+            binding.dashboardPanel.timeView.text = it
+        }
     }
 
     private val pageList = listOf(
@@ -105,6 +110,16 @@ class MainActivity : AppCompatActivity(), OptionListPageFragment.Callback {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        timeViewDelegate.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        timeViewDelegate.onPause()
+    }
+
     override fun getOptionList(pageId: String): List<GameOption> {
         when (pageId) {
             ContentPage.State.pageId -> {
@@ -146,7 +161,7 @@ class MainActivity : AppCompatActivity(), OptionListPageFragment.Callback {
     ) {
 
         data object State : ContentPage(StatePageFragment::class.java, "State")
-        data object Foods : ContentPage(ListContentPageFragment::class.java, "Foods")
+        data object Foods : ContentPage(OptionListPageFragment::class.java, "Foods")
 
     }
 

@@ -2,10 +2,13 @@ package com.lollipop.wear.ps.business.page
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.lollipop.wear.ps.business.options.OptionBufferBuilder
 import com.lollipop.wear.ps.databinding.ItemOptionBinding
 import com.lollipop.wear.ps.engine.state.BackpackItem
 import com.lollipop.wear.ps.engine.state.BackpackManager
@@ -39,6 +42,15 @@ open class OptionListPageFragment : ListContentPageFragment() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.post {
+            adapter.setParentHeight(view.height / 2)
+            adapter.notifyDataSetChanged()
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
         view?.let {
@@ -67,7 +79,6 @@ open class OptionListPageFragment : ListContentPageFragment() {
 
         private var layoutInflaterImpl: LayoutInflater? = null
 
-        @SuppressLint("NotifyDataSetChanged")
         fun setParentHeight(height: Int) {
             parentHeight = height
         }
@@ -81,7 +92,7 @@ open class OptionListPageFragment : ListContentPageFragment() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListHolder {
             if (viewType == TYPE_OPTION) {
                 return OptionHolder(
-                    ItemOptionBinding.inflate(getLayoutInflater(parent)),
+                    ItemOptionBinding.inflate(getLayoutInflater(parent), parent, false),
                     this::onItemClick
                 )
             }
@@ -158,6 +169,13 @@ open class OptionListPageFragment : ListContentPageFragment() {
                 binding.priceView.isVisible = true
             } else {
                 binding.priceView.isVisible = false
+            }
+            val buffer = OptionBufferBuilder.buildBuffer(option)
+            if (buffer.isNotEmpty()) {
+                binding.buffView.text = buffer
+                binding.buffView.isVisible = true
+            } else {
+                binding.buffView.isVisible = false
             }
         }
 
