@@ -9,6 +9,8 @@ import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.lollipop.wear.basic.R
 import com.lollipop.wear.devices.DeviceHelper
 import kotlin.math.max
@@ -99,6 +101,8 @@ class HorizontalPageIndicator @JvmOverloads constructor(
             return indicatorDrawable.indicatorInterval
         }
 
+    private var viewPagerDelegate: PageIndicatorDelegate? = null
+
     init {
         setImageDrawable(indicatorDrawable)
         attributeSet?.let { attr ->
@@ -128,6 +132,65 @@ class HorizontalPageIndicator @JvmOverloads constructor(
             indicatorIndex = 1
             indicatorOffset = 0.5F
         }
+    }
+
+    fun bind(viewPager: ViewPager2) {
+        viewPagerDelegate?.unbind()
+        val newDelegate = PageIndicatorDelegate(viewPager, this)
+        newDelegate.bind()
+        viewPagerDelegate = newDelegate
+    }
+
+    private class PageIndicatorDelegate(
+        private val viewPager: ViewPager2,
+        private val pageIndicator: HorizontalPageIndicator
+    ) {
+
+        private val pageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                pageIndicator.indicatorIndex = position
+                pageIndicator.indicatorOffset = 0F
+            }
+
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                pageIndicator.indicatorIndex = position
+                pageIndicator.indicatorOffset = positionOffset
+            }
+        }
+
+        private val adapterDataObserver = object : RecyclerView.AdapterDataObserver() {
+            override fun onChanged() {
+                onCountChanged()
+            }
+
+            override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+                onCountChanged()
+            }
+
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                onCountChanged()
+            }
+
+            private fun onCountChanged() {
+                pageIndicator.indicatorCount = viewPager.adapter?.itemCount ?: 0
+            }
+        }
+
+        fun bind() {
+            viewPager.adapter?.registerAdapterDataObserver(adapterDataObserver)
+            viewPager.registerOnPageChangeCallback(pageChangeCallback)
+            pageIndicator.indicatorCount = viewPager.adapter?.itemCount ?: 0
+        }
+
+        fun unbind() {
+            viewPager.adapter?.unregisterAdapterDataObserver(adapterDataObserver)
+            viewPager.unregisterOnPageChangeCallback(pageChangeCallback)
+        }
+
     }
 
     private class PageIndicatorDrawable : Drawable() {

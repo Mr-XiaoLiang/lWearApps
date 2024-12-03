@@ -81,7 +81,10 @@
                     android:layout_height="match_parent"
                     android:layout_margin="2dp"
                     app:indicatorInterval="4dp"
-                    app:indicatorRadius="2dp" />
+                    app:indicatorRadius="2dp"
+                    app:activeColor="#FFFFFFFF"
+                    app:inactiveColor="#80FFFFFF"
+                    />
 
             </com.lollipop.wear.widget.CircularFrameLayout>
 

@@ -3,4 +3,8 @@
     <style name="MainActivityTheme.Starting" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowSwipeToDismiss">true</item>
     </style>
+
+    <style name="MainActivityTheme.Stable" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowSwipeToDismiss">false</item>
+    </style>
 </resources>

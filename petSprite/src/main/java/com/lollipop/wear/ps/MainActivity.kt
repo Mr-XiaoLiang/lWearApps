@@ -44,10 +44,16 @@ class MainActivity : AppCompatActivity(), OptionListPageFragment.Callback {
 
     private val pageList = listOf(
 //        ContentPage.State,
-        ContentPage.Foods
+        ContentPage.Asian,
+        ContentPage.Fruit,
+        ContentPage.Vegetable,
+        ContentPage.Cooked,
+        ContentPage.Seafood,
+        ContentPage.Dessert,
+        ContentPage.Drink
     )
 
-    private val foodsList = ArrayList<GameOption>()
+    private val itemListMap = HashMap<ContentPage, ArrayList<GameOption>>()
 
     private val pageAdapter by lazy {
         PageAdapter(this, pageList)
@@ -59,6 +65,8 @@ class MainActivity : AppCompatActivity(), OptionListPageFragment.Callback {
         dashboardDelegate.onCreate()
         initContentPanelController()
         binding.contentViewPager.adapter = pageAdapter
+        binding.contentPageIndicator.bind(binding.contentViewPager)
+//        binding.contentPageIndicator.indicatorCount = pageList.size
 //        binding.spritePlayer.setSpriteInfo(
 //            SpriteInfo.createBy4x4(256) { left, up, right, down ->
 //                SpriteInfo.FromAssets(
@@ -126,14 +134,61 @@ class MainActivity : AppCompatActivity(), OptionListPageFragment.Callback {
                 return emptyList()
             }
 
-            ContentPage.Foods.pageId -> {
-                if (foodsList.isEmpty()) {
-                    foodsList.addAll(Foods.options)
+            ContentPage.Fruit.pageId -> {
+                return getOptionList(ContentPage.Fruit) {
+                    Foods.Fruit.options
                 }
-                return foodsList
+            }
+
+            ContentPage.Vegetable.pageId -> {
+                return getOptionList(ContentPage.Vegetable) {
+                    Foods.Vegetable.options
+                }
+            }
+
+            ContentPage.Cooked.pageId -> {
+                return getOptionList(ContentPage.Cooked) {
+                    Foods.Cooked.options
+                }
+            }
+
+            ContentPage.Asian.pageId -> {
+                return getOptionList(ContentPage.Asian) {
+                    Foods.Asian.options
+                }
+            }
+
+            ContentPage.Seafood.pageId -> {
+                return getOptionList(ContentPage.Seafood) {
+                    Foods.Seafood.options
+                }
+            }
+
+            ContentPage.Dessert.pageId -> {
+                return getOptionList(ContentPage.Dessert) {
+                    Foods.Dessert.options
+                }
+            }
+
+            ContentPage.Drink.pageId -> {
+                return getOptionList(ContentPage.Drink) {
+                    Foods.Drink.options
+                }
             }
         }
         return emptyList()
+    }
+
+    private fun getOptionList(
+        page: ContentPage,
+        create: () -> Array<GameOption>
+    ): List<GameOption> {
+        val itemList = itemListMap[page] ?: ArrayList()
+        if (itemList.isEmpty()) {
+            itemList.addAll(create())
+            itemListMap[page] = itemList
+        }
+        return itemList
     }
 
     override fun onOptionClick(option: GameOption) {
@@ -161,7 +216,13 @@ class MainActivity : AppCompatActivity(), OptionListPageFragment.Callback {
     ) {
 
         data object State : ContentPage(StatePageFragment::class.java, "State")
-        data object Foods : ContentPage(OptionListPageFragment::class.java, "Foods")
+        data object Fruit : ContentPage(OptionListPageFragment::class.java, "Fruit")
+        data object Vegetable : ContentPage(OptionListPageFragment::class.java, "Vegetable")
+        data object Cooked : ContentPage(OptionListPageFragment::class.java, "Cooked")
+        data object Asian : ContentPage(OptionListPageFragment::class.java, "Asian")
+        data object Seafood : ContentPage(OptionListPageFragment::class.java, "Seafood")
+        data object Dessert : ContentPage(OptionListPageFragment::class.java, "Dessert")
+        data object Drink : ContentPage(OptionListPageFragment::class.java, "Drink")
 
     }
 
