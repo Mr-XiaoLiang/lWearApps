@@ -30,11 +30,12 @@ object FileHelper {
     fun write(file: File, data: ByteArray): FileResult<File> {
         return tryDo {
             val input = ByteArrayInputStream(data)
-            val output = file.outputStream()
             file.parentFile?.mkdirs()
             if (file.exists()) {
                 file.delete()
             }
+            file.createNewFile()
+            val output = file.outputStream()
             input.use {
                 output.use {
                     input.copyTo(output)

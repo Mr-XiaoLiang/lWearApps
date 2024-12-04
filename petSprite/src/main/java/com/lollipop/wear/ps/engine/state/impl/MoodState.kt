@@ -1,6 +1,5 @@
 package com.lollipop.wear.ps.engine.state.impl
 
-import com.lollipop.wear.ps.engine.state.GameOption
 import com.lollipop.wear.ps.engine.state.GameSomeThings
 import com.lollipop.wear.ps.engine.state.IntGameState
 import com.lollipop.wear.ps.engine.state.type.Toy

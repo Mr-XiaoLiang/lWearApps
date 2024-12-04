@@ -22,6 +22,7 @@ abstract class DatabaseHelper(
     }
 
     protected fun createTable(
+        db: SQLiteDatabase,
         tableName: String,
         primaryKey: Column<Int>? = COLUMN_ID,
         columns: Array<Column<*>>
@@ -38,11 +39,11 @@ abstract class DatabaseHelper(
             } else {
                 createTableSql.append(" , ")
             }
-            createTableSql.append("${column.name} ${column.type.key},")
+            createTableSql.append(" ${column.name} ${column.type.key} ")
         }
 
         createTableSql.append(" )")
-        writableDatabase.execSQL(createTableSql.toString())
+        db.execSQL(createTableSql.toString())
     }
 
     protected fun deleteTable(tableName: String) {

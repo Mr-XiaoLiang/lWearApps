@@ -34,10 +34,10 @@ abstract class IntGameState : SingleGameState() {
     protected fun putValue(newValue: Int) {
         current += newValue
         if (current > maxValue) {
-            current = minValue
+            current = maxValue
         }
         if (current < minValue) {
-            current = maxValue
+            current = minValue
         }
     }
 

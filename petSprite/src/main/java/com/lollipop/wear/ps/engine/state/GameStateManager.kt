@@ -8,7 +8,7 @@ import com.lollipop.wear.ps.engine.option.SignalOption
 import com.lollipop.wear.ps.utils.BasicDataManager
 import org.json.JSONObject
 
-object StateManager : BasicDataManager("PS_State.lf") {
+object GameStateManager : BasicDataManager("PS_State.lf") {
 
     val stateList = ArraySet<GameState>()
 

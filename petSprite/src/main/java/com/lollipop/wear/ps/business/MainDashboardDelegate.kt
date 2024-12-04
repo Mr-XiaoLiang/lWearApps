@@ -11,7 +11,7 @@ import androidx.wear.widget.CurvedTextView
 import com.lollipop.wear.ps.R
 import com.lollipop.wear.ps.databinding.PanelDashboardBinding
 import com.lollipop.wear.ps.engine.state.GameSomeThings
-import com.lollipop.wear.ps.engine.state.StateManager
+import com.lollipop.wear.ps.engine.state.GameStateManager
 import com.lollipop.wear.ps.engine.state.impl.HealthState
 import com.lollipop.wear.ps.engine.state.impl.MoodState
 import com.lollipop.wear.ps.engine.state.impl.SatiationState
@@ -21,7 +21,7 @@ import java.util.concurrent.Executors
 class MainDashboardDelegate(
     private val activity: AppCompatActivity,
     private val binding: PanelDashboardBinding
-) : LifecycleEventObserver, StateManager.OnOptionListener {
+) : LifecycleEventObserver, GameStateManager.OnOptionListener {
 
     companion object {
         private const val TAG = "MainDashboardDelegate"
@@ -39,7 +39,7 @@ class MainDashboardDelegate(
 
     init {
         activity.lifecycle.addObserver(this)
-        StateManager.addOptionListener(this)
+        GameStateManager.addOptionListener(this)
     }
 
     fun onCreate() {
@@ -84,7 +84,7 @@ class MainDashboardDelegate(
             }
 
             Lifecycle.Event.ON_DESTROY -> {
-                StateManager.removeOptionListener(this)
+                GameStateManager.removeOptionListener(this)
             }
 
             else -> {

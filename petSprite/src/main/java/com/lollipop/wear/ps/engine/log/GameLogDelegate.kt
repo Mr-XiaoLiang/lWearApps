@@ -4,10 +4,10 @@ import android.content.Context
 import android.util.Log
 import com.lollipop.wear.ps.engine.option.SignalOption
 import com.lollipop.wear.ps.engine.state.GameSomeThings
-import com.lollipop.wear.ps.engine.state.StateManager
+import com.lollipop.wear.ps.engine.state.GameStateManager
 import java.util.concurrent.Executors
 
-class GameLogDelegate(private val context: Context) : StateManager.OnOptionListener {
+class GameLogDelegate(private val context: Context) : GameStateManager.OnOptionListener {
 
     private val logStore by lazy {
         GameLogStore(context)
@@ -23,14 +23,14 @@ class GameLogDelegate(private val context: Context) : StateManager.OnOptionListe
                 return
             }
             val what = context.getString(things.action.resId, context.getString(things.option.name))
-            putCurrentLog(what = what, option = things::class.java.simpleName)
+            putCurrentLog(what = what, option = things.option::class.java.simpleName)
         } catch (e: Throwable) {
             Log.e("GameLogDelegate", "onOption error", e)
         }
     }
 
     private fun getProtagonist(): String {
-        return StateManager.currentSprite
+        return GameStateManager.currentSprite
     }
 
     private fun putCurrentLog(what: String, option: String) {

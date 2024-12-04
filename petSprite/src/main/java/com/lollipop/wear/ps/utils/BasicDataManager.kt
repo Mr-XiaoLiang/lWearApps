@@ -1,6 +1,7 @@
 package com.lollipop.wear.ps.utils
 
 import android.content.Context
+import android.util.Log
 import com.lollipop.wear.data.FileHelper
 import com.lollipop.wear.data.PreferenceHelper
 import org.json.JSONArray
@@ -30,6 +31,10 @@ abstract class BasicDataManager(
     fun save(context: Context) {
         PreferenceHelper.saveJson(context = context, fileName) { json ->
             saveData(json)
+        }.onResult {
+            if (it is FileHelper.FileResult.Failure) {
+                Log.e("BasicDataManager", "save", it.error)
+            }
         }
     }
 

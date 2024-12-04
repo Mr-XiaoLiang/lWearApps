@@ -21,6 +21,9 @@ import com.lollipop.wear.ps.databinding.ActivityMainBinding
 import com.lollipop.wear.ps.engine.sprite.SpritePlayer
 import com.lollipop.wear.ps.engine.sprite.SpriteToward
 import com.lollipop.wear.ps.engine.state.GameOption
+import com.lollipop.wear.ps.engine.state.GameOptionAction
+import com.lollipop.wear.ps.engine.state.GameStateManager
+import com.lollipop.wear.ps.engine.state.type.Food
 
 class MainActivity : AppCompatActivity(), OptionListPageFragment.Callback {
 
@@ -192,7 +195,12 @@ class MainActivity : AppCompatActivity(), OptionListPageFragment.Callback {
     }
 
     override fun onOptionClick(option: GameOption) {
-        // TODO
+        if (option is Food) {
+            GameStateManager.onOption(GameOptionAction.ATE, option)
+        } else {
+            GameStateManager.onOption(GameOptionAction.USED, option)
+        }
+        GameStateManager.save(this)
     }
 
     private class PageAdapter(activity: AppCompatActivity, val list: List<ContentPage>) :

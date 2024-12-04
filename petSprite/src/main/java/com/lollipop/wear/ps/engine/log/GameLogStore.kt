@@ -6,7 +6,9 @@ import com.lollipop.wear.data.DatabaseHelper
 
 class GameLogStore(context: Context) : DatabaseHelper(context, "game_log", 1) {
     override fun onCreate(db: SQLiteDatabase?) {
+        db ?: return
         createTable(
+            db,
             LogTable.TABLE_NAME,
             LogTable.id,
             arrayOf(LogTable.time, LogTable.who, LogTable.what, LogTable.option)

@@ -4,7 +4,7 @@ import android.app.Application
 import com.lollipop.wear.ps.engine.attr.AttributeManager
 import com.lollipop.wear.ps.engine.log.GameLogDelegate
 import com.lollipop.wear.ps.engine.state.BackpackManager
-import com.lollipop.wear.ps.engine.state.StateManager
+import com.lollipop.wear.ps.engine.state.GameStateManager
 import com.lollipop.wear.ps.engine.state.impl.HealthState
 import com.lollipop.wear.ps.engine.state.impl.MoodState
 import com.lollipop.wear.ps.engine.state.impl.RichState
@@ -20,14 +20,14 @@ object GameInit {
         }
         isInit = true
         registerState()
-        StateManager.init(app)
+        GameStateManager.init(app)
         BackpackManager.init(app)
         AttributeManager.init(app)
-        StateManager.addOptionListener(GameLogDelegate(app))
+        GameStateManager.addOptionListener(GameLogDelegate(app))
     }
 
     private fun registerState() {
-        StateManager.apply {
+        GameStateManager.apply {
             register(RichState)
             register(HealthState)
             register(MoodState)
