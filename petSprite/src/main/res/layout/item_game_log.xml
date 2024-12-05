@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_item_option"
+        android:orientation="vertical"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="6dp">
+
+        <TextView
+            android:id="@+id/messageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            tools:text="吃了披萨" />
+
+        <TextView
+            android:id="@+id/timeView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="end"
+            android:textColor="#76DBFF"
+            android:textSize="11sp"
+            tools:text="2024-12-05 12:34" />
+
+    </LinearLayout>
+
+</FrameLayout>
