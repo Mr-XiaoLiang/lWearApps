@@ -1,10 +1,19 @@
 <resources>
 
-    <style name="MainActivityTheme.Starting" parent="Theme.AppCompat.NoActionBar">
+    <style name="L.Theme.Activity.Base" parent="Theme.AppCompat.NoActionBar">
+    </style>
+
+
+    <style name="L.Theme.Activity.Stable" parent="L.Theme.Activity.Base">
+        <item name="android:windowSwipeToDismiss">false</item>
+    </style>
+
+    <style name="L.Theme.Activity.Swipe" parent="L.Theme.Activity.Base">
         <item name="android:windowSwipeToDismiss">true</item>
     </style>
 
-    <style name="MainActivityTheme.Stable" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowSwipeToDismiss">false</item>
+
+    <style name="MainActivityTheme.Starting" parent="L.Theme.Activity.Swipe">
+        <item name="android:windowSwipeToDismiss">true</item>
     </style>
 </resources>

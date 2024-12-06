@@ -13,7 +13,7 @@ abstract class DashboardBasicActivity : AppCompatActivity() {
         ActivityDashboardBasicBinding.inflate(layoutInflater)
     }
 
-    private val dashboardDelegate by lazy {
+    protected val dashboardDelegate by lazy {
         MainDashboardDelegate(this, basicBinding.dashboardPanel)
     }
 

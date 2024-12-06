@@ -39,12 +39,6 @@ class MainActivity : AppCompatActivity(), OptionListPageFragment.Callback {
         AnimationHelper()
     }
 
-    private val timeViewDelegate by lazy {
-        TimeViewDelegate {
-            binding.dashboardPanel.timeView.text = it
-        }
-    }
-
     private val pageList = listOf(
 //        ContentPage.State,
         ContentPage.Asian,
@@ -119,16 +113,6 @@ class MainActivity : AppCompatActivity(), OptionListPageFragment.Callback {
         } else {
             player.changedToward(toward, true)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        timeViewDelegate.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        timeViewDelegate.onPause()
     }
 
     override fun getOptionList(pageId: String): List<GameOption> {

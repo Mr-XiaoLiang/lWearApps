@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Space
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.lollipop.wear.basic.doAsync
@@ -50,7 +51,12 @@ class GameLogActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListene
         binding.refreshLayout.setColorSchemeColors(Color.RED, Color.BLUE, Color.GREEN)
         binding.refreshLayout.setProgressBackgroundColorSchemeColor(Color.DKGRAY)
         binding.refreshLayout.setOnRefreshListener(this)
-
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.post {
+            adapter.setSpaceHeight(binding.recyclerView.height / 2)
+        }
+        binding.recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        onRefresh()
     }
 
     private fun onLoadEnd() {

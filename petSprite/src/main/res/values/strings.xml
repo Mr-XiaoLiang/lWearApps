@@ -104,6 +104,8 @@
     <string name="food_jiao_zi">🥟饺子</string>
     <string name="food_lucky_cookie">🥠幸运饼干</string>
     <string name="food_takeout">🥡外卖</string>
+
+    <!--   海鲜 -->
     <string name="food_crab">🦀螃蟹</string>
     <string name="food_lobster">🦞龙虾</string>
     <string name="food_shrimp">🦐虾</string>
@@ -141,6 +143,15 @@
     <string name="food_milk_tea">🧋珍珠奶茶</string>
     <string name="food_juice">🧃果汁</string>
     <string name="food_yerba_mate">🧉马黛茶</string>
+
+    <!--  标签  -->
+    <string name="label_food_fruit">🍒水果</string>
+    <string name="label_food_vegetable">🥦蔬菜</string>
+    <string name="label_food_cooked">🍞熟食</string>
+    <string name="label_food_asian">🍚亚洲食物</string>
+    <string name="label_food_seafood">🦐海鲜</string>
+    <string name="label_food_dessert">🍦甜点</string>
+    <string name="label_food_drink">🍹饮料</string>
 
 
 </resources>

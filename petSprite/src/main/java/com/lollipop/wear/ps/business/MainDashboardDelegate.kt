@@ -4,10 +4,12 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.wear.widget.CurvedTextView
+import com.lollipop.wear.devices.TimeViewDelegate
 import com.lollipop.wear.ps.R
 import com.lollipop.wear.ps.databinding.PanelDashboardBinding
 import com.lollipop.wear.ps.engine.state.GameSomeThings
@@ -37,9 +39,24 @@ class MainDashboardDelegate(
 
     private var currentLifecycleState = activity.lifecycle.currentState
 
+    private val timeViewDelegate by lazy {
+        TimeViewDelegate {
+            binding.timeView.text = it
+        }
+    }
+
     init {
         activity.lifecycle.addObserver(this)
         GameStateManager.addOptionListener(this)
+    }
+
+    fun setTextVisible(visible: Boolean) {
+        binding.healthValueView.isVisible = visible
+        binding.moodValueView.isVisible = visible
+        binding.hungerValueView.isVisible = visible
+        if (visible && currentLifecycleState.isAtLeast(Lifecycle.State.RESUMED)) {
+            updateState()
+        }
     }
 
     fun onCreate() {
@@ -81,6 +98,11 @@ class MainDashboardDelegate(
         when (event) {
             Lifecycle.Event.ON_RESUME -> {
                 updateState()
+                timeViewDelegate.onResume()
+            }
+
+            Lifecycle.Event.ON_PAUSE -> {
+                timeViewDelegate.onPause()
             }
 
             Lifecycle.Event.ON_DESTROY -> {
@@ -99,7 +121,9 @@ class MainDashboardDelegate(
         value: Int,
         maxValue: Int
     ) {
-        textView.text = textView.context.getString(resId, value)
+        if (textView.isVisible) {
+            textView.text = textView.context.getString(resId, value)
+        }
         progressBar.progress = (value * 1F / maxValue)
     }
 

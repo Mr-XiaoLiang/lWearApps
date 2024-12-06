@@ -2,6 +2,8 @@ package com.lollipop.wear.ps.activity
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Space
 import androidx.recyclerview.widget.RecyclerView
 import com.lollipop.wear.widget.RecyclerViewLoadMoreHelper
 
@@ -22,6 +24,7 @@ abstract class DashboardBasicListActivity : DashboardBasicActivity() {
         initRecyclerView(recyclerView)
         loadMoreHelper.loadMoreEnabled = loadMoreEnable
         loadMoreHelper.attach(recyclerView)
+        dashboardDelegate.setTextVisible(false)
     }
 
     override fun createContent(): View {
@@ -36,6 +39,31 @@ abstract class DashboardBasicListActivity : DashboardBasicActivity() {
 
     protected fun onNextPageLoaded() {
         loadMoreHelper.canLoadMore = true
+    }
+
+    protected object SpaceInfo
+
+    protected abstract class ListHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    protected class SpaceHolder(
+        private val spaceView: Space
+    ) : ListHolder(spaceView) {
+
+        companion object {
+            fun create(parent: ViewGroup, height: Int): SpaceHolder {
+                val spaceView = Space(parent.context)
+                spaceView.layoutParams = RecyclerView.LayoutParams(
+                    RecyclerView.LayoutParams.MATCH_PARENT,
+                    height
+                )
+                return SpaceHolder(spaceView)
+            }
+        }
+
+        fun setHeight(height: Int) {
+            spaceView.layoutParams.height = height
+        }
+
     }
 
 }
