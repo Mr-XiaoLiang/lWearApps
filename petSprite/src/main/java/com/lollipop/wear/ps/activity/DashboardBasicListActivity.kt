@@ -1,6 +1,7 @@
 package com.lollipop.wear.ps.activity
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Space
@@ -37,8 +38,73 @@ abstract class DashboardBasicListActivity : DashboardBasicActivity() {
 
     }
 
+    protected fun bindViewSize(view: View, adapter: ListAdapter) {
+        view.post {
+            adapter.setSpaceHeight(view.height / 2)
+            adapter.notifyDataSetChanged()
+        }
+    }
+
     protected fun onNextPageLoaded() {
         loadMoreHelper.canLoadMore = true
+    }
+
+    protected abstract class ListAdapter(
+        protected val dataList: List<Any>
+    ) : RecyclerView.Adapter<ListHolder>() {
+
+        companion object {
+            const val TYPE_SPACE = 999
+        }
+
+        private var spaceHeight = 0
+
+        private var layoutInflaterImpl: LayoutInflater? = null
+
+        fun setSpaceHeight(height: Int) {
+            spaceHeight = height
+        }
+
+        protected fun getLayoutInflater(parent: ViewGroup): LayoutInflater {
+            return layoutInflaterImpl ?: LayoutInflater.from(parent.context).also {
+                layoutInflaterImpl = it
+            }
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListHolder {
+            val itemHolder = onCreateItemHolder(parent, viewType)
+            if (itemHolder != null) {
+                return itemHolder
+            }
+            return SpaceHolder.create(parent, spaceHeight)
+        }
+
+        protected abstract fun onCreateItemHolder(parent: ViewGroup, viewType: Int): ListHolder?
+
+        override fun getItemViewType(position: Int): Int {
+            val any = dataList[position]
+            if (any is SpaceInfo) {
+                return TYPE_SPACE
+            }
+            return getItemType(any, position) ?: TYPE_SPACE
+        }
+
+        protected abstract fun getItemType(data: Any, position: Int): Int?
+
+        override fun getItemCount(): Int {
+            return dataList.size
+        }
+
+        override fun onBindViewHolder(holder: ListHolder, position: Int) {
+            if (holder is SpaceHolder) {
+                holder.setHeight(spaceHeight)
+                return
+            }
+            onBindItemHolder(holder, position)
+        }
+
+        protected abstract fun onBindItemHolder(holder: ListHolder, position: Int)
+
     }
 
     protected object SpaceInfo

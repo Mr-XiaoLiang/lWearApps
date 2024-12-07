@@ -3,7 +3,7 @@ package com.lollipop.wear.ps.business.options
 import com.lollipop.wear.ps.R
 import com.lollipop.wear.ps.engine.state.GameOption
 
-enum class OptionMenu(val key: String, val label: Int) {
+enum class BackpackMenu(val key: String, val label: Int) {
 
     FoodsFruit("foods_fruit", R.string.label_food_fruit),
     FoodsVegetable("foods_vegetable", R.string.label_food_vegetable),
@@ -14,7 +14,7 @@ enum class OptionMenu(val key: String, val label: Int) {
     FoodsDrink("foods_drink", R.string.label_food_drink);
 
     companion object {
-        fun find(key: String): OptionMenu? {
+        fun find(key: String): BackpackMenu? {
             return entries.firstOrNull { it.key == key }
         }
     }

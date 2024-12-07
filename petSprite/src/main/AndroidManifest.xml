@@ -12,9 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/L.Theme.Activity.Swipe"
         tools:ignore="WearStandaloneAppFlag">
-
+        <activity
+            android:name=".activity.BackpackActivity"
+            android:exported="false"
+            android:taskAffinity="" />
         <activity
             android:name=".activity.GameLogActivity"
+            android:exported="false"
+            android:taskAffinity="" />
+        <activity
+            android:name=".activity.GameOptionListActivity"
             android:exported="false"
             android:taskAffinity="" />
         <activity

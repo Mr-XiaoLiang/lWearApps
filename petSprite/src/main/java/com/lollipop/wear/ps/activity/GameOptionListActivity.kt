@@ -4,13 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.lollipop.wear.ps.business.options.BackpackMenu
 import com.lollipop.wear.ps.business.options.OptionBufferBuilder
-import com.lollipop.wear.ps.business.options.OptionMenu
 import com.lollipop.wear.ps.databinding.ItemOptionBinding
 import com.lollipop.wear.ps.engine.state.BackpackItem
 import com.lollipop.wear.ps.engine.state.BackpackManager
@@ -26,14 +25,14 @@ class GameOptionListActivity : DashboardBasicListActivity() {
 
         private const val EXTRA_OPTION = "option"
 
-        fun start(context: Context, option: OptionMenu) {
+        fun start(context: Context, option: BackpackMenu) {
             context.startActivity(Intent(context, GameOptionListActivity::class.java).apply {
                 putExtra(EXTRA_OPTION, option.key)
             })
         }
     }
 
-    private val optionList = ArrayList<GameOption>()
+    private val optionList = ArrayList<Any>()
 
     private val adapter by lazy {
         OptionAdapter(optionList, ::onOptionClick)
@@ -42,12 +41,14 @@ class GameOptionListActivity : DashboardBasicListActivity() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val menu = OptionMenu.find(intent.getStringExtra(EXTRA_OPTION) ?: "")
+        val menu = BackpackMenu.find(intent.getStringExtra(EXTRA_OPTION) ?: "")
         if (menu == null) {
             finish()
             return
         }
+        optionList.add(SpaceInfo)
         optionList.addAll(menu.getOptionList())
+        optionList.add(SpaceInfo)
         adapter.notifyDataSetChanged()
     }
 
@@ -55,10 +56,7 @@ class GameOptionListActivity : DashboardBasicListActivity() {
     override fun initRecyclerView(recyclerView: RecyclerView) {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        recyclerView.post {
-            adapter.setParentHeight(recyclerView.height / 2)
-            adapter.notifyDataSetChanged()
-        }
+        bindViewSize(recyclerView, adapter)
     }
 
     private fun onOptionClick(option: GameOption) {
@@ -71,37 +69,22 @@ class GameOptionListActivity : DashboardBasicListActivity() {
     }
 
     private class OptionAdapter(
-        private val dataList: List<Any>,
+        dataList: List<Any>,
         private val onOptionClick: (GameOption) -> Unit
-    ) : RecyclerView.Adapter<ListHolder>() {
+    ) : ListAdapter(dataList) {
 
         companion object {
-            const val TYPE_SPACE = 1
             const val TYPE_OPTION = 2
         }
 
-        private var parentHeight = 0
-
-        private var layoutInflaterImpl: LayoutInflater? = null
-
-        fun setParentHeight(height: Int) {
-            parentHeight = height
-        }
-
-        private fun getLayoutInflater(parent: ViewGroup): LayoutInflater {
-            return layoutInflaterImpl ?: LayoutInflater.from(parent.context).also {
-                layoutInflaterImpl = it
-            }
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListHolder {
+        override fun onCreateItemHolder(parent: ViewGroup, viewType: Int): ListHolder? {
             if (viewType == TYPE_OPTION) {
                 return OptionHolder(
                     ItemOptionBinding.inflate(getLayoutInflater(parent), parent, false),
                     this::onItemClick
                 )
             }
-            return SpaceHolder.create(parent, parentHeight)
+            return null
         }
 
         private fun onItemClick(position: Int) {
@@ -114,29 +97,17 @@ class GameOptionListActivity : DashboardBasicListActivity() {
             }
         }
 
-        override fun getItemViewType(position: Int): Int {
-            val d = dataList[position]
-            if (d is SpaceInfo) {
-                return TYPE_SPACE
-            }
-            if (d is GameOption) {
+        override fun getItemType(data: Any, position: Int): Int? {
+            if (data is GameOption) {
                 return TYPE_OPTION
             }
-            return super.getItemViewType(position)
+            return null
         }
 
-        override fun getItemCount(): Int {
-            return dataList.size
-        }
-
-        override fun onBindViewHolder(holder: ListHolder, position: Int) {
-            if (holder is SpaceHolder) {
-                holder.setHeight(parentHeight)
-                return
-            }
-            val d = dataList[position]
-            if (d is GameOption) {
-                if (holder is OptionHolder) {
+        override fun onBindItemHolder(holder: ListHolder, position: Int) {
+            if (holder is OptionHolder) {
+                val d = dataList[position]
+                if (d is GameOption) {
                     holder.bind(d)
                 }
             }
