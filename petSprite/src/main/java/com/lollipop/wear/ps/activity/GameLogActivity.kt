@@ -1,6 +1,8 @@
 package com.lollipop.wear.ps.activity
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,6 +26,12 @@ import java.util.Date
 import java.util.Locale
 
 class GameLogActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
+
+    companion object {
+        fun start(context: Context) {
+            context.startActivity(Intent(context, GameLogActivity::class.java))
+        }
+    }
 
     private val binding by lazy {
         ActivityGameLogBinding.inflate(layoutInflater)

@@ -6,14 +6,14 @@ import android.os.Bundle
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.lollipop.wear.ps.business.options.BackpackMenu
+import com.lollipop.wear.ps.R
 import com.lollipop.wear.ps.databinding.ItemSimpleOptionBinding
 
-class BackpackActivity : DashboardBasicListActivity() {
+class ContentMenuActivity : DashboardBasicListActivity() {
 
     companion object {
         fun start(context: Context) {
-            context.startActivity(Intent(context, BackpackActivity::class.java))
+            context.startActivity(Intent(context, ContentMenuActivity::class.java))
         }
     }
 
@@ -26,7 +26,7 @@ class BackpackActivity : DashboardBasicListActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         optionList.add(SpaceInfo)
-        optionList.addAll(BackpackMenu.entries)
+        optionList.addAll(MenuItem.entries)
         optionList.add(SpaceInfo)
     }
 
@@ -36,13 +36,25 @@ class BackpackActivity : DashboardBasicListActivity() {
         bindViewSize(recyclerView, adapter)
     }
 
-    private fun onItemClick(item: BackpackMenu) {
-        GameOptionListActivity.start(this, item)
+    private fun onItemClick(item: MenuItem) {
+        when (item) {
+            MenuItem.GameState -> {
+
+            }
+
+            MenuItem.GameLog -> {
+                GameLogActivity.start(this)
+            }
+
+            MenuItem.Backpack -> {
+                BackpackActivity.start(this)
+            }
+        }
     }
 
     private class BackpackOptionAdapter(
         dataList: List<Any>,
-        private val onItemClickCallback: (BackpackMenu) -> Unit
+        private val onItemClickCallback: (MenuItem) -> Unit
     ) : ListAdapter(dataList) {
 
         companion object {
@@ -51,7 +63,7 @@ class BackpackActivity : DashboardBasicListActivity() {
 
         override fun onCreateItemHolder(parent: ViewGroup, viewType: Int): ListHolder? {
             if (TYPE_OPTION == viewType) {
-                return BackpackOptionHolder(
+                return MenuOptionHolder(
                     ItemSimpleOptionBinding.inflate(
                         getLayoutInflater(
                             parent
@@ -68,22 +80,22 @@ class BackpackActivity : DashboardBasicListActivity() {
                 return
             }
             val item = dataList[position]
-            if (item is BackpackMenu) {
+            if (item is MenuItem) {
                 onItemClickCallback(item)
             }
         }
 
         override fun getItemType(data: Any, position: Int): Int? {
-            if (data is BackpackMenu) {
+            if (data is MenuItem) {
                 return TYPE_OPTION
             }
             return null
         }
 
         override fun onBindItemHolder(holder: ListHolder, position: Int) {
-            if (holder is BackpackOptionHolder) {
+            if (holder is MenuOptionHolder) {
                 val any = dataList[position]
-                if (any is BackpackMenu) {
+                if (any is MenuItem) {
                     holder.bind(any)
                 }
             }
@@ -91,7 +103,7 @@ class BackpackActivity : DashboardBasicListActivity() {
 
     }
 
-    private class BackpackOptionHolder(
+    private class MenuOptionHolder(
         private val binding: ItemSimpleOptionBinding,
         private val onClickCallback: (Int) -> Unit
     ) : ListHolder(binding.root) {
@@ -106,9 +118,17 @@ class BackpackActivity : DashboardBasicListActivity() {
             onClickCallback(adapterPosition)
         }
 
-        fun bind(item: BackpackMenu) {
+        fun bind(item: MenuItem) {
             binding.nameView.setText(item.label)
         }
+
+    }
+
+    private enum class MenuItem(val label: Int) {
+
+        GameState(R.string.label_game_state),
+        GameLog(R.string.label_game_log),
+        Backpack(R.string.label_backpack),
 
     }
 

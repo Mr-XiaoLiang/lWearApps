@@ -11,7 +11,7 @@ import com.lollipop.wear.animation.converter.TranslationX
 import com.lollipop.wear.animation.dsl.withView
 import com.lollipop.wear.animation.end.HideOnClose
 import com.lollipop.wear.animation.start.ShowOnStart
-import com.lollipop.wear.ps.activity.BackpackActivity
+import com.lollipop.wear.ps.activity.ContentMenuActivity
 import com.lollipop.wear.ps.business.MainDashboardDelegate
 import com.lollipop.wear.ps.business.options.Foods
 import com.lollipop.wear.ps.business.page.ContentPageFragment
@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity(), OptionListPageFragment.Callback {
         }
         binding.backpackButton.setOnClickListener {
 //            contentPanelController.expand()
-            BackpackActivity.start(this)
+            ContentMenuActivity.start(this)
         }
     }
 
