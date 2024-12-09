@@ -31,7 +31,13 @@ class GameLogStore(context: Context) : DatabaseHelper(context, "game_log", 1) {
     fun queryLog(pageIndex: Int, pageSize: Int = 20): List<GameLog> {
         return select(
             tableName = LogTable.TABLE_NAME,
-            columns = arrayOf(LogTable.id, LogTable.who, LogTable.what, LogTable.option),
+            columns = arrayOf(
+                LogTable.id,
+                LogTable.who,
+                LogTable.what,
+                LogTable.option,
+                LogTable.time
+            ),
             suffix = " ORDER BY ${LogTable.time.name} DESC " +
                     " LIMIT ? OFFSET ? ",
             args = arrayOf(pageSize.toString(), pageIndex.toString())

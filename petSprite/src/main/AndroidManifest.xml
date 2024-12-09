@@ -25,6 +25,10 @@
             android:exported="false"
             android:taskAffinity="" />
         <activity
+            android:name=".activity.ContentMenuActivity"
+            android:exported="false"
+            android:taskAffinity="" />
+        <activity
             android:name=".MainActivity"
             android:enabled="true"
             android:exported="true"

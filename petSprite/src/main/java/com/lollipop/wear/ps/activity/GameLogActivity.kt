@@ -62,6 +62,7 @@ class GameLogActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListene
         binding.recyclerView.adapter = adapter
         binding.recyclerView.post {
             adapter.setSpaceHeight(binding.recyclerView.height / 2)
+            adapter.notifyDataSetChanged()
         }
         binding.recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         onRefresh()
@@ -78,6 +79,7 @@ class GameLogActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListene
 
     override fun onRefresh() {
         pageIndex = 0
+        loadMoreHelper.canLoadMore = true
         loadItems()
     }
 
@@ -88,29 +90,34 @@ class GameLogActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListene
     private fun loadItems() {
         loadMoreHelper.canLoadMore = false
         val index = pageIndex
-        if (index == 0) {
-            logList.clear()
-            logList.add(SpaceInfo)
-        }
         val pageSize = 20
         doAsync {
             val list = logStore.queryLog(index, pageSize = pageSize)
             onUI {
-                if (list.isNotEmpty()) {
-                    if (logList.size > 1) {
-                        val lastIndex = logList.size - 1
-                        val last = logList[lastIndex]
-                        if (last is SpaceInfo) {
-                            logList.removeAt(lastIndex)
-                            adapter.notifyItemRemoved(lastIndex)
+                if (index < 1) {
+                    logList.clear()
+                    logList.add(SpaceInfo)
+                    adapter.notifyDataSetChanged()
+                } else {
+                    if (list.isNotEmpty()) {
+                        if (logList.size > 1) {
+                            val lastIndex = logList.size - 1
+                            val last = logList[lastIndex]
+                            if (last is SpaceInfo) {
+                                logList.removeAt(lastIndex)
+                                adapter.notifyItemRemoved(lastIndex)
+                            }
                         }
+                        if (list.size < pageSize) {
+                            loadMoreHelper.canLoadMore = false
+                        }
+                        val startIndex = logList.size
+                        logList.addAll(list)
+                        if (list.size < pageSize) {
+                            logList.add(SpaceInfo)
+                        }
+                        adapter.notifyItemRangeInserted(startIndex, list.size)
                     }
-                    val startIndex = logList.size
-                    logList.addAll(list)
-                    if (list.size < pageSize) {
-                        logList.add(SpaceInfo)
-                    }
-                    adapter.notifyItemRangeInserted(startIndex, list.size)
                 }
                 onRefreshEnd()
                 onLoadEnd()

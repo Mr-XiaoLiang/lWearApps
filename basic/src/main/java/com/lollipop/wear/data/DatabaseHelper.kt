@@ -59,7 +59,7 @@ abstract class DatabaseHelper(
     ): List<T> {
         // 只管检索和表信息，其他的让他们自己拼接吧
         val selectSql = StringBuilder("SELECT ")
-        columns.joinTo(buffer = selectSql, separator = ", ")
+        columns.joinTo(buffer = selectSql, separator = ", ") { it.name }
         selectSql.append(" FROM ").append(tableName).append(" ").append(suffix)
         val result = ArrayList<T>()
         readableDatabase.rawQuery(selectSql.toString(), args).use {
