@@ -6,6 +6,10 @@ interface GameState {
 
     val key: String
 
+    val name: Int
+
+    fun displayValue(): String
+
     fun onOption(things: GameSomeThings)
 
     fun parse(json: JSONObject)
@@ -30,6 +34,10 @@ abstract class IntGameState : SingleGameState() {
 
     var current: Int = 0
         private set
+
+    override fun displayValue(): String {
+        return current.toString()
+    }
 
     protected fun putValue(newValue: Int) {
         current += newValue

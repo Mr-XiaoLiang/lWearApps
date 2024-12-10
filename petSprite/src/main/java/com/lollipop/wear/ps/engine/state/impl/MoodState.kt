@@ -1,5 +1,6 @@
 package com.lollipop.wear.ps.engine.state.impl
 
+import com.lollipop.wear.ps.R
 import com.lollipop.wear.ps.engine.state.GameSomeThings
 import com.lollipop.wear.ps.engine.state.IntGameState
 import com.lollipop.wear.ps.engine.state.type.Toy
@@ -10,6 +11,8 @@ import com.lollipop.wear.ps.engine.state.type.Toy
 object MoodState : IntGameState() {
 
     override val key: String = "Mood"
+
+    override val name: Int = R.string.label_state_mood
 
     override val maxValue: Int = 100
 

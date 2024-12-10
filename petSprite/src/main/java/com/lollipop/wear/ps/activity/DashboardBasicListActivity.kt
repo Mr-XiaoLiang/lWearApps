@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Space
 import androidx.recyclerview.widget.RecyclerView
+import com.lollipop.wear.ps.databinding.ItemSimpleOptionBinding
 import com.lollipop.wear.widget.RecyclerViewLoadMoreHelper
 
 abstract class DashboardBasicListActivity : DashboardBasicActivity() {
@@ -129,6 +130,18 @@ abstract class DashboardBasicListActivity : DashboardBasicActivity() {
         fun setHeight(height: Int) {
             spaceView.layoutParams.height = height
         }
+
+    }
+
+    protected abstract class SimpleHolder(
+        val binding: ItemSimpleOptionBinding
+    ) : ListHolder(binding.root) {
+
+        init {
+            binding.nameView.setOnClickListener { onItemClick() }
+        }
+
+        abstract fun onItemClick()
 
     }
 

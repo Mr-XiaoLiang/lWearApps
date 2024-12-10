@@ -39,7 +39,7 @@ class ContentMenuActivity : DashboardBasicListActivity() {
     private fun onItemClick(item: MenuItem) {
         when (item) {
             MenuItem.GameState -> {
-
+                GameStateActivity.start(this)
             }
 
             MenuItem.GameLog -> {
@@ -104,17 +104,11 @@ class ContentMenuActivity : DashboardBasicListActivity() {
     }
 
     private class MenuOptionHolder(
-        private val binding: ItemSimpleOptionBinding,
+        binding: ItemSimpleOptionBinding,
         private val onClickCallback: (Int) -> Unit
-    ) : ListHolder(binding.root) {
+    ) : SimpleHolder(binding) {
 
-        init {
-            binding.nameView.setOnClickListener {
-                onItemClick()
-            }
-        }
-
-        private fun onItemClick() {
+        override fun onItemClick() {
             onClickCallback(adapterPosition)
         }
 

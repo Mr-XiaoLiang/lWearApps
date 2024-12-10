@@ -156,5 +156,11 @@
     <string name="label_game_state">🏷️状态</string>
     <string name="label_backpack">👜背包</string>
 
+    <!--  状态  -->
+    <string name="label_state_health">💊健康: %1$s</string>
+    <string name="label_state_mood">🎮心情: %1$s</string>
+    <string name="label_state_rich">💰财富: %1$s</string>
+    <string name="label_state_satiation">🍚饥饿: %1$s</string>
+
 
 </resources>
