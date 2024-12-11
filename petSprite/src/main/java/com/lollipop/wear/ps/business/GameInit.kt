@@ -1,6 +1,7 @@
 package com.lollipop.wear.ps.business
 
 import android.app.Application
+import com.lollipop.wear.ps.engine.GameController
 import com.lollipop.wear.ps.engine.attr.AttributeManager
 import com.lollipop.wear.ps.engine.log.GameLogDelegate
 import com.lollipop.wear.ps.engine.state.BackpackManager
@@ -23,6 +24,7 @@ object GameInit {
         GameStateManager.init(app)
         BackpackManager.init(app)
         AttributeManager.init(app)
+        GameController.init(app)
         GameStateManager.addOptionListener(GameLogDelegate(app))
     }
 
