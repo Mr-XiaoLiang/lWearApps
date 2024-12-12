@@ -26,6 +26,8 @@ object GameInit {
         AttributeManager.init(app)
         GameController.init(app)
         GameStateManager.addOptionListener(GameLogDelegate(app))
+        // 同步时间（将离线时候的事件补充回来）
+        GameController.timeSync()
     }
 
     private fun registerState() {
