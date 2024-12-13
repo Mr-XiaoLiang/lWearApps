@@ -35,7 +35,11 @@ object GameController {
         providerWeightTotal -= provider.weight
     }
 
-    fun timeSync() {
+    fun findFuture(context: Context) {
+        timeSync(context)
+    }
+
+    private fun timeSync(context: Context) {
         val now = System.currentTimeMillis()
         val weightTotal = providerWeightTotal
         val providers = ArrayList<RandomThingsProvider>()
@@ -43,11 +47,16 @@ object GameController {
         providers.sortBy { it.weight }
         while (currentGameTime < now) {
             currentGameTime += TIME_STEP
-            val target = (Random.nextFloat() * weightTotal).toInt()
-            findProvider(providers, target)?.let { provider ->
-                provider.getThings()?.let { things ->
-                    postOption(things)
-                }
+            randomNextOption(weightTotal, providers)
+        }
+        updateTime(context)
+    }
+
+    private fun randomNextOption(weightTotal: Int, providers: List<RandomThingsProvider>) {
+        val target = (Random.nextFloat() * weightTotal).toInt()
+        findProvider(providers, target)?.let { provider ->
+            provider.getThings()?.let { things ->
+                postOption(things)
             }
         }
     }
@@ -77,6 +86,11 @@ object GameController {
         } else {
             currentGameTime = lastTime
         }
+        timeSync(context)
+    }
+
+    private fun updateTime(context: Context) {
+        getPreferences(context).lastTime = System.currentTimeMillis()
     }
 
     private fun postOption(things: GameSomeThings) {
