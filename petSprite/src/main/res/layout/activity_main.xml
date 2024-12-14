@@ -47,56 +47,6 @@
                 app:tint="@android:color/white" />
         </com.lollipop.wear.widget.ArcLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/contentPanelBackground"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#E000"
-                android:visibility="invisible"
-                tools:visibility="visible" />
-
-            <com.lollipop.wear.widget.CircularFrameLayout
-                android:id="@+id/contentPanel"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="21dp"
-                android:background="@android:color/black"
-                android:foreground="@drawable/fg_circular_border"
-                android:visibility="invisible"
-                tools:visibility="visible">
-
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/contentViewPager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:background="#005900" />
-
-                <com.lollipop.wear.widget.HorizontalPageIndicator
-                    android:id="@+id/contentPageIndicator"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="2dp"
-                    app:indicatorInterval="4dp"
-                    app:indicatorRadius="2dp"
-                    app:activeColor="#FFFFFFFF"
-                    app:inactiveColor="#80FFFFFF"
-                    />
-
-            </com.lollipop.wear.widget.CircularFrameLayout>
-
-            <com.lollipop.wear.widget.RingTouchLayout
-                android:id="@+id/contentPanelBackgroundRing"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="invisible"
-                app:ring_width="21dp" />
-
-        </FrameLayout>
-
         <include
             android:id="@+id/statePanel"
             layout="@layout/panel_state"
