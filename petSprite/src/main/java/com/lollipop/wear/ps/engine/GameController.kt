@@ -1,6 +1,8 @@
 package com.lollipop.wear.ps.engine
 
 import android.content.Context
+import com.lollipop.wear.basic.doAsync
+import com.lollipop.wear.basic.onUI
 import com.lollipop.wear.ps.engine.state.GameSomeThings
 import com.lollipop.wear.ps.engine.state.GameStateManager
 import com.lollipop.wear.utils.PreferencesDelegate
@@ -40,24 +42,24 @@ object GameController {
     }
 
     private fun timeSync(context: Context) {
-        val now = System.currentTimeMillis()
-        val weightTotal = providerWeightTotal
-        val providers = ArrayList<RandomThingsProvider>()
-        providers.addAll(providerList)
-        providers.sortBy { it.weight }
-        while (currentGameTime < now) {
-            currentGameTime += TIME_STEP
-            randomNextOption(weightTotal, providers)
-        }
-        updateTime(context)
-    }
-
-    private fun randomNextOption(weightTotal: Int, providers: List<RandomThingsProvider>) {
-        val target = (Random.nextFloat() * weightTotal).toInt()
-        findProvider(providers, target)?.let { provider ->
-            provider.getThings()?.let { things ->
-                postOption(things)
+        doAsync {
+            val now = System.currentTimeMillis()
+            val weightTotal = providerWeightTotal
+            val providers = ArrayList<RandomThingsProvider>()
+            providers.addAll(providerList)
+            providers.sortBy { it.weight }
+            while (currentGameTime < now) {
+                currentGameTime += TIME_STEP
+                val target = (Random.nextFloat() * weightTotal).toInt()
+                findProvider(providers, target)?.let { provider ->
+                    provider.getThings()?.let { things ->
+                        onUI {
+                            postOption(things)
+                        }
+                    }
+                }
             }
+            updateTime(context)
         }
     }
 
@@ -114,6 +116,10 @@ object GameController {
     interface RandomThingsProvider {
         val weight: Int
 
+        /**
+         * 随机获取一个事件
+         * 它会在子线程中执行，所以可以做耗时的操作，但是不要更新UI
+         */
         fun getThings(): GameSomeThings?
 
     }

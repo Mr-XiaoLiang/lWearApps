@@ -24,4 +24,8 @@ object RichState : IntGameState() {
         }
     }
 
+    fun use(amount: Int) {
+        putValue(-amount)
+    }
+
 }

@@ -9,97 +9,36 @@ import java.io.File
 
 object PreferenceHelper {
 
-    private fun getFile(context: Context, name: String): File {
+    fun getFile(context: Context, name: String): File {
         return File(context.filesDir, name)
     }
 
-    fun saveJson(
-        context: Context,
-        name: String,
-        contentBuilder: (JSONObject) -> Unit
-    ): SaveTaskCallback {
-        return save(context, name) { file ->
-            val json = JSONObject()
-            contentBuilder(json)
-            FileHelper.write(file, json)
-        }
+    fun from(context: Context, name: String): Controller {
+        return Controller.from(context, name)
     }
 
-    fun saveString(
-        context: Context,
-        name: String,
-        contentBuilder: () -> String
-    ): SaveTaskCallback {
-        return save(context, name) { file ->
-            val content = contentBuilder()
-            FileHelper.write(file, content)
-        }
-    }
-
-    fun saveByteArray(
-        context: Context,
-        name: String,
-        contentBuilder: () -> ByteArray
-    ): SaveTaskCallback {
-        return save(context, name) { file ->
-            val content = contentBuilder()
-            FileHelper.write(file, content)
-        }
-    }
-
-    fun readJson(
-        context: Context,
-        name: String,
-        resultCallback: (FileHelper.FileResult<JSONObject>) -> Unit
-    ) {
-        read(context, name, resultCallback) {
-            FileHelper.readJson(it)
-        }
-    }
-
-    fun readString(
-        context: Context,
-        name: String,
-        resultCallback: (FileHelper.FileResult<String>) -> Unit
-    ) {
-        read(context, name, resultCallback) {
-            FileHelper.readString(it)
-        }
-    }
-
-    fun readByteArray(
-        context: Context,
-        name: String,
-        resultCallback: (FileHelper.FileResult<ByteArray>) -> Unit
-    ) {
-        read(context, name, resultCallback) {
-            FileHelper.readByteArray(it)
-        }
+    fun from(file: File): Controller {
+        return Controller.from(file)
     }
 
     private fun <T : Any> read(
-        context: Context,
-        name: String,
+        file: File,
         result: (FileHelper.FileResult<T>) -> Unit,
         workBlock: (File) -> FileHelper.FileResult<T>
     ) {
-        val app = context.applicationContext
         val taskCallback = ReadTaskCallback<T>()
         taskCallback.onResult(result)
         doAsync(taskCallback) {
-            taskCallback.invokeResult(workBlock(getFile(app, name)))
+            taskCallback.invokeResult(workBlock(file))
         }
     }
 
     private fun save(
-        context: Context,
-        name: String,
+        file: File,
         workBlock: (File) -> FileHelper.FileResult<File>
     ): SaveTaskCallback {
-        val app = context.applicationContext
         val taskCallback = SaveTaskCallback()
         doAsync(taskCallback) {
-            val file = getFile(app, name)
             val result = workBlock(file)
             taskCallback.invokeResult(result)
         }
@@ -141,6 +80,73 @@ object PreferenceHelper {
         fun invokeResult(result: FileHelper.FileResult<T>) {
             onUI {
                 resultCallback?.invoke(result)
+            }
+        }
+
+    }
+
+    class Controller(private val file: File) {
+
+        companion object {
+            fun from(context: Context, name: String): Controller {
+                return Controller(getFile(context, name))
+            }
+
+            fun from(file: File): Controller {
+                return Controller(file)
+            }
+        }
+
+        fun readJson(
+            resultCallback: (FileHelper.FileResult<JSONObject>) -> Unit
+        ) {
+            read(file, resultCallback) {
+                FileHelper.readJson(it)
+            }
+        }
+
+        fun readString(
+            resultCallback: (FileHelper.FileResult<String>) -> Unit
+        ) {
+            read(file, resultCallback) {
+                FileHelper.readString(it)
+            }
+        }
+
+        fun readByteArray(
+            resultCallback: (FileHelper.FileResult<ByteArray>) -> Unit
+        ) {
+            read(file, resultCallback) {
+                FileHelper.readByteArray(it)
+            }
+        }
+
+
+        fun saveJson(
+            contentBuilder: (JSONObject) -> Unit
+        ): SaveTaskCallback {
+            return save(file) { file ->
+                val json = JSONObject()
+                contentBuilder(json)
+                FileHelper.write(file, json)
+            }
+        }
+
+        fun saveString(
+            contentBuilder: () -> String
+        ): SaveTaskCallback {
+            return save(file) { file ->
+                val content = contentBuilder()
+                FileHelper.write(file, content)
+            }
+        }
+
+        fun saveByteArray(
+            contentBuilder: () -> ByteArray
+        ): SaveTaskCallback {
+            return save(file) { file ->
+                val content = contentBuilder()
+                FileHelper.write(file, content)
             }
         }
 

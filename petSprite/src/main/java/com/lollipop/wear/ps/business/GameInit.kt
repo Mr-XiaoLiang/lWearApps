@@ -58,6 +58,7 @@ object GameInit {
 
     private fun bindListener(app: Application) {
         GameStateManager.addOptionListener(GameLogDelegate(app))
+        GameStateManager.addOptionListener(BackpackManager)
     }
 
 }

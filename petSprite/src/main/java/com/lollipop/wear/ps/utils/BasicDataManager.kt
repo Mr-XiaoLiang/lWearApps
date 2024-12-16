@@ -8,13 +8,15 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 abstract class BasicDataManager(
-    val fileName: String
+    private val fileName: String
 ) {
 
     protected val dataObject = JSONObject()
+    protected var dataController: PreferenceHelper.Controller? = null
 
     fun init(context: Context) {
-        PreferenceHelper.readJson(context, fileName) { result ->
+        dataController = PreferenceHelper.from(context, fileName)
+        dataController?.readJson { result ->
             when (result) {
                 is FileHelper.FileResult.Success -> {
                     parseData(result.data)
@@ -28,10 +30,12 @@ abstract class BasicDataManager(
         }
     }
 
-    fun save(context: Context) {
-        PreferenceHelper.saveJson(context = context, fileName) { json ->
-            saveData(json)
-        }.onResult {
+    protected open fun onInit(context: Context) {
+
+    }
+
+    fun save() {
+        dataController?.saveJson { saveData(it) }?.onResult {
             if (it is FileHelper.FileResult.Failure) {
                 Log.e("BasicDataManager", "save", it.error)
             }

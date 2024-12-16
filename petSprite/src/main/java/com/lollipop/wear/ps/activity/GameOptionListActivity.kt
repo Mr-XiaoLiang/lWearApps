@@ -65,7 +65,7 @@ class GameOptionListActivity : DashboardBasicListActivity() {
         } else {
             GameStateManager.onOption(GameOptionAction.USED, option)
         }
-        GameStateManager.save(this)
+        GameStateManager.save()
     }
 
     private class OptionAdapter(

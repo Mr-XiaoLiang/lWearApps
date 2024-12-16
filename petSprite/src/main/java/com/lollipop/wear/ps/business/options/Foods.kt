@@ -3,6 +3,7 @@ package com.lollipop.wear.ps.business.options
 import com.lollipop.wear.ps.R
 import com.lollipop.wear.ps.engine.state.BackpackItem
 import com.lollipop.wear.ps.engine.state.GameOption
+import com.lollipop.wear.ps.engine.state.type.Antibiotic
 import com.lollipop.wear.ps.engine.state.type.Commodity
 import com.lollipop.wear.ps.engine.state.type.Food
 import com.lollipop.wear.ps.engine.state.type.Toy
@@ -24,8 +25,9 @@ object Foods : OptionList {
         override val name: Int,
         override val kcal: Int,
         override val dopamine: Int,
-        override val price: Int
-    ) : GameOption, Food, BackpackItem, Toy, Commodity
+        override val price: Int,
+        override val antibody: Int
+    ) : GameOption, Food, BackpackItem, Toy, Commodity, Antibiotic
 
     /**
      * 水果
@@ -40,7 +42,8 @@ object Foods : OptionList {
             name = R.string.food_grape,
             kcal = 1,
             dopamine = 7,
-            price = 12
+            price = 12,
+            antibody = 3
         )
 
         /**
@@ -51,7 +54,8 @@ object Foods : OptionList {
             name = R.string.food_melon,
             kcal = 1,
             dopamine = 6,
-            price = 8
+            price = 8,
+            antibody = 4
         )
 
         /**
@@ -62,7 +66,8 @@ object Foods : OptionList {
             name = R.string.food_watermelon,
             kcal = 1,
             dopamine = 6,
-            price = 3
+            price = 3,
+            antibody = 2
         )
 
         /**
@@ -73,7 +78,8 @@ object Foods : OptionList {
             name = R.string.food_orange,
             kcal = 1,
             dopamine = 4,
-            price = 4
+            price = 4,
+            antibody = 3
         )
 
         /**
@@ -84,7 +90,8 @@ object Foods : OptionList {
             name = R.string.food_lemon,
             kcal = 1,
             dopamine = 2,
-            price = 5
+            price = 5,
+            antibody = 6
         )
 
         /**
@@ -95,7 +102,8 @@ object Foods : OptionList {
             name = R.string.food_banana,
             kcal = 1,
             dopamine = 3,
-            price = 6
+            price = 6,
+            antibody = 3
         )
 
         /**
@@ -106,7 +114,8 @@ object Foods : OptionList {
             name = R.string.food_mango,
             kcal = 1,
             dopamine = 4,
-            price = 7
+            price = 7,
+            antibody = 5
         )
 
         /**
@@ -117,7 +126,8 @@ object Foods : OptionList {
             name = R.string.food_pineapple,
             kcal = 1,
             dopamine = 4,
-            price = 9
+            price = 9,
+            antibody = 3
         )
 
         /**
@@ -128,7 +138,8 @@ object Foods : OptionList {
             name = R.string.food_cherry,
             kcal = 1,
             dopamine = 5,
-            price = 10
+            price = 10,
+            antibody = 4
         )
 
         /**
@@ -139,7 +150,8 @@ object Foods : OptionList {
             name = R.string.food_red_apple,
             kcal = 1,
             dopamine = 2,
-            price = 4
+            price = 4,
+            antibody = 5
         )
 
         /**
@@ -150,7 +162,8 @@ object Foods : OptionList {
             name = R.string.food_green_apple,
             kcal = 1,
             dopamine = 2,
-            price = 4
+            price = 4,
+            antibody = 5
         )
 
         /**
@@ -161,7 +174,8 @@ object Foods : OptionList {
             name = R.string.food_pear,
             kcal = 1,
             dopamine = 3,
-            price = 5
+            price = 5,
+            antibody = 4
         )
 
         /**
@@ -172,7 +186,8 @@ object Foods : OptionList {
             name = R.string.food_peach,
             kcal = 1,
             dopamine = 5,
-            price = 6
+            price = 6,
+            antibody = 4
         )
 
         /**
@@ -183,7 +198,8 @@ object Foods : OptionList {
             name = R.string.food_strawberry,
             kcal = 1,
             dopamine = 7,
-            price = 7
+            price = 7,
+            antibody = 5
         )
 
         /**
@@ -194,7 +210,8 @@ object Foods : OptionList {
             name = R.string.food_blueberry,
             kcal = 1,
             dopamine = 7,
-            price = 7
+            price = 7,
+            antibody = 3
         )
 
         /**
@@ -205,7 +222,8 @@ object Foods : OptionList {
             name = R.string.food_kiwi,
             kcal = 1,
             dopamine = 6,
-            price = 6
+            price = 6,
+            antibody = 4
         )
 
         /**
@@ -216,7 +234,8 @@ object Foods : OptionList {
             name = R.string.food_persimmon,
             kcal = 1,
             dopamine = 4,
-            price = 4
+            price = 4,
+            antibody = 3
         )
 
         /**
@@ -227,7 +246,8 @@ object Foods : OptionList {
             name = R.string.food_olive,
             kcal = 1,
             dopamine = 4,
-            price = 8
+            price = 8,
+            antibody = 4
         )
 
         /**
@@ -238,7 +258,8 @@ object Foods : OptionList {
             name = R.string.food_coconut,
             kcal = 1,
             dopamine = 4,
-            price = 9
+            price = 9,
+            antibody = 3
         )
 
         /**
@@ -249,7 +270,8 @@ object Foods : OptionList {
             name = R.string.food_avocado,
             kcal = 1,
             dopamine = 4,
-            price = 16
+            price = 16,
+            antibody = 5
         )
 
         override val options = arrayOf<GameOption>(
@@ -290,7 +312,8 @@ object Foods : OptionList {
             name = R.string.food_eggplant,
             kcal = 5,
             dopamine = 3,
-            price = 1
+            price = 1,
+            antibody = 4
         )
 
         /**
@@ -301,7 +324,8 @@ object Foods : OptionList {
             name = R.string.food_potato,
             kcal = 5,
             dopamine = 3,
-            price = 1
+            price = 1,
+            antibody = 3
         )
 
         /**
@@ -312,7 +336,8 @@ object Foods : OptionList {
             name = R.string.food_carrot,
             kcal = 5,
             dopamine = 3,
-            price = 1
+            price = 1,
+            antibody = 7
         )
 
         /**
@@ -323,7 +348,8 @@ object Foods : OptionList {
             name = R.string.food_corn,
             kcal = 7,
             dopamine = 4,
-            price = 2
+            price = 2,
+            antibody = 4
         )
 
         /**
@@ -334,7 +360,8 @@ object Foods : OptionList {
             name = R.string.food_red_pepper,
             kcal = 2,
             dopamine = 6,
-            price = 2
+            price = 2,
+            antibody = 8
         )
 
         /**
@@ -345,7 +372,8 @@ object Foods : OptionList {
             name = R.string.food_bell_pepper,
             kcal = 2,
             dopamine = 4,
-            price = 2
+            price = 2,
+            antibody = 8
         )
 
         /**
@@ -356,7 +384,8 @@ object Foods : OptionList {
             name = R.string.food_cucumber,
             kcal = 2,
             dopamine = 3,
-            price = 2
+            price = 2,
+            antibody = 5
         )
 
         /**
@@ -367,7 +396,8 @@ object Foods : OptionList {
             name = R.string.food_greengrocery,
             kcal = 2,
             dopamine = 3,
-            price = 2
+            price = 2,
+            antibody = 4
         )
 
         /**
@@ -378,7 +408,8 @@ object Foods : OptionList {
             name = R.string.food_broccoli,
             kcal = 2,
             dopamine = 4,
-            price = 3
+            price = 3,
+            antibody = 4
         )
 
         /**
@@ -389,7 +420,8 @@ object Foods : OptionList {
             name = R.string.food_garlic,
             kcal = 1,
             dopamine = 1,
-            price = 2
+            price = 2,
+            antibody = 8
         )
 
         /**
@@ -400,7 +432,8 @@ object Foods : OptionList {
             name = R.string.food_onion,
             kcal = 1,
             dopamine = 2,
-            price = 2
+            price = 2,
+            antibody = 8
         )
 
         /**
@@ -411,7 +444,8 @@ object Foods : OptionList {
             name = R.string.food_mushroom,
             kcal = 1,
             dopamine = 7,
-            price = 6
+            price = 6,
+            antibody = 9
         )
 
         /**
@@ -422,7 +456,8 @@ object Foods : OptionList {
             name = R.string.food_peanut,
             kcal = 2,
             dopamine = 4,
-            price = 3
+            price = 3,
+            antibody = 5
         )
 
         /**
@@ -433,7 +468,8 @@ object Foods : OptionList {
             name = R.string.food_bean,
             kcal = 2,
             dopamine = 1,
-            price = 2
+            price = 2,
+            antibody = 2
         )
 
         /**
@@ -444,7 +480,8 @@ object Foods : OptionList {
             name = R.string.food_chestnut,
             kcal = 2,
             dopamine = 4,
-            price = 4
+            price = 4,
+            antibody = 3
         )
 
         override val options = arrayOf<GameOption>(
@@ -480,7 +517,8 @@ object Foods : OptionList {
             name = R.string.food_toast,
             kcal = 10,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -491,7 +529,8 @@ object Foods : OptionList {
             name = R.string.food_croissant,
             kcal = 10,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -502,7 +541,8 @@ object Foods : OptionList {
             name = R.string.food_baguette,
             kcal = 10,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -513,7 +553,8 @@ object Foods : OptionList {
             name = R.string.food_flatbread,
             kcal = 10,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -524,7 +565,8 @@ object Foods : OptionList {
             name = R.string.food_pretzels,
             kcal = 10,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -535,7 +577,8 @@ object Foods : OptionList {
             name = R.string.food_bagels,
             kcal = 10,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -546,7 +589,8 @@ object Foods : OptionList {
             name = R.string.food_pancakes,
             kcal = 10,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -557,7 +601,8 @@ object Foods : OptionList {
             name = R.string.food_waffles,
             kcal = 10,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -568,7 +613,8 @@ object Foods : OptionList {
             name = R.string.food_cheese,
             kcal = 10,
             dopamine = 4,
-            price = 7
+            price = 7,
+            antibody = 1
         )
 
         /**
@@ -579,7 +625,8 @@ object Foods : OptionList {
             name = R.string.food_ribs,
             kcal = 20,
             dopamine = 12,
-            price = 15
+            price = 15,
+            antibody = 1
         )
 
         /**
@@ -590,7 +637,8 @@ object Foods : OptionList {
             name = R.string.food_poultry_legs,
             kcal = 15,
             dopamine = 10,
-            price = 10
+            price = 10,
+            antibody = 1
         )
 
         /**
@@ -601,7 +649,8 @@ object Foods : OptionList {
             name = R.string.food_steak,
             kcal = 25,
             dopamine = 14,
-            price = 25
+            price = 25,
+            antibody = 1
         )
 
         /**
@@ -612,7 +661,8 @@ object Foods : OptionList {
             name = R.string.food_bacon,
             kcal = 10,
             dopamine = 4,
-            price = 7
+            price = 7,
+            antibody = 1
         )
 
         /**
@@ -623,7 +673,8 @@ object Foods : OptionList {
             name = R.string.food_hamburger,
             kcal = 15,
             dopamine = 9,
-            price = 10
+            price = 10,
+            antibody = 1
         )
 
         /**
@@ -634,7 +685,8 @@ object Foods : OptionList {
             name = R.string.food_french_fries,
             kcal = 10,
             dopamine = 8,
-            price = 7
+            price = 7,
+            antibody = 1
         )
 
         /**
@@ -645,7 +697,8 @@ object Foods : OptionList {
             name = R.string.food_pizza,
             kcal = 14,
             dopamine = 9,
-            price = 12
+            price = 12,
+            antibody = 1
         )
 
         /**
@@ -656,7 +709,8 @@ object Foods : OptionList {
             name = R.string.food_hot_dog,
             kcal = 16,
             dopamine = 9,
-            price = 15
+            price = 15,
+            antibody = 1
         )
 
         /**
@@ -667,7 +721,8 @@ object Foods : OptionList {
             name = R.string.food_sandwich,
             kcal = 10,
             dopamine = 9,
-            price = 9
+            price = 9,
+            antibody = 1
         )
 
         /**
@@ -678,7 +733,8 @@ object Foods : OptionList {
             name = R.string.food_burritos,
             kcal = 14,
             dopamine = 9,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -689,7 +745,8 @@ object Foods : OptionList {
             name = R.string.food_mexican_tacos,
             kcal = 10,
             dopamine = 7,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -700,7 +757,8 @@ object Foods : OptionList {
             name = R.string.food_mexican_tamales,
             kcal = 10,
             dopamine = 5,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -711,7 +769,8 @@ object Foods : OptionList {
             name = R.string.food_mexican_tortilla,
             kcal = 10,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -722,7 +781,8 @@ object Foods : OptionList {
             name = R.string.food_fried_bean_balls,
             kcal = 10,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -733,7 +793,8 @@ object Foods : OptionList {
             name = R.string.food_egg,
             kcal = 6,
             dopamine = 4,
-            price = 2
+            price = 2,
+            antibody = 1
         )
 
         /**
@@ -744,7 +805,8 @@ object Foods : OptionList {
             name = R.string.food_fried_egg,
             kcal = 6,
             dopamine = 4,
-            price = 2
+            price = 2,
+            antibody = 1
         )
 
         /**
@@ -755,7 +817,8 @@ object Foods : OptionList {
             name = R.string.food_soup,
             kcal = 8,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -766,7 +829,8 @@ object Foods : OptionList {
             name = R.string.food_porridge,
             kcal = 4,
             dopamine = 4,
-            price = 1
+            price = 1,
+            antibody = 1
         )
 
         /**
@@ -777,7 +841,8 @@ object Foods : OptionList {
             name = R.string.food_stew,
             kcal = 10,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -788,7 +853,8 @@ object Foods : OptionList {
             name = R.string.food_cheese_hotpot,
             kcal = 30,
             dopamine = 40,
-            price = 25
+            price = 25,
+            antibody = 1
         )
 
         /**
@@ -799,7 +865,8 @@ object Foods : OptionList {
             name = R.string.food_salad,
             kcal = 2,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -810,7 +877,8 @@ object Foods : OptionList {
             name = R.string.food_popcorn,
             kcal = 10,
             dopamine = 4,
-            price = 8
+            price = 8,
+            antibody = 1
         )
 
         /**
@@ -821,7 +889,8 @@ object Foods : OptionList {
             name = R.string.food_butter,
             kcal = 20,
             dopamine = 1,
-            price = 15
+            price = 15,
+            antibody = 1
         )
 
         /**
@@ -832,7 +901,8 @@ object Foods : OptionList {
             name = R.string.food_canned_food,
             kcal = 10,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         override val options = arrayOf<GameOption>(
@@ -885,7 +955,8 @@ object Foods : OptionList {
             name = R.string.food_box_lunch,
             kcal = 40,
             dopamine = 14,
-            price = 15
+            price = 15,
+            antibody = 1
         )
 
         /**
@@ -896,7 +967,8 @@ object Foods : OptionList {
             name = R.string.food_rice_cake,
             kcal = 10,
             dopamine = 8,
-            price = 3
+            price = 3,
+            antibody = 1
         )
 
         /**
@@ -907,7 +979,8 @@ object Foods : OptionList {
             name = R.string.food_rice_ball,
             kcal = 10,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -918,7 +991,8 @@ object Foods : OptionList {
             name = R.string.food_rice,
             kcal = 50,
             dopamine = 10,
-            price = 3
+            price = 3,
+            antibody = 1
         )
 
         /**
@@ -929,7 +1003,8 @@ object Foods : OptionList {
             name = R.string.food_curry_rice,
             kcal = 40,
             dopamine = 14,
-            price = 15
+            price = 15,
+            antibody = 1
         )
 
         /**
@@ -940,7 +1015,8 @@ object Foods : OptionList {
             name = R.string.food_noodle,
             kcal = 30,
             dopamine = 12,
-            price = 9
+            price = 9,
+            antibody = 1
         )
 
         /**
@@ -951,7 +1027,8 @@ object Foods : OptionList {
             name = R.string.food_pasta,
             kcal = 30,
             dopamine = 14,
-            price = 15
+            price = 15,
+            antibody = 1
         )
 
         /**
@@ -962,7 +1039,8 @@ object Foods : OptionList {
             name = R.string.food_baked_sweet_potatoes,
             kcal = 10,
             dopamine = 16,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -973,7 +1051,8 @@ object Foods : OptionList {
             name = R.string.food_oden,
             kcal = 10,
             dopamine = 14,
-            price = 15
+            price = 15,
+            antibody = 1
         )
 
         /**
@@ -984,7 +1063,8 @@ object Foods : OptionList {
             name = R.string.food_sushi,
             kcal = 20,
             dopamine = 20,
-            price = 35
+            price = 35,
+            antibody = 1
         )
 
         /**
@@ -995,7 +1075,8 @@ object Foods : OptionList {
             name = R.string.food_fried_shrimp,
             kcal = 10,
             dopamine = 8,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -1006,7 +1087,8 @@ object Foods : OptionList {
             name = R.string.food_fish_pan,
             kcal = 1,
             dopamine = 1,
-            price = 1
+            price = 1,
+            antibody = 1
         )
 
         /**
@@ -1017,7 +1099,8 @@ object Foods : OptionList {
             name = R.string.food_yue_bing,
             kcal = 10,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -1028,7 +1111,8 @@ object Foods : OptionList {
             name = R.string.food_dango,
             kcal = 10,
             dopamine = 4,
-            price = 6
+            price = 6,
+            antibody = 1
         )
 
         /**
@@ -1039,7 +1123,8 @@ object Foods : OptionList {
             name = R.string.food_jiao_zi,
             kcal = 15,
             dopamine = 7,
-            price = 6
+            price = 6,
+            antibody = 1
         )
 
         /**
@@ -1050,7 +1135,8 @@ object Foods : OptionList {
             name = R.string.food_lucky_cookie,
             kcal = 1,
             dopamine = 24,
-            price = 15
+            price = 15,
+            antibody = 1
         )
 
         /**
@@ -1061,7 +1147,8 @@ object Foods : OptionList {
             name = R.string.food_takeout,
             kcal = 14,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         override val options = arrayOf<GameOption>(
@@ -1098,7 +1185,8 @@ object Foods : OptionList {
             name = R.string.food_crab,
             kcal = 10,
             dopamine = 24,
-            price = 35
+            price = 35,
+            antibody = 1
         )
 
         /**
@@ -1109,7 +1197,8 @@ object Foods : OptionList {
             name = R.string.food_lobster,
             kcal = 10,
             dopamine = 34,
-            price = 45
+            price = 45,
+            antibody = 1
         )
 
         /**
@@ -1120,7 +1209,8 @@ object Foods : OptionList {
             name = R.string.food_shrimp,
             kcal = 3,
             dopamine = 14,
-            price = 15
+            price = 15,
+            antibody = 1
         )
 
         /**
@@ -1131,7 +1221,8 @@ object Foods : OptionList {
             name = R.string.food_squid,
             kcal = 1,
             dopamine = 9,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -1142,7 +1233,8 @@ object Foods : OptionList {
             name = R.string.food_oyster,
             kcal = 2,
             dopamine = 9,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         override val options = arrayOf<GameOption>(
@@ -1167,7 +1259,8 @@ object Foods : OptionList {
             name = R.string.food_ice_cream_cone,
             kcal = 0,
             dopamine = 14,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -1178,7 +1271,8 @@ object Foods : OptionList {
             name = R.string.food_shaved_ice,
             kcal = 0,
             dopamine = 14,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -1189,7 +1283,8 @@ object Foods : OptionList {
             name = R.string.food_ice_cream,
             kcal = 0,
             dopamine = 14,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -1200,7 +1295,8 @@ object Foods : OptionList {
             name = R.string.food_donut,
             kcal = 5,
             dopamine = 6,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -1211,7 +1307,8 @@ object Foods : OptionList {
             name = R.string.food_cookie,
             kcal = 7,
             dopamine = 5,
-            price = 3
+            price = 3,
+            antibody = 1
         )
 
         /**
@@ -1222,7 +1319,8 @@ object Foods : OptionList {
             name = R.string.food_birthday_cake,
             kcal = 10,
             dopamine = 24,
-            price = 19
+            price = 19,
+            antibody = 1
         )
 
         /**
@@ -1233,7 +1331,8 @@ object Foods : OptionList {
             name = R.string.food_fruit_cake,
             kcal = 10,
             dopamine = 14,
-            price = 15
+            price = 15,
+            antibody = 1
         )
 
         /**
@@ -1244,7 +1343,8 @@ object Foods : OptionList {
             name = R.string.food_cupcakes,
             kcal = 10,
             dopamine = 14,
-            price = 9
+            price = 9,
+            antibody = 1
         )
 
         /**
@@ -1255,7 +1355,8 @@ object Foods : OptionList {
             name = R.string.food_pie,
             kcal = 15,
             dopamine = 14,
-            price = 15
+            price = 15,
+            antibody = 1
         )
 
         /**
@@ -1266,7 +1367,8 @@ object Foods : OptionList {
             name = R.string.food_chocolate,
             kcal = 10,
             dopamine = 9,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -1277,7 +1379,8 @@ object Foods : OptionList {
             name = R.string.food_candy,
             kcal = 1,
             dopamine = 9,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -1288,7 +1391,8 @@ object Foods : OptionList {
             name = R.string.food_lollipop,
             kcal = 1,
             dopamine = 6,
-            price = 0
+            price = 0,
+            antibody = 1
         )
 
         /**
@@ -1299,7 +1403,8 @@ object Foods : OptionList {
             name = R.string.food_pudding,
             kcal = 10,
             dopamine = 8,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -1310,7 +1415,8 @@ object Foods : OptionList {
             name = R.string.food_honey,
             kcal = 10,
             dopamine = 14,
-            price = 8
+            price = 8,
+            antibody = 1
         )
 
         override val options = arrayOf<GameOption>(
@@ -1344,7 +1450,8 @@ object Foods : OptionList {
             name = R.string.food_bottle,
             kcal = 6,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 7
         )
 
         /**
@@ -1355,7 +1462,8 @@ object Foods : OptionList {
             name = R.string.food_milk,
             kcal = 6,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 4
         )
 
         /**
@@ -1366,7 +1474,8 @@ object Foods : OptionList {
             name = R.string.food_coffee,
             kcal = 1,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -1377,7 +1486,8 @@ object Foods : OptionList {
             name = R.string.food_tea,
             kcal = 0,
             dopamine = 5,
-            price = 5
+            price = 5,
+            antibody = 4
         )
 
         /**
@@ -1388,7 +1498,8 @@ object Foods : OptionList {
             name = R.string.food_green_tea,
             kcal = 0,
             dopamine = 5,
-            price = 5
+            price = 5,
+            antibody = 3
         )
 
         /**
@@ -1399,7 +1510,8 @@ object Foods : OptionList {
             name = R.string.food_sake,
             kcal = 0,
             dopamine = 2,
-            price = 5
+            price = 5,
+            antibody = 2
         )
 
         /**
@@ -1410,7 +1522,8 @@ object Foods : OptionList {
             name = R.string.food_champagne,
             kcal = 0,
             dopamine = 8,
-            price = 15
+            price = 15,
+            antibody = 1
         )
 
         /**
@@ -1421,7 +1534,8 @@ object Foods : OptionList {
             name = R.string.food_red_wine,
             kcal = 0,
             dopamine = 8,
-            price = 15
+            price = 15,
+            antibody = 4
         )
 
         /**
@@ -1432,7 +1546,8 @@ object Foods : OptionList {
             name = R.string.food_cocktail,
             kcal = 0,
             dopamine = 14,
-            price = 25
+            price = 25,
+            antibody = 2
         )
 
         /**
@@ -1443,7 +1558,8 @@ object Foods : OptionList {
             name = R.string.food_fruit_drink,
             kcal = 0,
             dopamine = 24,
-            price = 15
+            price = 15,
+            antibody = 2
         )
 
         /**
@@ -1454,7 +1570,8 @@ object Foods : OptionList {
             name = R.string.food_beer,
             kcal = 0,
             dopamine = 4,
-            price = 5
+            price = 5,
+            antibody = 1
         )
 
         /**
@@ -1465,7 +1582,8 @@ object Foods : OptionList {
             name = R.string.food_milk_tea,
             kcal = 10,
             dopamine = 34,
-            price = 9
+            price = 9,
+            antibody = 1
         )
 
         /**
@@ -1476,7 +1594,8 @@ object Foods : OptionList {
             name = R.string.food_juice,
             kcal = 0,
             dopamine = 4,
-            price = 2
+            price = 2,
+            antibody = 5
         )
 
         /**
@@ -1487,7 +1606,8 @@ object Foods : OptionList {
             name = R.string.food_yerba_mate,
             kcal = 0,
             dopamine = 2,
-            price = 5
+            price = 5,
+            antibody = 2
         )
 
         override val options = arrayOf<GameOption>(
