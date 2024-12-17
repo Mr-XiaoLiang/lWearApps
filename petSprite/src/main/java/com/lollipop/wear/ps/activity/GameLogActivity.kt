@@ -217,7 +217,11 @@ class GameLogActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListene
 
             @SuppressLint("SetTextI18n")
             fun bind(log: GameLog) {
-                binding.messageView.text = "${log.who} ${log.what}"
+                if (log.reason.isEmpty()) {
+                    binding.messageView.text = "${log.who} ${log.what}"
+                } else {
+                    binding.messageView.text = "${log.who} ${log.reason}, ${log.what}"
+                }
                 binding.timeView.text = dateFormat.format(Date(log.time))
             }
 

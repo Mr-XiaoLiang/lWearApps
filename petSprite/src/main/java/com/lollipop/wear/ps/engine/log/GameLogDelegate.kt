@@ -23,7 +23,16 @@ class GameLogDelegate(private val context: Context) : GameStateManager.OnOptionL
                 return
             }
             val what = context.getString(things.action.resId, context.getString(things.option.name))
-            putCurrentLog(what = what, option = things.option::class.java.simpleName)
+            val reason = if (things.reason.display != 0) {
+                context.getString(things.reason.display)
+            } else {
+                ""
+            }
+            putCurrentLog(
+                what = what,
+                option = things.option::class.java.simpleName,
+                reason = reason
+            )
         } catch (e: Throwable) {
             Log.e("GameLogDelegate", "onOption error", e)
         }
@@ -33,14 +42,14 @@ class GameLogDelegate(private val context: Context) : GameStateManager.OnOptionL
         return GameStateManager.currentSprite
     }
 
-    private fun putCurrentLog(what: String, option: String) {
-        putLog(getProtagonist(), what, option)
+    private fun putCurrentLog(what: String, option: String, reason: String) {
+        putLog(getProtagonist(), what, option, reason)
     }
 
-    private fun putLog(who: String, what: String, option: String) {
+    private fun putLog(who: String, what: String, option: String, reason: String) {
         executor.execute {
             try {
-                logStore.addLog(who, what, option)
+                logStore.addLog(who, what, option, reason)
             } catch (e: Throwable) {
                 Log.e("GameLogDelegate", "putLog error", e)
             }

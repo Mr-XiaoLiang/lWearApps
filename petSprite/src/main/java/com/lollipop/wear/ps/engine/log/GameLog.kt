@@ -5,6 +5,6 @@ class GameLog(
     val who: String,
     val time: Long,
     val what: String,
-    val option: String
-) {
-}
+    val option: String,
+    val reason: String
+)

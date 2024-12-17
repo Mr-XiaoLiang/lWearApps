@@ -161,6 +161,9 @@
     <string name="label_state_mood">🎮心情: %1$s</string>
     <string name="label_state_rich">💰财富: %1$s</string>
     <string name="label_state_satiation">🍚饥饿: %1$s</string>
+    <string name="reason_health_low">生病了</string>
+    <string name="reason_mood_low">心情不好</string>
+    <string name="reason_satiation_low">饿了</string>
 
 
 </resources>

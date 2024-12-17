@@ -6,6 +6,7 @@ import com.lollipop.wear.ps.engine.state.BackpackItem
 import com.lollipop.wear.ps.engine.state.BackpackManager
 import com.lollipop.wear.ps.engine.state.GameOption
 import com.lollipop.wear.ps.engine.state.GameOptionAction
+import com.lollipop.wear.ps.engine.state.GameOptionReason
 import com.lollipop.wear.ps.engine.state.GameSomeThings
 import com.lollipop.wear.ps.engine.state.GameState
 import com.lollipop.wear.ps.engine.state.IntGameState
@@ -31,20 +32,24 @@ object FoodsEventProvider : GameController.RandomThingsProvider {
         val state = findFocusState() ?: return null
         val optionList = ArrayList<GameOption>()
         optionList.addAll(Foods.options)
+        var reason: GameOptionReason = GameOptionReason.None
         when (state) {
             HealthState -> {
                 // 健康属性
                 optionList.sortToDescending<GameOption, Antibiotic> { it.antibody }
+                reason = GameOptionReason.HealthLow
             }
 
             MoodState -> {
                 // 心情属性
                 optionList.sortToDescending<GameOption, Toy> { it.dopamine }
+                reason = GameOptionReason.MoodLow
             }
 
             SatiationState -> {
                 // 饱腹属性
                 optionList.sortToDescending<GameOption, Food> { it.kcal }
+                reason = GameOptionReason.SatiationLow
             }
 
             else -> {
@@ -55,9 +60,9 @@ object FoodsEventProvider : GameController.RandomThingsProvider {
         optionList.sortToDescending<GameOption, BackpackItem> { BackpackManager.getItemCount(it) }
         val option = optionList[0]
         return if (option is Food) {
-            GameSomeThings(GameOptionAction.ATE, option)
+            GameSomeThings(reason, GameOptionAction.ATE, option)
         } else {
-            GameSomeThings(GameOptionAction.USED, option)
+            GameSomeThings(reason, GameOptionAction.USED, option)
         }
     }
 

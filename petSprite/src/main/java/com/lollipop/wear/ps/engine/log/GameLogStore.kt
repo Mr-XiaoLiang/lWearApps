@@ -11,11 +11,11 @@ class GameLogStore(context: Context) : DatabaseHelper(context, "game_log", 1) {
             db,
             LogTable.TABLE_NAME,
             LogTable.id,
-            arrayOf(LogTable.time, LogTable.who, LogTable.what, LogTable.option)
+            arrayOf(LogTable.time, LogTable.who, LogTable.what, LogTable.option, LogTable.reason)
         )
     }
 
-    fun addLog(who: String, what: String, option: String) {
+    fun addLog(who: String, what: String, option: String, reason: String) {
         val time = System.currentTimeMillis()
         insert(
             LogTable.TABLE_NAME,
@@ -23,7 +23,8 @@ class GameLogStore(context: Context) : DatabaseHelper(context, "game_log", 1) {
                 LogTable.who.valueOf(who),
                 LogTable.what.valueOf(what),
                 LogTable.option.valueOf(option),
-                LogTable.time.valueOf(time)
+                LogTable.time.valueOf(time),
+                LogTable.reason.valueOf(reason)
             )
         )
     }
@@ -36,7 +37,8 @@ class GameLogStore(context: Context) : DatabaseHelper(context, "game_log", 1) {
                 LogTable.who,
                 LogTable.what,
                 LogTable.option,
-                LogTable.time
+                LogTable.time,
+                LogTable.reason
             ),
             suffix = " ORDER BY ${LogTable.time.name} DESC " +
                     " LIMIT ? OFFSET ? ",
@@ -47,7 +49,8 @@ class GameLogStore(context: Context) : DatabaseHelper(context, "game_log", 1) {
                 who = LogTable.who.getValue(it),
                 what = LogTable.what.getValue(it),
                 option = LogTable.option.getValue(it),
-                time = LogTable.time.getValue(it)
+                time = LogTable.time.getValue(it),
+                reason = LogTable.reason.getValue(it)
             )
         }
     }
@@ -61,6 +64,7 @@ class GameLogStore(context: Context) : DatabaseHelper(context, "game_log", 1) {
         val who = TextColumn("log_who", "")
         val what = TextColumn("log_what", "")
         val option = TextColumn("log_option", "")
+        val reason = TextColumn("log_reason", "")
 
     }
 
