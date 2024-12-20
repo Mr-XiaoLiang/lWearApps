@@ -165,5 +165,16 @@
     <string name="reason_mood_low">心情不好</string>
     <string name="reason_satiation_low">饿了</string>
 
+    <!--  幸运捡到钱  -->
+    <string name="lucky_money_1">💰1</string>
+    <string name="lucky_money_10">10</string>
+    <string name="lucky_money_20">20</string>
+    <string name="lucky_money_50">50</string>
+    <string name="lucky_money_100">100</string>
+    <string name="lucky_money_200">200</string>
+    <string name="lucky_money_500">500</string>
+    <string name="lucky_money_5">5</string>
+    <string name="reason_lucky">真幸运</string>
+
 
 </resources>
