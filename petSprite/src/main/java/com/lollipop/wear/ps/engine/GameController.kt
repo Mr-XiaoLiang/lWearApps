@@ -1,14 +1,23 @@
 package com.lollipop.wear.ps.engine
 
 import android.content.Context
+import android.util.Log
 import com.lollipop.wear.basic.doAsync
 import com.lollipop.wear.basic.onUI
+import com.lollipop.wear.ps.engine.state.GameOption
+import com.lollipop.wear.ps.engine.state.GameOptionAction
+import com.lollipop.wear.ps.engine.state.GameOptionReason
 import com.lollipop.wear.ps.engine.state.GameSomeThings
 import com.lollipop.wear.ps.engine.state.GameStateManager
 import com.lollipop.wear.utils.PreferencesDelegate
 import kotlin.random.Random
 
 object GameController {
+
+    const val WEIGHT_NONE = 0
+    const val WEIGHT_LOW = 20
+    const val WEIGHT_MIDDLE = 50
+    const val WEIGHT_HIGH = 100
 
     private var currentGameTime = 0L
 
@@ -121,6 +130,40 @@ object GameController {
          * 它会在子线程中执行，所以可以做耗时的操作，但是不要更新UI
          */
         fun getThings(): GameSomeThings?
+
+    }
+
+    abstract class SimpleRandomThingsProvider(
+        override val weight: Int
+    ) : RandomThingsProvider {
+
+        protected fun randomOption(options: Array<GameOption>): GameOption? {
+            try {
+                val size = options.size
+                if (size < 1) {
+                    return null
+                }
+                val nextInt = Random.nextInt(size)
+                return options[nextInt]
+            } catch (e: Exception) {
+                Log.e("SimpleRandomThingsProvider", "randomOption: ", e)
+            }
+            return null
+        }
+
+        protected fun randomThings(
+            options: Array<GameOption>,
+            reason: GameOptionReason,
+            action: GameOptionAction,
+        ): GameSomeThings? {
+            try {
+                val nextOption = randomOption(options) ?: return null
+                return GameSomeThings(reason, action, nextOption)
+            } catch (e: Exception) {
+                Log.e("SimpleRandomThingsProvider", "randomThings: ", e)
+            }
+            return null
+        }
 
     }
 

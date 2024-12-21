@@ -20,9 +20,7 @@ import com.lollipop.wear.ps.engine.state.type.Toy
 /**
  * 食物相关的事件
  */
-object FoodsEventProvider : GameController.RandomThingsProvider {
-
-    override val weight: Int = 100
+object FoodsEventProvider : GameController.SimpleRandomThingsProvider(GameController.WEIGHT_HIGH) {
 
     private val stateArray by lazy {
         arrayOf(HealthState, MoodState, SatiationState)

@@ -37,7 +37,12 @@ enum class GameOptionAction(val resId: Int) {
     /**
      * 完成了什么事情
      */
-    DONE(R.string.action_done)
+    DONE(R.string.action_done),
+
+    /**
+     * 生病了
+     */
+    SICK(R.string.action_sick)
 
 
 }

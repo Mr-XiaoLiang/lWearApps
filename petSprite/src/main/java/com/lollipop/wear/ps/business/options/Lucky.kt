@@ -22,49 +22,49 @@ object Lucky : OptionList {
 
         object Money1 : MoneyOption(
             key = "lucky_money_1",
-            name = R.string.lucky_money_1,
+            name = R.string.label_lucky_money_1,
             amount = 1,
         )
 
         object Money5 : MoneyOption(
             key = "lucky_money_5",
-            name = R.string.lucky_money_5,
+            name = R.string.label_lucky_money_5,
             amount = 10,
         )
 
         object Money10 : MoneyOption(
             key = "lucky_money_10",
-            name = R.string.lucky_money_10,
+            name = R.string.label_lucky_money_10,
             amount = 10,
         )
 
         object Money20 : MoneyOption(
             key = "lucky_money_20",
-            name = R.string.lucky_money_20,
+            name = R.string.label_lucky_money_20,
             amount = 20,
         )
 
         object Money50 : MoneyOption(
             key = "lucky_money_50",
-            name = R.string.lucky_money_50,
+            name = R.string.label_lucky_money_50,
             amount = 50,
         )
 
         object Money100 : MoneyOption(
             key = "lucky_money_100",
-            name = R.string.lucky_money_100,
+            name = R.string.label_lucky_money_100,
             amount = 100,
         )
 
         object Money200 : MoneyOption(
             key = "lucky_money_200",
-            name = R.string.lucky_money_200,
+            name = R.string.label_lucky_money_200,
             amount = 200,
         )
 
         object Money500 : MoneyOption(
             key = "lucky_money_500",
-            name = R.string.lucky_money_500,
+            name = R.string.label_lucky_money_500,
             amount = 500,
         )
 

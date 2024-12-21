@@ -6,9 +6,7 @@ import com.lollipop.wear.ps.engine.state.GameSomeThings
 /**
  * 工作相关的事件
  */
-object WorkEventProvider : GameController.RandomThingsProvider {
-
-    override val weight: Int = 100
+object WorkEventProvider : GameController.SimpleRandomThingsProvider(GameController.WEIGHT_HIGH) {
 
     override fun getThings(): GameSomeThings? {
         return null

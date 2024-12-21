@@ -11,6 +11,7 @@
     <string name="action_discarded">丢弃了 %1$s</string>
     <string name="action_started">开始了 %1$s</string>
     <string name="action_done">完成了 %1$s</string>
+    <string name="action_sick">生病了 得了%1$s</string>
 
     <!--  食物  -->
 
@@ -161,20 +162,28 @@
     <string name="label_state_mood">🎮心情: %1$s</string>
     <string name="label_state_rich">💰财富: %1$s</string>
     <string name="label_state_satiation">🍚饥饿: %1$s</string>
+
+    <!--  原因  -->
     <string name="reason_health_low">生病了</string>
     <string name="reason_mood_low">心情不好</string>
     <string name="reason_satiation_low">饿了</string>
+    <string name="reason_lucky">真幸运</string>
 
     <!--  幸运捡到钱  -->
-    <string name="lucky_money_1">💰1</string>
-    <string name="lucky_money_10">10</string>
-    <string name="lucky_money_20">20</string>
-    <string name="lucky_money_50">50</string>
-    <string name="lucky_money_100">100</string>
-    <string name="lucky_money_200">200</string>
-    <string name="lucky_money_500">500</string>
-    <string name="lucky_money_5">5</string>
-    <string name="reason_lucky">真幸运</string>
+    <string name="label_lucky_money_1">💰1</string>
+    <string name="label_lucky_money_10">10</string>
+    <string name="label_lucky_money_20">20</string>
+    <string name="label_lucky_money_50">50</string>
+    <string name="label_lucky_money_100">100</string>
+    <string name="label_lucky_money_200">200</string>
+    <string name="label_lucky_money_500">500</string>
+    <string name="label_lucky_money_5">5</string>
+
+
+    <!--  疾病  -->
+    <string name="label_negative_disease_cold">💊感冒</string>
+    <string name="label_negative_disease_fever">💉发烧</string>
+    <string name="label_negative_disease_diarrhea">💉腹泻</string>
 
 
 </resources>
