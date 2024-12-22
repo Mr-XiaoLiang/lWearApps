@@ -185,5 +185,9 @@
     <string name="label_negative_disease_fever">💉发烧</string>
     <string name="label_negative_disease_diarrhea">💉腹泻</string>
 
+    <!--  工作  -->
+    <string name="label_work_leafleteer">📰传单派发</string>
+    <string name="label_work_librarian">📚图书馆整理图书</string>
+
 
 </resources>
