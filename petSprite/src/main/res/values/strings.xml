@@ -171,13 +171,13 @@
 
     <!--  幸运捡到钱  -->
     <string name="label_lucky_money_1">💰1</string>
-    <string name="label_lucky_money_10">10</string>
-    <string name="label_lucky_money_20">20</string>
-    <string name="label_lucky_money_50">50</string>
-    <string name="label_lucky_money_100">100</string>
-    <string name="label_lucky_money_200">200</string>
-    <string name="label_lucky_money_500">500</string>
-    <string name="label_lucky_money_5">5</string>
+    <string name="label_lucky_money_5">💰5</string>
+    <string name="label_lucky_money_10">💰10</string>
+    <string name="label_lucky_money_20">💰20</string>
+    <string name="label_lucky_money_50">💰50</string>
+    <string name="label_lucky_money_100">💰100</string>
+    <string name="label_lucky_money_200">💰200</string>
+    <string name="label_lucky_money_500">💰500</string>
 
 
     <!--  疾病  -->
@@ -188,6 +188,15 @@
     <!--  工作  -->
     <string name="label_work_leafleteer">📰传单派发</string>
     <string name="label_work_librarian">📚图书馆整理图书</string>
+    <string name="label_toy_stare_blankly">💫发呆</string>
+    <string name="label_toy_ping_pong">🏓乒乓球</string>
+    <string name="label_toy_football">⚽足球</string>
+    <string name="label_toy_basketball">🏀篮球</string>
+    <string name="label_toy_badminton">🏸羽毛球</string>
+    <string name="label_toy_tennis">🎾网球</string>
+    <string name="label_toy_bowling">🎳保龄球</string>
+    <string name="label_toy_golf">🏌高尔夫秋</string>
+    <string name="label_toy_swimming">🤿游泳</string>
 
 
 </resources>
