@@ -2,7 +2,6 @@ package com.lollipop.wear.ps.engine.sprite
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Log
 import com.lollipop.wear.ps.engine.sprite.SpriteFrame.Line
 import java.io.File
@@ -81,7 +80,7 @@ sealed class SpriteInfo(
 
         override fun loadBitmap(context: Context): Bitmap? {
             try {
-                return BitmapFactory.decodeStream(context.assets.open(path))
+                return BitmapCache.optAssets(context, path)
             } catch (e: Throwable) {
                 Log.e("SpriteInfo", "FromAssets.loadBitmap", e)
             }
@@ -106,7 +105,7 @@ sealed class SpriteInfo(
     ) : SpriteInfo(left, up, right, down) {
         override fun loadBitmap(context: Context): Bitmap? {
             try {
-                return BitmapFactory.decodeResource(context.resources, id)
+                return BitmapCache.optResource(context, id)
             } catch (e: Throwable) {
                 Log.e("SpriteInfo", "FromResource.loadBitmap", e)
             }
@@ -130,7 +129,7 @@ sealed class SpriteInfo(
     ) : SpriteInfo(left, up, right, down) {
         override fun loadBitmap(context: Context): Bitmap? {
             try {
-                return BitmapFactory.decodeFile(file.path)
+                return BitmapCache.optFile(file)
             } catch (e: Throwable) {
                 Log.e("SpriteInfo", "FromFile.loadBitmap", e)
             }
@@ -154,7 +153,7 @@ sealed class SpriteInfo(
     ) : SpriteInfo(left, up, right, down) {
         override fun loadBitmap(context: Context): Bitmap? {
             try {
-                return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                return BitmapCache.optByteArray(bytes)
             } catch (e: Throwable) {
                 Log.e("SpriteInfo", "FromByteArray.loadBitmap", e)
             }
