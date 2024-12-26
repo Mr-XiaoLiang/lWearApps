@@ -103,7 +103,7 @@ class SpritePlayer @JvmOverloads constructor(
     }
 
     private fun onStateChanged() {
-        postInvalidate()
+        postInvalidateOnAnimation()
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -113,7 +113,7 @@ class SpritePlayer @JvmOverloads constructor(
             onDrawFrame(frame, canvas)
         }
         if (isRunning) {
-            postInvalidate()
+            postInvalidateOnAnimation()
         }
     }
 

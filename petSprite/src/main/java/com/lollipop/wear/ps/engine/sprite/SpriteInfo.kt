@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
 import com.lollipop.wear.ps.engine.sprite.SpriteFrame.Line
+import org.json.JSONObject
 import java.io.File
 
 sealed class SpriteInfo(
@@ -12,6 +13,8 @@ sealed class SpriteInfo(
     val right: SpriteFrame,
     val down: SpriteFrame
 ) {
+
+    var name = ""
 
     abstract fun loadBitmap(context: Context): Bitmap?
 
@@ -194,7 +197,13 @@ sealed class SpriteInfo(
 
 sealed class SpriteFrame {
 
-    data object None : SpriteFrame()
+    abstract fun toJson(): JSONObject
+
+    data object None : SpriteFrame() {
+        override fun toJson(): JSONObject {
+            return JSONObject()
+        }
+    }
 
     class Line(
         val count: Int,
@@ -202,15 +211,51 @@ sealed class SpriteFrame {
         val left: Int,
         val frameWidth: Int,
         val frameHeight: Int
-    ) : SpriteFrame()
+    ) : SpriteFrame() {
+        override fun toJson(): JSONObject {
+            return JSONObject().apply {
+                put(KEY_COUNT, count)
+                put(KEY_TOP, top)
+                put(KEY_LEFT, left)
+                put(KEY_FRAME_WIDTH, frameWidth)
+                put(KEY_FRAME_HEIGHT, frameHeight)
+            }
+        }
+
+    }
 
     companion object {
+
+        const val KEY_COUNT = "count"
+        const val KEY_TOP = "top"
+        const val KEY_LEFT = "left"
+        const val KEY_FRAME_WIDTH = "frameWidth"
+        const val KEY_FRAME_HEIGHT = "frameHeight"
+
+        fun parse(json: JSONObject): SpriteFrame {
+            val count = json.optInt(KEY_COUNT, 0)
+            if (count > 0) {
+                val frameWidth = json.optInt(KEY_FRAME_WIDTH, 0)
+                val frameHeight = json.optInt(KEY_FRAME_HEIGHT, 0)
+                if (frameWidth > 0 && frameHeight > 0) {
+                    return Line(
+                        count = count,
+                        top = json.optInt(KEY_TOP, 0),
+                        left = json.optInt(KEY_LEFT, 0),
+                        frameWidth = frameWidth,
+                        frameHeight = frameHeight
+                    )
+                }
+            }
+            return None
+        }
+
         /**
          * @return [left, up, right, down]
          */
         fun createBy4x4(
             imageWidth: Int,
-            imageHeight: Int,
+            imageHeight: Int = imageWidth,
             paddingLeft: Int = 0,
             paddingTop: Int = 0,
             paddingRight: Int = 0,

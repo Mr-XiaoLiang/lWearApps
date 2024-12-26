@@ -54,6 +54,7 @@ object GameInit {
         BackpackManager.init(app)
         AttributeManager.init(app)
         GameController.init(app)
+        SpriteAssets.init(app)
     }
 
     private fun bindListener(app: Application) {
