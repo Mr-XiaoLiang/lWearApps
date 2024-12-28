@@ -33,6 +33,10 @@
             android:exported="false"
             android:taskAffinity="" />
         <activity
+            android:name=".activity.SpriteSelectActivity"
+            android:exported="false"
+            android:taskAffinity="" />
+        <activity
             android:name=".MainActivity"
             android:enabled="true"
             android:exported="true"
