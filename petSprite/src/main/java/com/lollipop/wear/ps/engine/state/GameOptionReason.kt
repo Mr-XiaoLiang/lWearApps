@@ -14,4 +14,6 @@ sealed class GameOptionReason(val display: Int) {
 
     data object Lucky : GameOptionReason(R.string.reason_lucky)
 
+    data object Feeding : GameOptionReason(R.string.reason_feeding)
+
 }

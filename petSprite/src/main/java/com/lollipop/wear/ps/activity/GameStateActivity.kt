@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lollipop.wear.ps.databinding.ItemSimpleOptionBinding
 import com.lollipop.wear.ps.engine.state.GameState
 import com.lollipop.wear.ps.engine.state.GameStateManager
+import com.lollipop.wear.ps.utils.RoundPageListAdapter
 
 class GameStateActivity : DashboardBasicListActivity() {
 
@@ -32,9 +33,9 @@ class GameStateActivity : DashboardBasicListActivity() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        stateList.add(SpaceInfo)
+        stateList.add(RoundPageListAdapter.SpaceInfo)
         stateList.addAll(GameStateManager.stateList)
-        stateList.add(SpaceInfo)
+        stateList.add(RoundPageListAdapter.SpaceInfo)
         adapter.notifyDataSetChanged()
     }
 
@@ -79,7 +80,7 @@ class GameStateActivity : DashboardBasicListActivity() {
 
     private class StateItemHolder(
         binding: ItemSimpleOptionBinding
-    ) : SimpleHolder(binding) {
+    ) : RoundPageListAdapter.SimpleHolder(binding) {
         override fun onItemClick() {
             // 不考虑处理
         }

@@ -36,7 +36,7 @@ object GameStateManager : BasicDataManager("PS_State.lf") {
             }
             onUI {
                 // 更新数据之后，发起一次刷新
-                onOption(GameOptionAction.DONE, SignalOption)
+                onOption(GameSomeThings(GameOptionReason.None, GameOptionAction.DONE, SignalOption))
             }
         }
     }
@@ -78,8 +78,8 @@ object GameStateManager : BasicDataManager("PS_State.lf") {
         return resultOption
     }
 
-    fun onOption(action: GameOptionAction, option: GameOption) {
-        val realOption = filterOption(GameSomeThings(action, option))
+    fun onOption(things: GameSomeThings) {
+        val realOption = filterOption(things)
         stateList.forEach {
             it.onOption(realOption)
         }

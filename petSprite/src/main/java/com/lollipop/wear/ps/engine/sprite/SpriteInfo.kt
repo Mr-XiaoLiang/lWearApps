@@ -214,6 +214,18 @@ sealed class SpriteInfo(
         const val TYPE_FILE = "file"
         const val TYPE_BYTE_ARRAY = "byteArray"
 
+        fun parse(value: String): SpriteInfo {
+            try {
+                if (value.isEmpty()) {
+                    return None
+                }
+                return parse(JSONObject(value))
+            } catch (e: Throwable) {
+                Log.e("SpriteInfo", "parse", e)
+            }
+            return None
+        }
+
         fun parse(json: JSONObject): SpriteInfo {
             val type = json.optString(KEY_TYPE, "")
             val info = when (type) {

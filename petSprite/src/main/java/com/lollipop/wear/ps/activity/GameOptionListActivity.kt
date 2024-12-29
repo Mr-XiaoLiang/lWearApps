@@ -15,9 +15,12 @@ import com.lollipop.wear.ps.engine.state.BackpackItem
 import com.lollipop.wear.ps.engine.state.BackpackManager
 import com.lollipop.wear.ps.engine.state.GameOption
 import com.lollipop.wear.ps.engine.state.GameOptionAction
+import com.lollipop.wear.ps.engine.state.GameOptionReason
+import com.lollipop.wear.ps.engine.state.GameSomeThings
 import com.lollipop.wear.ps.engine.state.GameStateManager
 import com.lollipop.wear.ps.engine.state.type.Commodity
 import com.lollipop.wear.ps.engine.state.type.Food
+import com.lollipop.wear.ps.utils.RoundPageListAdapter
 
 class GameOptionListActivity : DashboardBasicListActivity() {
 
@@ -46,9 +49,9 @@ class GameOptionListActivity : DashboardBasicListActivity() {
             finish()
             return
         }
-        optionList.add(SpaceInfo)
+        optionList.add(RoundPageListAdapter.SpaceInfo)
         optionList.addAll(menu.getOptionList())
-        optionList.add(SpaceInfo)
+        optionList.add(RoundPageListAdapter.SpaceInfo)
         adapter.notifyDataSetChanged()
     }
 
@@ -61,9 +64,21 @@ class GameOptionListActivity : DashboardBasicListActivity() {
 
     private fun onOptionClick(option: GameOption) {
         if (option is Food) {
-            GameStateManager.onOption(GameOptionAction.ATE, option)
+            GameStateManager.onOption(
+                GameSomeThings(
+                    GameOptionReason.Feeding,
+                    GameOptionAction.ATE,
+                    option
+                )
+            )
         } else {
-            GameStateManager.onOption(GameOptionAction.USED, option)
+            GameStateManager.onOption(
+                GameSomeThings(
+                    GameOptionReason.Feeding,
+                    GameOptionAction.USED,
+                    option
+                )
+            )
         }
         GameStateManager.save()
     }
@@ -118,7 +133,7 @@ class GameOptionListActivity : DashboardBasicListActivity() {
     private class OptionHolder(
         private val binding: ItemOptionBinding,
         private val clickCallback: (Int) -> Unit
-    ) : ListHolder(binding.root) {
+    ) : RoundPageListAdapter.ListHolder(binding.root) {
 
         init {
             itemView.setOnClickListener {

@@ -168,6 +168,7 @@
     <string name="reason_mood_low">心情不好</string>
     <string name="reason_satiation_low">饿了</string>
     <string name="reason_lucky">真幸运</string>
+    <string name="reason_feeding">被投喂</string>
 
     <!--  幸运捡到钱  -->
     <string name="label_lucky_money_1">💰1</string>

@@ -6,6 +6,7 @@
     android:paddingVertical="4dp">
 
     <LinearLayout
+        android:id="@+id/itemContentView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_item_option"
@@ -29,7 +30,6 @@
             tools:text="ABOMASNOW" />
 
     </LinearLayout>
-
 
 
 </FrameLayout>

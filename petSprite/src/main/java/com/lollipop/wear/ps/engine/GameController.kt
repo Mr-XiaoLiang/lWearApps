@@ -105,7 +105,7 @@ object GameController {
     }
 
     private fun postOption(things: GameSomeThings) {
-        GameStateManager.onOption(things.action, things.option)
+        GameStateManager.onOption(things)
     }
 
     private fun getPreferences(context: Context): ControllerPreferences {

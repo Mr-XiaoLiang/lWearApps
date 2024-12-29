@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lollipop.wear.ps.R
 import com.lollipop.wear.ps.databinding.ItemSimpleOptionBinding
+import com.lollipop.wear.ps.utils.RoundPageListAdapter
 
 class ContentMenuActivity : DashboardBasicListActivity() {
 
@@ -25,9 +26,9 @@ class ContentMenuActivity : DashboardBasicListActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        optionList.add(SpaceInfo)
+        optionList.add(RoundPageListAdapter.SpaceInfo)
         optionList.addAll(MenuItem.entries)
-        optionList.add(SpaceInfo)
+        optionList.add(RoundPageListAdapter.SpaceInfo)
     }
 
     override fun initRecyclerView(recyclerView: RecyclerView) {
@@ -106,7 +107,7 @@ class ContentMenuActivity : DashboardBasicListActivity() {
     private class MenuOptionHolder(
         binding: ItemSimpleOptionBinding,
         private val onClickCallback: (Int) -> Unit
-    ) : SimpleHolder(binding) {
+    ) : RoundPageListAdapter.SimpleHolder(binding) {
 
         override fun onItemClick() {
             onClickCallback(adapterPosition)
