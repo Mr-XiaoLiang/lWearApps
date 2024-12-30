@@ -2,6 +2,7 @@ package com.lollipop.wear.ps.engine.log
 
 import android.content.Context
 import android.util.Log
+import com.lollipop.wear.ps.engine.GameController
 import com.lollipop.wear.ps.engine.option.SignalOption
 import com.lollipop.wear.ps.engine.state.GameSomeThings
 import com.lollipop.wear.ps.engine.state.GameStateManager
@@ -39,7 +40,7 @@ class GameLogDelegate(private val context: Context) : GameStateManager.OnOptionL
     }
 
     private fun getProtagonist(): String {
-        return GameStateManager.currentSprite
+        return GameController.currentSprite.name
     }
 
     private fun putCurrentLog(what: String, option: String, reason: String) {

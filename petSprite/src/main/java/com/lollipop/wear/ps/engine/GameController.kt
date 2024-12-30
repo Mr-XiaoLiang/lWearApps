@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.lollipop.wear.basic.doAsync
 import com.lollipop.wear.basic.onUI
+import com.lollipop.wear.ps.engine.sprite.SpriteInfo
 import com.lollipop.wear.ps.engine.state.GameOption
 import com.lollipop.wear.ps.engine.state.GameOptionAction
 import com.lollipop.wear.ps.engine.state.GameOptionReason
@@ -32,6 +33,9 @@ object GameController {
 
     private val providerList = ArrayList<RandomThingsProvider>()
     private var providerWeightTotal = 0
+
+    var currentSprite: SpriteInfo = SpriteInfo.None
+        private set
 
     fun addProvider(provider: RandomThingsProvider) {
         if (provider.weight == 0) {
@@ -112,6 +116,10 @@ object GameController {
         return pref ?: ControllerPreferences(context).also {
             pref = it
         }
+    }
+
+    private fun resumeSprite(context: Context) {
+
     }
 
     private class ControllerPreferences(

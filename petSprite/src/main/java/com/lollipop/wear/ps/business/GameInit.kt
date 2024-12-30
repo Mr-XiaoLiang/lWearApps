@@ -11,6 +11,7 @@ import com.lollipop.wear.ps.engine.attr.AttributeManager
 import com.lollipop.wear.ps.engine.log.GameLogDelegate
 import com.lollipop.wear.ps.engine.state.BackpackManager
 import com.lollipop.wear.ps.engine.state.GameStateManager
+import com.lollipop.wear.ps.engine.state.SpriteDataStore
 import com.lollipop.wear.ps.engine.state.impl.HealthState
 import com.lollipop.wear.ps.engine.state.impl.MoodState
 import com.lollipop.wear.ps.engine.state.impl.RichState
@@ -50,6 +51,7 @@ object GameInit {
     }
 
     private fun initManager(app: Application) {
+        SpriteDataStore.init(app)
         GameStateManager.init(app)
         BackpackManager.init(app)
         AttributeManager.init(app)

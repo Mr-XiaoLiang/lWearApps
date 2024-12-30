@@ -4,10 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lollipop.wear.ps.R
 import com.lollipop.wear.ps.databinding.ItemSimpleOptionBinding
+import com.lollipop.wear.ps.engine.sprite.SpriteInfo
+import com.lollipop.wear.ps.engine.state.SpriteDataStore
 import com.lollipop.wear.ps.utils.RoundPageListAdapter
 
 class ContentMenuActivity : DashboardBasicListActivity() {
@@ -24,11 +27,26 @@ class ContentMenuActivity : DashboardBasicListActivity() {
         BackpackOptionAdapter(optionList, ::onItemClick)
     }
 
+    private var spriteSelectLauncher: ActivityResultLauncher<SpriteInfo>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        spriteSelectLauncher = registerForActivityResult(SpriteSelectActivity.ResultContracts()) { info ->
+            onSpriteSelectResult(info)
+        }
+
         optionList.add(RoundPageListAdapter.SpaceInfo)
         optionList.addAll(MenuItem.entries)
         optionList.add(RoundPageListAdapter.SpaceInfo)
+    }
+
+    private fun onSpriteSelectResult(info: SpriteInfo) {
+        SpriteDataStore.updateSprite(info)
+    }
+
+    private fun openSpriteSelect() {
+        spriteSelectLauncher?.launch(SpriteDataStore.currentSprite)
     }
 
     override fun initRecyclerView(recyclerView: RecyclerView) {
@@ -49,6 +67,10 @@ class ContentMenuActivity : DashboardBasicListActivity() {
 
             MenuItem.Backpack -> {
                 BackpackActivity.start(this)
+            }
+
+            MenuItem.Sprite -> {
+                openSpriteSelect()
             }
         }
     }
@@ -124,6 +146,7 @@ class ContentMenuActivity : DashboardBasicListActivity() {
         GameState(R.string.label_game_state),
         GameLog(R.string.label_game_log),
         Backpack(R.string.label_backpack),
+        Sprite(R.string.label_sprite),
 
     }
 

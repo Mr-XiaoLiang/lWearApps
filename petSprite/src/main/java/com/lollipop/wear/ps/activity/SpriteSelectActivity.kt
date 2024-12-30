@@ -1,5 +1,6 @@
 package com.lollipop.wear.ps.activity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -52,15 +53,23 @@ class SpriteSelectActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
         binding.selectedButton.setOnClickListener {
-            setResult(this, selectedInfo)
-            onBackPressedDispatcher.onBackPressed()
+            onConfirmClick()
         }
+
+        adapter.bindViewSize(binding.root)
 
         initData()
 
         setResult(RESULT_CANCELED)
     }
 
+    private fun onConfirmClick() {
+        val info = SpriteAssets.filterEmptySprite(selectedInfo)
+        setResult(this, info)
+        onBackPressedDispatcher.onBackPressed()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
     private fun initData() {
         selectedInfo = SpriteInfo.parse(intent.getStringExtra(PARAMS_SPRITE_INFO) ?: "")
         spriteList.clear()
@@ -72,7 +81,7 @@ class SpriteSelectActivity : AppCompatActivity() {
     }
 
     private fun onItemClick(info: SpriteInfo) {
-        selectedInfo = info
+        selectedInfo = SpriteAssets.filterEmptySprite(info)
         updateSelectedSprite()
     }
 

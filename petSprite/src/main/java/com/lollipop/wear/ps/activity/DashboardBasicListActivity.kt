@@ -37,10 +37,7 @@ abstract class DashboardBasicListActivity : DashboardBasicActivity() {
     }
 
     protected fun bindViewSize(view: View, adapter: ListAdapter) {
-        view.post {
-            adapter.setSpaceHeight(view.height / 2)
-            adapter.notifyDataSetChanged()
-        }
+        adapter.bindViewSize(view)
     }
 
     protected fun onNextPageLoaded() {

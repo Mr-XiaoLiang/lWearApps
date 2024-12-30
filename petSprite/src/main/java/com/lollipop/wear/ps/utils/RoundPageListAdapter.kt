@@ -1,5 +1,6 @@
 package com.lollipop.wear.ps.utils
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,14 @@ abstract class RoundPageListAdapter(
     private var spaceHeight = 0
 
     private var layoutInflaterImpl: LayoutInflater? = null
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun bindViewSize(view: View, weight: Float = 0.5F) {
+        view.post {
+            setSpaceHeight((view.height * weight).toInt())
+            notifyDataSetChanged()
+        }
+    }
 
     fun setSpaceHeight(height: Int) {
         spaceHeight = height

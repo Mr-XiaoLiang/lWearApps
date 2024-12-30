@@ -5,15 +5,13 @@ import com.lollipop.wear.basic.ListenerManager
 import com.lollipop.wear.basic.doAsync
 import com.lollipop.wear.basic.onUI
 import com.lollipop.wear.ps.engine.option.SignalOption
+import com.lollipop.wear.ps.engine.sprite.SpriteInfo
 import com.lollipop.wear.ps.utils.BasicDataManager
 import org.json.JSONObject
 
 object GameStateManager : BasicDataManager("PS_State.lf") {
 
     val stateList = ArraySet<GameState>()
-
-    var currentSprite: String = ""
-        private set
 
     private val optionListenerList = ListenerManager<OnOptionListener>()
     private val optionFilterList = ListenerManager<GameOptionFilter>()

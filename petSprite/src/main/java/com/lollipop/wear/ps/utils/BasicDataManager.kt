@@ -28,6 +28,7 @@ abstract class BasicDataManager(
                 }
             }
         }
+        onInit(context)
     }
 
     protected open fun onInit(context: Context) {
@@ -35,11 +36,16 @@ abstract class BasicDataManager(
     }
 
     fun save() {
+        onSave()
         dataController?.saveJson { saveData(it) }?.onResult {
             if (it is FileHelper.FileResult.Failure) {
                 Log.e("BasicDataManager", "save", it.error)
             }
         }
+    }
+
+    protected open fun onSave() {
+
     }
 
     protected fun getString(key: String, default: String): String {

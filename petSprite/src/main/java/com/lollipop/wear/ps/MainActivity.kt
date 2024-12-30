@@ -2,6 +2,7 @@ package com.lollipop.wear.ps
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.lollipop.wear.ps.activity.ContentMenuActivity
 import com.lollipop.wear.ps.business.MainDashboardDelegate
 import com.lollipop.wear.ps.databinding.ActivityMainBinding
 import com.lollipop.wear.ps.engine.GameController
@@ -22,6 +23,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         dashboardDelegate.onCreate()
+        binding.backpackButtonClickDelegate.setOnClickListener {
+            ContentMenuActivity.start(this)
+        }
 //        binding.contentPageIndicator.indicatorCount = pageList.size
 //        binding.spritePlayer.setSpriteInfo(
 //            SpriteInfo.createBy4x4(256) { left, up, right, down ->
