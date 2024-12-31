@@ -6,6 +6,7 @@ import com.lollipop.wear.ps.activity.ContentMenuActivity
 import com.lollipop.wear.ps.business.MainDashboardDelegate
 import com.lollipop.wear.ps.databinding.ActivityMainBinding
 import com.lollipop.wear.ps.engine.GameController
+import com.lollipop.wear.ps.engine.SpriteControl
 import com.lollipop.wear.ps.engine.sprite.SpritePlayer
 import com.lollipop.wear.ps.engine.sprite.SpriteToward
 
@@ -17,6 +18,10 @@ class MainActivity : AppCompatActivity() {
 
     private val dashboardDelegate by lazy {
         MainDashboardDelegate(this, binding.dashboardPanel)
+    }
+
+    private val spriteControl by lazy {
+        SpriteControl(binding.gamePanel.spritePlayer)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,13 +49,19 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         GameController.findFuture(this)
+        spriteControl.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        spriteControl.onPause()
     }
 
     private fun updateToward(player: SpritePlayer, toward: SpriteToward) {
         if (player.spriteToward == toward) {
-            player.changedToward(toward, !player.isRunning)
+            player.changedToward(toward)
         } else {
-            player.changedToward(toward, true)
+            player.changedToward(toward)
         }
     }
 

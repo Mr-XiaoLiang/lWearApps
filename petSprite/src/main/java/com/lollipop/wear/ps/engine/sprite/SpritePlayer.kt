@@ -42,10 +42,18 @@ class SpritePlayer @JvmOverloads constructor(
         frameInterval = 1000L / fps
     }
 
-    fun changedToward(toward: SpriteToward, run: Boolean) {
-        this.isRunning = run
+    fun changedToward(toward: SpriteToward) {
         checkSupportedToward(toward)
         onStateChanged()
+    }
+
+    fun resume() {
+        isRunning = true
+        onStateChanged()
+    }
+
+    fun pause() {
+        isRunning = false
     }
 
     private fun checkSupportedToward(expectant: SpriteToward) {
@@ -93,9 +101,11 @@ class SpritePlayer @JvmOverloads constructor(
         val bitmap = spriteInfo.loadBitmap(context)
         if (bitmap != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                paint.shader = BitmapShader(bitmap, Shader.TileMode.DECAL, Shader.TileMode.DECAL)
+                paint.shader =
+                    BitmapShader(bitmap, Shader.TileMode.DECAL, Shader.TileMode.DECAL)
             } else {
-                paint.shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+                paint.shader =
+                    BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
             }
         } else {
             paint.shader = null
