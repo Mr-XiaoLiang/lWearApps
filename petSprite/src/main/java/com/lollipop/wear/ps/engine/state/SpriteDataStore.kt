@@ -1,5 +1,7 @@
 package com.lollipop.wear.ps.engine.state
 
+import android.util.Log
+import com.lollipop.wear.basic.ListenerManager
 import com.lollipop.wear.basic.doAsync
 import com.lollipop.wear.ps.business.SpriteAssets
 import com.lollipop.wear.ps.engine.sprite.SpriteInfo
@@ -7,6 +9,8 @@ import com.lollipop.wear.ps.utils.BasicDataManager
 import org.json.JSONObject
 
 object SpriteDataStore : BasicDataManager("PS_Sprite.lf") {
+
+    private val listenerManager = ListenerManager<OnChangeListener>()
 
     private const val KEY_CURRENT_SPRITE = "currentSprite"
 
@@ -37,8 +41,10 @@ object SpriteDataStore : BasicDataManager("PS_Sprite.lf") {
     }
 
     private fun changeSprite(spriteInfo: SpriteInfo) {
+        Log.d("SpriteDataStore", "changeSprite: ${spriteInfo.name}")
         currentSprite = spriteInfo
         updateMode++
+        listenerManager.invoke { it.onSpriteChange(spriteInfo) }
     }
 
     override fun saveData(out: JSONObject) {
@@ -54,8 +60,20 @@ object SpriteDataStore : BasicDataManager("PS_Sprite.lf") {
         save()
     }
 
+    fun addOnChangeListener(listener: OnChangeListener) {
+        listenerManager.add(listener)
+    }
+
+    fun removeOnChangeListener(listener: OnChangeListener) {
+        listenerManager.remove(listener)
+    }
+
     private fun getDefaultSprite(): SpriteInfo {
         return SpriteAssets.createSprite("PIKACHU.png")
+    }
+
+    fun interface OnChangeListener {
+        fun onSpriteChange(spriteInfo: SpriteInfo)
     }
 
 }

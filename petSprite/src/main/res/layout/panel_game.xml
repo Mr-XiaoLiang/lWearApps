@@ -15,8 +15,8 @@
 
         <com.lollipop.wear.ps.engine.sprite.SpritePlayer
             android:id="@+id/spritePlayer"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             tools:background="#FFF"
             tools:layout_gravity="center" />
     </FrameLayout>
