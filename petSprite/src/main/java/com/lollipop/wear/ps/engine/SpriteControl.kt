@@ -40,7 +40,6 @@ class SpriteControl(
         get() = player.spriteToward
 
     fun onResume() {
-        Log.d("SpriteControl", "onResume")
         speed = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             SPEED_DP,
@@ -69,7 +68,6 @@ class SpriteControl(
     }
 
     private fun nextAction() {
-        Log.d("SpriteControl", "nextAction")
         val c = container ?: return
         containerWidth = c.width
         containerHeight = c.height

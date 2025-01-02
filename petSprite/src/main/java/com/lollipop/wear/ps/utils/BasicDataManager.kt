@@ -23,6 +23,7 @@ abstract class BasicDataManager(
                 }
 
                 is FileHelper.FileResult.Failure -> {
+                    parseData(JSONObject())
                     // 读取失败，重新创建一个
                     saveData(JSONObject())
                 }
