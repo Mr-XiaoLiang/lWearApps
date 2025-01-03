@@ -1,0 +1,203 @@
+<resources>
+    <string name="app_name">宠物精灵</string>
+    <string name="health">💊 %1$d</string>
+    <string name="mood">🎮 %1$d</string>
+    <string name="hunger">🍚 %1$d</string>
+
+    <string name="action_used">使用了 %1$s</string>
+    <string name="action_ate">吃了 %1$s</string>
+    <string name="action_got">获得了 %1$s</string>
+    <string name="action_lost">失去了 %1$s</string>
+    <string name="action_discarded">丢弃了 %1$s</string>
+    <string name="action_started">开始了 %1$s</string>
+    <string name="action_done">完成了 %1$s</string>
+    <string name="action_sick">生病了 得了%1$s</string>
+
+    <!--  食物  -->
+
+    <!--  水果  -->
+    <string name="food_grape">🍇 葡萄</string>
+    <string name="food_melon">🍈 甜瓜</string>
+    <string name="food_watermelon">🍉 西瓜</string>
+    <string name="food_orange">🍊 橘子</string>
+    <string name="food_lemon">🍋 柠檬</string>
+    <string name="food_banana">🍌 香蕉</string>
+    <string name="food_mango">🥭 芒果</string>
+    <string name="food_pineapple">🍍 菠萝</string>
+    <string name="food_cherry">🍒 樱桃</string>
+    <string name="food_red_apple">🍎 红苹果</string>
+    <string name="food_green_apple">🍏 绿苹果</string>
+    <string name="food_pear">🍐 梨</string>
+    <string name="food_peach">🍑 桃</string>
+    <string name="food_strawberry">🍓 草莓</string>
+    <string name="food_blueberry">🫐 蓝莓</string>
+    <string name="food_kiwi">🥝 猕猴桃</string>
+    <string name="food_persimmon">🍅 柿子</string>
+    <string name="food_olive">🫒 橄榄</string>
+    <string name="food_coconut">🥥 椰子</string>
+    <string name="food_avocado">🥑 鳄梨</string>
+    <!--  蔬菜  -->
+    <string name="food_eggplant">🍆 茄子</string>
+    <string name="food_potato">🥔 土豆</string>
+    <string name="food_broccoli">🥦 西兰花</string>
+    <string name="food_carrot">🥕 胡萝卜</string>
+    <string name="food_corn">🌽 玉米</string>
+    <string name="food_red_pepper">🌶️ 红辣椒</string>
+    <string name="food_bell_pepper">🫑 灯笼椒</string>
+    <string name="food_cucumber">🥒 黄瓜</string>
+    <string name="food_greengrocery">🥬 青菜</string>
+    <string name="food_garlic">🧄 蒜</string>
+    <string name="food_onion">🧅 洋葱</string>
+    <string name="food_mushroom">🍄 蘑菇</string>
+    <string name="food_peanut">🥜 花生</string>
+    <string name="food_bean">🫘 豆子</string>
+    <string name="food_chestnut">🌰 栗子</string>
+    <!--  熟食  -->
+    <string name="food_toast">🍞 吐司</string>
+    <string name="food_croissant">🥐 牛角面包</string>
+    <string name="food_baguette">🥖 法式长棍面包</string>
+    <string name="food_flatbread">🫓 扁面包</string>
+    <string name="food_pretzels">🥨 椒盐脆饼</string>
+    <string name="food_bagels">🥯 面包圈</string>
+    <string name="food_pancakes">🥞 烙饼</string>
+    <string name="food_waffles">🧇 华夫饼</string>
+    <string name="food_cheese">🧀 奶酪</string>
+    <string name="food_ribs">🍖 排骨</string>
+    <string name="food_poultry_legs">🍗 鸡腿</string>
+    <string name="food_steak">🥩 牛排</string>
+    <string name="food_bacon">🥓 培根</string>
+    <string name="food_hamburger">🍔 汉堡</string>
+    <string name="food_french_fries">🍟 薯条</string>
+    <string name="food_pizza">🍕 披萨</string>
+    <string name="food_hot_dog">🌭 热狗</string>
+    <string name="food_sandwich">🥪 三明治</string>
+    <string name="food_burritos">🌮 墨西哥卷饼</string>
+    <string name="food_mexican_tacos">🌯 墨西哥玉米卷</string>
+    <string name="food_mexican_tamales">🫔 墨西哥粽子</string>
+    <string name="food_mexican_tortilla">🥙 墨西哥卷饼</string>
+    <string name="food_fried_bean_balls">🧆 油炸豆丸子</string>
+    <string name="food_egg">🥚 蛋</string>
+    <string name="food_fried_egg">🍳 煎蛋</string>
+    <string name="food_soup">🥘 汤</string>
+    <string name="food_porridge">🥣 粥</string>
+    <string name="food_stew">🍲 炖菜</string>
+    <string name="food_cheese_hotpot">🫕 奶酪火锅</string>
+    <string name="food_popcorn">🍿 爆米花</string>
+    <string name="food_salad">🥗 沙拉</string>
+    <string name="food_butter">🧈 黄油</string>
+    <string name="food_canned_food">🥫 罐头</string>
+
+    <!--  亚洲食物  -->
+    <string name="food_box_lunch">🍱 盒饭</string>
+    <string name="food_rice_cake">🍘 米饼</string>
+    <string name="food_rice_ball">🍙 饭团</string>
+    <string name="food_rice">🍚 米饭</string>
+    <string name="food_curry_rice">🍛 咖喱饭</string>
+    <string name="food_noodle">🍜 面条</string>
+    <string name="food_pasta">🍝 意大利面</string>
+    <string name="food_baked_sweet_potatoes">🍠 烤红薯</string>
+    <string name="food_oden">🍢 关东煮</string>
+    <string name="food_sushi">🍣 寿司</string>
+    <string name="food_fried_shrimp">🍤 天妇罗</string>
+    <string name="food_fish_pan">🍥 鱼板</string>
+    <string name="food_yue_bing">🥮 月饼</string>
+    <string name="food_dango">🍡 团子</string>
+    <string name="food_jiao_zi">🥟 饺子</string>
+    <string name="food_lucky_cookie">🥠 幸运饼干</string>
+    <string name="food_takeout">🥡 外卖</string>
+
+    <!--   海鲜 -->
+    <string name="food_crab">🦀 螃蟹</string>
+    <string name="food_lobster">🦞 龙虾</string>
+    <string name="food_shrimp">🦐 虾</string>
+    <string name="food_squid">🦑 鱿鱼</string>
+    <string name="food_oyster">🦪 牡蛎</string>
+
+    <!--  甜点  -->
+    <string name="food_ice_cream_cone">🍦 甜筒冰淇淋</string>
+    <string name="food_shaved_ice">🍧 刨冰</string>
+    <string name="food_ice_cream">🍨 冰淇淋</string>
+    <string name="food_donut">🍩 甜甜圈</string>
+    <string name="food_cookie">🍪 曲奇饼</string>
+    <string name="food_birthday_cake">🎂 生日蛋糕</string>
+    <string name="food_fruit_cake">🍰 水果蛋糕</string>
+    <string name="food_cupcakes">🧁 纸杯蛋糕</string>
+    <string name="food_pie">🥧 派</string>
+    <string name="food_chocolate">🍫 巧克力</string>
+    <string name="food_candy">🍬 糖果</string>
+    <string name="food_lollipop">🍭 棒棒糖</string>
+    <string name="food_pudding">🍮 布丁</string>
+    <string name="food_honey">🍯 蜂蜜</string>
+
+    <!--  饮料  -->
+    <string name="food_bottle">🍼 瓶瓶奶</string>
+    <string name="food_milk">🥛 牛奶</string>
+    <string name="food_coffee">☕ 咖啡</string>
+    <string name="food_tea">🫖 红茶</string>
+    <string name="food_green_tea">🍵 绿茶</string>
+    <string name="food_sake">🍶 清酒</string>
+    <string name="food_champagne">🍾 香槟</string>
+    <string name="food_red_wine">🍷 红酒</string>
+    <string name="food_cocktail">🍸 鸡尾酒</string>
+    <string name="food_fruit_drink">🍹 水果饮料</string>
+    <string name="food_beer">🍺 啤酒</string>
+    <string name="food_milk_tea">🧋 珍珠奶茶</string>
+    <string name="food_juice">🧃 果汁</string>
+    <string name="food_yerba_mate">🧉 马黛茶</string>
+
+    <!--  标签  -->
+    <string name="label_food_fruit">🍒 水果</string>
+    <string name="label_food_vegetable">🥦 蔬菜</string>
+    <string name="label_food_cooked">🍞 熟食</string>
+    <string name="label_food_asian">🍚 亚洲食物</string>
+    <string name="label_food_seafood">🦐 海鲜</string>
+    <string name="label_food_dessert">🍦 甜点</string>
+    <string name="label_food_drink">🍹 饮料</string>
+    <string name="label_game_log">📜 日志</string>
+    <string name="label_game_state">🏷️ 状态</string>
+    <string name="label_backpack">👜 背包</string>
+    <string name="label_sprite">🐱 精灵</string>
+
+    <!--  状态  -->
+    <string name="label_state_health">💊 健康: %1$s</string>
+    <string name="label_state_mood">🎮 心情: %1$s</string>
+    <string name="label_state_rich">💰 财富: %1$s</string>
+    <string name="label_state_satiation">🍚 饥饿: %1$s</string>
+
+    <!--  原因  -->
+    <string name="reason_health_low">生病了</string>
+    <string name="reason_mood_low">心情不好</string>
+    <string name="reason_satiation_low">饿了</string>
+    <string name="reason_lucky">真幸运</string>
+    <string name="reason_feeding">被投喂</string>
+
+    <!--  幸运捡到钱  -->
+    <string name="label_lucky_money_1">💰 1</string>
+    <string name="label_lucky_money_5">💰 5</string>
+    <string name="label_lucky_money_10">💰 10</string>
+    <string name="label_lucky_money_20">💰 20</string>
+    <string name="label_lucky_money_50">💰 50</string>
+    <string name="label_lucky_money_100">💰 100</string>
+    <string name="label_lucky_money_200">💰 200</string>
+    <string name="label_lucky_money_500">💰 500</string>
+
+
+    <!--  疾病  -->
+    <string name="label_negative_disease_cold">💊 感冒</string>
+    <string name="label_negative_disease_fever">💉 发烧</string>
+    <string name="label_negative_disease_diarrhea">💉 腹泻</string>
+
+    <!--  工作  -->
+    <string name="label_work_leafleteer">📰 传单派发</string>
+    <string name="label_work_librarian">📚 图书馆整理图书</string>
+    <string name="label_toy_stare_blankly">💫 发呆</string>
+    <string name="label_toy_ping_pong">🏓 乒乓球</string>
+    <string name="label_toy_football">⚽ 足球</string>
+    <string name="label_toy_basketball">🏀 篮球</string>
+    <string name="label_toy_badminton">🏸 羽毛球</string>
+    <string name="label_toy_tennis">🎾 网球</string>
+    <string name="label_toy_bowling">🎳 保龄球</string>
+    <string name="label_toy_golf">🏌 高尔夫秋</string>
+    <string name="label_toy_swimming">🤿 游泳</string>
+
+</resources>
