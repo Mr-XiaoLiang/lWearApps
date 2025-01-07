@@ -19,7 +19,7 @@ along with SwiFTP.  If not, see <http://www.gnu.org/licenses/>.
 
 package be.ppareit.swiftp.server;
 
-import net.vrallev.android.cat.Cat;
+import android.util.Log;
 
 import java.io.File;
 
@@ -33,6 +33,8 @@ public class CmdRNFR extends FtpCmd implements Runnable {
 
     protected String input;
 
+    private static final String TAG = "CmdRNFR";
+
     public CmdRNFR(SessionThread sessionThread, String input) {
         super(sessionThread);
         this.input = input;
@@ -40,7 +42,7 @@ public class CmdRNFR extends FtpCmd implements Runnable {
 
     @Override
     public void run() {
-        Cat.d("Executing RNFR");
+        Log.d(TAG, "Executing RNFR");
         String param = getParameter(input);
         String errString = null;
         File file = null;
@@ -58,7 +60,7 @@ public class CmdRNFR extends FtpCmd implements Runnable {
         }
         if (errString != null) {
             sessionThread.writeString(errString);
-            Cat.d("RNFR failed: " + errString.trim());
+            Log.d(TAG, "RNFR failed: " + errString.trim());
             sessionThread.setRenameFrom(null);
         } else {
             sessionThread.writeString("350 Filename noted, now send RNTO\r\n");

@@ -26,9 +26,9 @@ along with SwiFTP.  If not, see <http://www.gnu.org/licenses/>.
 
 package be.ppareit.swiftp.server;
 
-import androidx.documentfile.provider.DocumentFile;
+import android.util.Log;
 
-import net.vrallev.android.cat.Cat;
+import androidx.documentfile.provider.DocumentFile;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -44,6 +44,8 @@ public class CmdLIST extends CmdAbstractListing implements Runnable {
     public final static long MS_IN_SIX_MONTHS = 6L * 30L * 24L * 60L * 60L * 1000L;
     private final String input;
 
+    private static final String TAG = "CmdLIST";
+
     public CmdLIST(SessionThread sessionThread, String input) {
         super(sessionThread, input);
         this.input = input;
@@ -54,16 +56,17 @@ public class CmdLIST extends CmdAbstractListing implements Runnable {
         String errString = null;
         DocumentFile docFileToList = null;
 
-        mainblock: {
+        mainblock:
+        {
             String param = getParameter(input);
-            Cat.d("LIST parameter: " + param);
+            Log.d(TAG, "LIST parameter: " + param);
             while (param.startsWith("-")) {
                 // Skip all dashed -args, if present
-                Cat.d("LIST is skipping dashed arg " + param);
+                Log.d(TAG, "LIST is skipping dashed arg " + param);
                 param = getParameter(param);
             }
             File fileToList = null;
-            if (param.equals("")) {
+            if (param.isEmpty()) {
                 fileToList = sessionThread.getWorkingDir();
                 if (Util.useScopedStorage()) {
                     docFileToList = FileUtil.getDocumentFile(fileToList.getPath());
@@ -113,9 +116,9 @@ public class CmdLIST extends CmdAbstractListing implements Runnable {
             // May see "error 450 couldn't list that file" from bad path handling and this would then
             // be a bug and not an actual missing file.
             sessionThread.writeString(errString);
-            Cat.d("LIST failed with: " + errString);
+            Log.d(TAG, "LIST failed with: " + errString);
         } else {
-            Cat.d("LIST completed OK");
+            Log.d(TAG, "LIST completed OK");
         }
         // The success or error response over the control connection will
         // have already been handled by sendListing, so we can just quit now.
@@ -127,7 +130,7 @@ public class CmdLIST extends CmdAbstractListing implements Runnable {
         StringBuilder response = new StringBuilder();
 
         if (file == null || !file.exists()) {
-            Cat.i("makeLsString had nonexistent file");
+            Log.i(TAG, "makeLsString had nonexistent file");
             return null;
         }
 
@@ -138,7 +141,7 @@ public class CmdLIST extends CmdAbstractListing implements Runnable {
         String lastNamePart = file.getName();
         // Many clients can't handle files containing these symbols
         if (lastNamePart.contains("*") || lastNamePart.contains("/")) {
-            Cat.i("Filename omitted due to disallowed character");
+            Log.i(TAG, "Filename omitted due to disallowed character");
             return null;
         } else {
             // The following line generates many calls in large directories

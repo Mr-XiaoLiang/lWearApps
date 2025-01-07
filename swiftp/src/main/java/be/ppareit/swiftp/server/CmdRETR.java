@@ -20,10 +20,9 @@ along with SwiFTP.  If not, see <http://www.gnu.org/licenses/>.
 package be.ppareit.swiftp.server;
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.documentfile.provider.DocumentFile;
-
-import net.vrallev.android.cat.Cat;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,6 +39,8 @@ public class CmdRETR extends FtpCmd implements Runnable {
 
     protected String input;
 
+    private static final String TAG = "CmdRETR";
+
     public CmdRETR(SessionThread sessionThread, String input) {
         super(sessionThread);
         this.input = input;
@@ -47,7 +48,7 @@ public class CmdRETR extends FtpCmd implements Runnable {
 
     @Override
     public void run() {
-        Cat.d("RETR executing");
+        Log.d(TAG, "RETR executing");
         String param = getParameter(input);
         File fileToRetr;
         String errString = null;
@@ -88,17 +89,19 @@ public class CmdRETR extends FtpCmd implements Runnable {
                 }
                 byte[] buffer = new byte[SessionThread.DATA_CHUNK_SIZE];
                 int bytesRead;
-                if (FsSettings.isEarly150Enabled()) sessionThread.writeString("150 Sending file\r\n");
+                if (FsSettings.isEarly150Enabled())
+                    sessionThread.writeString("150 Sending file\r\n");
                 if (sessionThread.openDataSocket()) {
-                    Cat.d("RETR opened data socket");
+                    Log.d(TAG, "RETR opened data socket");
                 } else {
                     errString = "425 Error opening socket\r\n";
-                    Cat.i("Error in initDataSocket()");
+                    Log.i(TAG, "Error in initDataSocket()");
                     break mainblock;
                 }
-                if (!FsSettings.isEarly150Enabled()) sessionThread.writeString("150 Sending file\r\n");
+                if (!FsSettings.isEarly150Enabled())
+                    sessionThread.writeString("150 Sending file\r\n");
                 if (sessionThread.isBinaryMode()) { // RANG is supported only in binary mode.
-                    Cat.d("Transferring in binary mode");
+                    Log.d(TAG, "Transferring in binary mode");
                     long offset = 0L;
                     long endPosition = (Util.useScopedStorage() ? docFileToRetr.length() - 1
                             : fileToRetr.length() - 1);
@@ -125,15 +128,15 @@ public class CmdRETR extends FtpCmd implements Runnable {
 
                         if (!success) {
                             errString = "426 Data socket error\r\n";
-                            Cat.i("Data socket error");
+                            Log.i(TAG, "Data socket error");
                             break mainblock;
                         }
                     }
                 } else { // We're in ASCII mode
-                    Cat.d("Transferring in ASCII mode");
+                    Log.d(TAG, "Transferring in ASCII mode");
                     if (sessionThread.offset >= 0) {
                         errString = "550 Unable to seek to requested position in ASCII mode";
-                        Cat.e("Error: " + errString);
+                        Log.e(TAG, "Error: " + errString);
                         break mainblock;
                     }
                     // We have to convert all solitary \n to \r\n
@@ -195,7 +198,7 @@ public class CmdRETR extends FtpCmd implements Runnable {
         } else {
             sessionThread.writeString("226 Transmission finished\r\n");
         }
-        Cat.d("RETR done");
+        Log.d(TAG, "RETR done");
     }
 
     private String validate(FileUtil.Gen fileToRetr, String param) {
@@ -212,14 +215,15 @@ public class CmdRETR extends FtpCmd implements Runnable {
                 || (isFile && violatesChroot((File) fileToRetr.getOb()))) {
             errString = "550 Invalid name or chroot violation\r\n";
         } else if (fileToRetr.isDirectory()) {
-            Cat.d("Ignoring RETR for directory");
+            Log.d(TAG, "Ignoring RETR for directory");
             errString = "550 Can't RETR a directory\r\n";
         } else if (!fileToRetr.exists()) {
-            if (isDocumentFile) Cat.d("Can't RETR nonexistent file: " + fileToRetr.getName());
-            else Cat.d("Can't RETR nonexistent file: " + ((File)fileToRetr.getOb()).getAbsolutePath());
+            if (isDocumentFile) Log.d(TAG, "Can't RETR nonexistent file: " + fileToRetr.getName());
+            else
+                Log.d(TAG, "Can't RETR nonexistent file: " + ((File) fileToRetr.getOb()).getAbsolutePath());
             errString = "550 File does not exist\r\n";
         } else if (!fileToRetr.canRead()) {
-            Cat.i("Failed RETR permission (canRead() is false)");
+            Log.i(TAG, "Failed RETR permission (canRead() is false)");
             errString = "550 No read permissions\r\n";
         }
         return errString;

@@ -19,7 +19,6 @@ along with SwiFTP.  If not, see <http://www.gnu.org/licenses/>.
 
 package be.ppareit.swiftp;
 
-import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -34,11 +33,10 @@ import android.util.Log;
 
 import com.lollipop.swiftp.R;
 
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class NsdService extends Service {
     private static final String TAG = NsdService.class.getSimpleName();
 
-    private static final String FTP_SERVICE_TYPE= "_ftp._tcp.";
+    private static final String FTP_SERVICE_TYPE = "_ftp._tcp.";
 
     private NsdManager mNsdManager = null;
 
@@ -63,7 +61,7 @@ public class NsdService extends Service {
 
     }
 
-    private RegistrationListener mRegistrationListener = new RegistrationListener() {
+    private final RegistrationListener mRegistrationListener = new RegistrationListener() {
 
         @Override
         public void onServiceRegistered(NsdServiceInfo serviceInfo) {
@@ -111,7 +109,7 @@ public class NsdService extends Service {
                     // all kinds of problems with the NsdManager, give it
                     // some extra time before I make next call
                     Thread.sleep(500);
-                    if (running == false) {
+                    if (!running) {
                         Log.e(TAG, "NsdManager is no longer needed, bailing out");
                         mNsdManager = null;
                         return;
@@ -152,6 +150,7 @@ public class NsdService extends Service {
         }
         mNsdManager = null;
     }
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;

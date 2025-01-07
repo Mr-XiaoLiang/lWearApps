@@ -40,7 +40,7 @@ import be.ppareit.swiftp.utils.FileUtil;
 
 public abstract class CmdAbstractListing extends FtpCmd {
     // TODO: .class.getSimpleName() from abstract class?
-    private static String TAG = "CmdAbstractListing";
+    private static final String TAG = "CmdAbstractListing";
 
     public CmdAbstractListing(SessionThread sessionThread, String input) {
         super(sessionThread);

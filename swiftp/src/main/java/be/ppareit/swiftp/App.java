@@ -24,8 +24,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
-
-import net.vrallev.android.cat.Cat;
+import android.util.Log;
 
 public class App {
 
@@ -35,19 +34,17 @@ public class App {
         App.mInstance = app;
     }
 
-    public void onCreate() {
-        super.onCreate();
+    public static void onCreate(Application app) {
+        bind(app);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(FsService.ACTION_STARTED);
         intentFilter.addAction(FsService.ACTION_STOPPED);
         intentFilter.addAction(FsService.ACTION_FAILEDTOSTART);
 
         if (Build.VERSION.SDK_INT >= 33) {
-            registerReceiver(new NsdService.ServerActionsReceiver(), intentFilter, FsService.RECEIVER_EXPORTED);
-            registerReceiver(new FsWidgetProvider(), intentFilter, FsService.RECEIVER_EXPORTED);
+            app.registerReceiver(new NsdService.ServerActionsReceiver(), intentFilter, FsService.RECEIVER_EXPORTED);
         } else {
-            registerReceiver(new NsdService.ServerActionsReceiver(), intentFilter);
-            registerReceiver(new FsWidgetProvider(), intentFilter);
+            app.registerReceiver(new NsdService.ServerActionsReceiver(), intentFilter);
         }
     }
 
@@ -103,8 +100,8 @@ public class App {
         try {
             PackageManager pm = context.getPackageManager();
             return pm.getPackageInfo(packageName, 0).versionName;
-        } catch (NameNotFoundException e) {
-            Cat.e("Unable to find the name " + packageName + " in the package");
+        } catch (Throwable e) {
+            Log.e("Swiftp", "getVersion.ERROR", e);
             return null;
         }
     }

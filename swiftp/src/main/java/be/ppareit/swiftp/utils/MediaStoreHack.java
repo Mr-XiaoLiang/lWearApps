@@ -10,14 +10,14 @@ import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.lollipop.swiftp.R;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Locale;
-
-import be.ppareit.swiftp.R;
 
 /**
  * Wrapper for manipulating files via the Android Media Content Provider. As of Android 4.4 KitKat,
@@ -112,6 +112,9 @@ public class MediaStoreHack {
         Cursor fileCursor = resolver.query(MediaStore.Files.getContentUri("external"),
                 new String[]{BaseColumns._ID}, MediaStore.MediaColumns.DATA + " = ?",
                 new String[]{path}, MediaStore.MediaColumns.DATE_ADDED + " desc");
+        if (fileCursor == null) {
+            return null;
+        }
         fileCursor.moveToFirst();
 
         if (fileCursor.isAfterLast()) {
@@ -120,7 +123,11 @@ public class MediaStoreHack {
             values.put(MediaStore.MediaColumns.DATA, path);
             return resolver.insert(MediaStore.Files.getContentUri("external"), values);
         } else {
-            int imageId = fileCursor.getInt(fileCursor.getColumnIndex(BaseColumns._ID));
+            int columnIndex = fileCursor.getColumnIndex(BaseColumns._ID);
+            if (columnIndex < 0) {
+                return null;
+            }
+            int imageId = fileCursor.getInt(columnIndex);
             Uri uri = MediaStore.Files.getContentUri("external").buildUpon().appendPath(
                     Integer.toString(imageId)).build();
             fileCursor.close();
@@ -219,8 +226,19 @@ public class MediaStoreHack {
                     out.write(buffer, 0, bytesRead);
                 }
             } finally {
-                out.close();
-                in.close();
+                try {
+                    if (out != null) {
+                        out.close();
+                    }
+                } catch (Throwable e) {
+
+                }
+                try {
+                    if (in!= null) {
+                        in.close();
+                    }
+                } catch (Throwable e) {
+                }
             }
         }
         return temporaryTrack;

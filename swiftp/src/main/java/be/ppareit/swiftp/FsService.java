@@ -26,7 +26,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ServiceInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
@@ -46,7 +45,7 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
-import net.vrallev.android.cat.Cat;
+import com.lollipop.swiftp.R;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -62,7 +61,6 @@ import java.util.List;
 
 import javax.net.ssl.SSLServerSocket;
 
-import be.ppareit.swiftp.gui.FsNotification;
 import be.ppareit.swiftp.server.SessionThread;
 import be.ppareit.swiftp.server.TcpListener;
 import be.ppareit.swiftp.utils.FTPSSockets;
@@ -153,7 +151,7 @@ public class FsService extends Service implements Runnable {
     private static void warnIfNoExternalStorage() {
         String storageState = Environment.getExternalStorageState();
         if (!storageState.equals(Environment.MEDIA_MOUNTED)) {
-            Log.v(TAG, "Warning due to storage state " + storageState);
+            Log.i(TAG, "Warning due to storage state " + storageState);
             Toast toast = Toast.makeText(App.getAppContext(),
                     R.string.storage_warning, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER, 0, 0);
@@ -163,16 +161,10 @@ public class FsService extends Service implements Runnable {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (Build.VERSION.SDK_INT >= 34) {
-            startForeground(FsNotification.NOTIFICATION_ID, FsNotification.setupNotification(getApplicationContext()), ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE);
-        } else {
-            startForeground(FsNotification.NOTIFICATION_ID, FsNotification.setupNotification(getApplicationContext()));
-        }
-
         //https://developer.android.com/reference/android/app/Service.html
         //if there are not any pending start commands to be delivered to the service, it will be called with a null intent object,
         if (intent != null && intent.getAction() != null) {
-            Cat.d("onStartCommand called with action: " + intent.getAction());
+            Log.d(TAG, "onStartCommand called with action: " + intent.getAction());
 
             switch (intent.getAction()) {
                 case ACTION_REQUEST_START:
@@ -456,7 +448,7 @@ public class FsService extends Service implements Runnable {
                             && address.isSiteLocalAddress()
                             && address instanceof Inet4Address) {
                         if (returnAddress != null) {
-                            Cat.w("Found more than one valid address local inet address, why???");
+                            Log.w(TAG, "Found more than one valid address local inet address, why???");
                         }
                         returnAddress = address;
                     }
@@ -499,7 +491,7 @@ public class FsService extends Service implements Runnable {
                     }
                 }
             } catch (SocketException e) {
-                e.printStackTrace();
+                Log.e(TAG, "isConnectedToLocalNetwork: SocketException", e);
             }
         }
         return connected;

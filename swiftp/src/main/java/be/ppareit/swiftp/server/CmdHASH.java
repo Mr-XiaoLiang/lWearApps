@@ -1,8 +1,8 @@
 package be.ppareit.swiftp.server;
 
-import androidx.documentfile.provider.DocumentFile;
+import android.util.Log;
 
-import net.vrallev.android.cat.Cat;
+import androidx.documentfile.provider.DocumentFile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,6 +24,8 @@ import be.ppareit.swiftp.utils.FileUtil;
 public class CmdHASH extends FtpCmd implements Runnable {
     private String input;
 
+    private static final String TAG = "CmdHASH";
+
     public CmdHASH(SessionThread sessionThread, String input) {
         super(sessionThread);
         this.input = input;
@@ -31,7 +33,7 @@ public class CmdHASH extends FtpCmd implements Runnable {
 
     @Override
     public void run() {
-        Cat.d("HASH executing");
+        Log.d(TAG, "HASH executing");
         String param = getParameter(input);
         File fileToHash;
         String errString = null;
@@ -50,15 +52,15 @@ public class CmdHASH extends FtpCmd implements Runnable {
                 errString = "550 Invalid name or chroot violation\r\n";
                 break mainblock;
             } else if (gen.isDirectory()) {
-                Cat.d("Ignoring HASH for directory");
+                Log.d(TAG, "Ignoring HASH for directory");
                 errString = "553 Can't HASH a directory\r\n";
                 break mainblock;
             } else if (!gen.exists()) {
-                Cat.d("Can't HASH nonexistent file: " + gen.getAbsolutePath());
+                Log.d(TAG, "Can't HASH nonexistent file: " + gen.getAbsolutePath());
                 errString = "550 File does not exist\r\n";
                 break mainblock;
             } else if (!gen.canRead()) {
-                Cat.i("Failed HASH permission (canRead() is false)");
+                Log.i(TAG, "Failed HASH permission (canRead() is false)");
                 errString = "556 No read permissions\r\n";
                 break mainblock;
             }
@@ -129,6 +131,6 @@ public class CmdHASH extends FtpCmd implements Runnable {
         if (errString != null) {
             sessionThread.writeString(errString);
         }
-        Cat.d("HASH done");
+        Log.d(TAG, "HASH done");
     }
 }

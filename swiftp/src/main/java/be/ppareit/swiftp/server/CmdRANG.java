@@ -1,7 +1,7 @@
 package be.ppareit.swiftp.server;
 
-import net.vrallev.android.cat.Cat;
 
+import android.util.Log;
 
 /**
  * CmdRANG add's a RANG command to be used by clients to designate an octet range to a
@@ -10,6 +10,8 @@ import net.vrallev.android.cat.Cat;
 public class CmdRANG extends FtpCmd implements Runnable {
 
     private String input;
+    
+    private static final String TAG = "CmdRANG";
 
     public CmdRANG(SessionThread sessionThread, String input) {
         super(sessionThread);
@@ -18,7 +20,7 @@ public class CmdRANG extends FtpCmd implements Runnable {
 
     @Override
     public void run() {
-        Cat.d("RANG executing");
+        Log.d(TAG, "RANG executing");
         String param = getParameter(input);
         String splits[] = param.split(" ");
         String errString = null;

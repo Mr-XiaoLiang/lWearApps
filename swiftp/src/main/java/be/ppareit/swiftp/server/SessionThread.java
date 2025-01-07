@@ -19,7 +19,7 @@ along with SwiFTP.  If not, see <http://www.gnu.org/licenses/>.
 
 package be.ppareit.swiftp.server;
 
-import net.vrallev.android.cat.Cat;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,7 +38,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.net.ssl.SSLSocket;
 
 import be.ppareit.swiftp.App;
-import be.ppareit.swiftp.BuildConfig;
 import be.ppareit.swiftp.FsService;
 import be.ppareit.swiftp.FsSettings;
 import be.ppareit.swiftp.Util;
@@ -83,6 +82,8 @@ public class SessionThread extends Thread {
     private boolean epsvEnabled = false;
     private boolean eprtEnabled = false;
 
+    private static final String TAG = "SessionThread";
+
     public SessionThread(Socket socket, LocalDataSocket dataSocket, SSLSocket sslSocket) {
         cmdSocket = socket;
         cmdSSLSocket = sslSocket;
@@ -99,10 +100,10 @@ public class SessionThread extends Thread {
     public boolean sendViaDataSocket(String string) {
         try {
             byte[] bytes = string.getBytes(encoding);
-            Cat.d("Using data connection encoding: " + encoding);
+            Log.d(TAG, "Using data connection encoding: " + encoding);
             return sendViaDataSocket(bytes, 0, bytes.length);
         } catch (UnsupportedEncodingException e) {
-            Cat.e("Unsupported encoding for data socket send");
+            Log.e(TAG, "Unsupported encoding for data socket send", e);
             return false;
         }
     }
@@ -118,7 +119,7 @@ public class SessionThread extends Thread {
     public boolean sendViaDataSocket(byte[] bytes, int start, int len) {
 
         if (dataOutputStream == null) {
-            Cat.i("Can't send via null dataOutputStream");
+            Log.i(TAG, "Can't send via null dataOutputStream");
             return false;
         }
         if (len == 0) {
@@ -127,7 +128,7 @@ public class SessionThread extends Thread {
         try {
             dataOutputStream.write(bytes, start, len);
         } catch (IOException e) {
-            Cat.e("Couldn't write output stream for data socket, error:" + e.toString());
+            Log.e(TAG, "Couldn't write output stream for data socket, error:", e);
             return false;
         }
         localDataSocket.reportTraffic(len);
@@ -141,16 +142,16 @@ public class SessionThread extends Thread {
      *
      * @param buf Where to place the input bytes
      * @return >0 if successful which is the number of bytes read
-     *         -1 if no bytes remain to be read
-     *         -2 if the data socket was not connected
-     *         0 if there was a read  error
+     * -1 if no bytes remain to be read
+     * -2 if the data socket was not connected
+     * 0 if there was a read  error
      */
     public int receiveFromDataSocket(byte[] buf) {
         int bytesRead;
 
         if (sslDataSocket != null && dataSocket == null) {
             if (!sslDataSocket.isConnected()) {
-                Cat.i("Can't receive from unconnected socket");
+                Log.i(TAG, "Can't receive from unconnected socket");
                 return -2;
             }
 
@@ -159,18 +160,18 @@ public class SessionThread extends Thread {
                     bytesRead = dataInputStream.read(buf, 0, buf.length);
                 } while (bytesRead == 0);
             } catch (IOException e) {
-                Cat.i("Error reading data socket");
+                Log.i(TAG, "Error reading data socket");
                 return 0;
             }
             return bytesRead;
         }
 
         if (dataSocket == null) {
-            Cat.i("Can't receive from null dataSocket");
+            Log.i(TAG, "Can't receive from null dataSocket");
             return -2;
         }
         if (!dataSocket.isConnected()) {
-            Cat.i("Can't receive from unconnected socket");
+            Log.i(TAG, "Can't receive from unconnected socket");
             return -2;
         }
 
@@ -179,7 +180,7 @@ public class SessionThread extends Thread {
                 bytesRead = dataInputStream.read(buf, 0, buf.length);
             } while (bytesRead == 0);
         } catch (IOException e) {
-            Cat.i("Error reading data socket");
+            Log.i(TAG, "Error reading data socket");
             return 0;
         }
         return bytesRead;
@@ -195,17 +196,17 @@ public class SessionThread extends Thread {
     }
 
     /*
-    * Called when we receive a EPSV command.
-    *
-    * */
+     * Called when we receive a EPSV command.
+     *
+     * */
     public int onEpsv(InetAddress address) {
         return localDataSocket.onEpsv(address, cmdSSLSocket != null || cmdSSLAuthSocket != null);
     }
 
     /*
-    * Called when we receive a EPRT commant.
-    *
-    * */
+     * Called when we receive a EPRT commant.
+     *
+     * */
     public void onEprt(Inet6Address address, int port) {
         localDataSocket.onEprt(address, port);
     }
@@ -220,8 +221,8 @@ public class SessionThread extends Thread {
     }
 
     /*
-    * Returns IP of the device running Swiftp.
-    * */
+     * Returns IP of the device running Swiftp.
+     * */
     public InetAddress getDataSocketPasvIp() {
         // When the client sends PASV, our reply will contain the address and port
         // of the data connection that the client should connect to. For this purpose
@@ -241,9 +242,9 @@ public class SessionThread extends Thread {
     }
 
     /*
-    * Returns IPv4 or IPv6 of client device.
-    * IPv6 is returned as link local IP + network interface, when on same network.
-    * */
+     * Returns IPv4 or IPv6 of client device.
+     * IPv6 is returned as link local IP + network interface, when on same network.
+     * */
     public String getRemoteAddress() {
         if (cmdSocket != null) return cmdSocket.getInetAddress().toString();
         else if (cmdSSLSocket != null) return cmdSSLSocket.getInetAddress().toString();
@@ -252,8 +253,8 @@ public class SessionThread extends Thread {
     }
 
     /*
-    * Returns true if the plain/explicit port is used or false if the implicit port is used.
-    * */
+     * Returns true if the plain/explicit port is used or false if the implicit port is used.
+     * */
     public boolean getIsPlainSocket() {
         if (cmdSSLAuthSocket != null) return false;
         else if (cmdSocket != null) return true;
@@ -264,7 +265,7 @@ public class SessionThread extends Thread {
     /**
      * Will be called by (e.g.) CmdSTOR, CmdRETR, CmdLIST, etc. when they are about to
      * start actually doing IO over the data socket.
-     *
+     * <p>
      * Must call closeDataSocket() when done
      *
      * @return true if successful
@@ -274,14 +275,14 @@ public class SessionThread extends Thread {
             try {
                 sslDataSocket = localDataSocket.onTransferSSL();
                 if (sslDataSocket == null) {
-                    Cat.i("dataSocketFactory.onTransfer() returned null");
+                    Log.i(TAG, "dataSocketFactory.onTransfer() returned null");
                     return false;
                 }
                 dataInputStream = sslDataSocket.getInputStream();
                 dataOutputStream = sslDataSocket.getOutputStream();
                 return true;
             } catch (IOException e) {
-                Cat.i("IOException getting OutputStream for data socket");
+                Log.i(TAG, "IOException getting OutputStream for data socket");
                 sslDataSocket = null;
                 return false;
             }
@@ -290,14 +291,14 @@ public class SessionThread extends Thread {
         try {
             dataSocket = localDataSocket.onTransfer();
             if (dataSocket == null) {
-                Cat.i("dataSocketFactory.onTransfer() returned null");
+                Log.i(TAG, "dataSocketFactory.onTransfer() returned null");
                 return false;
             }
             dataInputStream = dataSocket.getInputStream();
             dataOutputStream = dataSocket.getOutputStream();
             return true;
         } catch (IOException e) {
-            Cat.i("IOException getting OutputStream for data socket");
+            Log.i(TAG, "IOException getting OutputStream for data socket");
             dataSocket = null;
             return false;
         }
@@ -307,7 +308,7 @@ public class SessionThread extends Thread {
      * Call when done doing IO over the data socket
      */
     public void closeDataSocket() {
-        Cat.d("Closing data socket");
+        Log.d(TAG, "Closing data socket");
         if (dataInputStream != null) {
             try {
                 dataInputStream.close();
@@ -339,7 +340,7 @@ public class SessionThread extends Thread {
     }
 
     public void quit() {
-        Cat.d("SessionThread told to quit");
+        Log.d(TAG, "SessionThread told to quit");
         closeSocket();
     }
 
@@ -347,10 +348,6 @@ public class SessionThread extends Thread {
      * Sanitize the logged commands so we don't leak username or password.
      */
     private String sanitizeCommand(String cmd) {
-        // Don't sanitize in debug build
-        if (BuildConfig.DEBUG) {
-            return cmd;
-        }
         // Running in release
         if (cmd.trim().startsWith("PASS")) {
             return "PASS [hidden]";
@@ -362,14 +359,13 @@ public class SessionThread extends Thread {
 
     @Override
     public void run() {
-        Cat.i("SessionThread started");
+        Log.i(TAG, "SessionThread started");
         // Give client a welcome
         if (sendWelcomeBanner) {
             if (FsSettings.isBannerDisabled()) {
                 new Logging().appendLog("Banner is disabled");
                 writeString("220 ready\r\n");
-            }
-            else writeString("220 SwiFTP " + App.getVersion() + " ready\r\n");
+            } else writeString("220 SwiFTP " + App.getVersion() + " ready\r\n");
         }
         logging.appendLog("Session started");
         // Main loop: read an incoming line and process it
@@ -400,17 +396,17 @@ public class SessionThread extends Thread {
                 }
                 if (line != null) {
                     logging.appendLog(sanitizeCommand(line));
-                    Cat.d("Received line from client: " + sanitizeCommand(line));
+                    Log.d(TAG, "Received line from client: " + sanitizeCommand(line));
                     FtpCmd.dispatchCommand(this, line);
                 } else {
                     logging.appendLog("quitting...");
-                    Cat.i("readLine gave null, quitting");
+                    Log.i(TAG, "readLine gave null, quitting");
                     break;
                 }
             }
         } catch (IOException e) {
             logging.appendLog("Connection was dropped: " + e.getMessage());
-            Cat.i("Connection was dropped");
+            Log.i(TAG, "Connection was dropped");
         }
         closeSocket();
         AnonymousLimit.decrement();
@@ -452,7 +448,7 @@ public class SessionThread extends Thread {
                 outputStream.flush();
                 localDataSocket.reportTraffic(bytes.length);
             } catch (IOException e) {
-                Cat.i("Exception writing socket");
+                Log.i(TAG, "Exception writing socket");
                 closeSocket();
             }
             return;
@@ -465,7 +461,7 @@ public class SessionThread extends Thread {
                 localDataSocket.reportTraffic(bytes.length);
             } catch (IOException e) {
                 logging.appendLog("Error on auth socket output");
-                Cat.i("Exception writing socket");
+                Log.i(TAG, "Exception writing socket");
                 closeSocket();
             }
             return;
@@ -477,7 +473,7 @@ public class SessionThread extends Thread {
                 outputStream.flush();
                 localDataSocket.reportTraffic(bytes.length);
             } catch (IOException e) {
-                Cat.i("Exception writing socket");
+                Log.i(TAG, "Exception writing socket");
                 closeSocket();
             }
         }
@@ -488,7 +484,7 @@ public class SessionThread extends Thread {
         try {
             strBytes = str.getBytes(encoding);
         } catch (UnsupportedEncodingException e) {
-            Cat.e("Unsupported encoding: " + encoding);
+            Log.e(TAG, "Unsupported encoding: " + encoding, e);
             strBytes = str.getBytes();
         }
         writeBytes(strBytes);
@@ -545,13 +541,13 @@ public class SessionThread extends Thread {
 
     public void authAttempt(boolean authenticated) {
         if (authenticated) {
-            Cat.i("Authentication complete");
+            Log.i(TAG, "Authentication complete");
             userAuthenticated = true;
         } else {
             authFails++;
-            Cat.i("Auth failed: " + authFails + "/" + MAX_AUTH_FAILS);
+            Log.i(TAG, "Auth failed: " + authFails + "/" + MAX_AUTH_FAILS);
             if (authFails > MAX_AUTH_FAILS) {
-                Cat.i("Too many auth fails, quitting session");
+                Log.i(TAG, "Too many auth fails, quitting session");
                 quit();
             }
         }
@@ -565,7 +561,7 @@ public class SessionThread extends Thread {
         try {
             this.workingDir = workingDir.getCanonicalFile().getAbsoluteFile();
         } catch (IOException e) {
-            Cat.i("SessionThread canonical error");
+            Log.i(TAG, "SessionThread canonical error");
         }
     }
 

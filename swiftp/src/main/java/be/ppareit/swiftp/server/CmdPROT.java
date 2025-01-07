@@ -41,11 +41,26 @@ public class CmdPROT extends FtpCmd implements Runnable {
         }
 
         switch (param) {
-            case "P" -> sessionThread.writeString("200 PROT command OK\r\n");
-            case "C" -> sessionThread.writeString("536 Protection level not supported\r\n");
-            case "S" -> sessionThread.writeString("536 Protection level not supported\r\n");
-            case "E" -> sessionThread.writeString("536 Protection level not supported\r\n");
-            default -> sessionThread.writeString("502 Command not recognized\r\n");
+            case "P": {
+                sessionThread.writeString("200 PROT command OK\r\n");
+                break;
+            }
+            case "C": {
+                sessionThread.writeString("536 Protection level not supported\r\n");
+                break;
+            }
+            case "S": {
+                sessionThread.writeString("536 Protection level not supported\r\n");
+                break;
+            }
+            case "E": {
+                sessionThread.writeString("536 Protection level not supported\r\n");
+                break;
+            }
+            default: {
+                sessionThread.writeString("502 Command not recognized\r\n");
+                break;
+            }
         }
 
         Log.d(TAG, "PROT success");

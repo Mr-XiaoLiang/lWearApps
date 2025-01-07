@@ -24,9 +24,9 @@ package be.ppareit.swiftp.server;
  * the common code is in this class, and inherited by CmdSTOR and CmdAPPE.
  */
 
-import androidx.documentfile.provider.DocumentFile;
+import android.util.Log;
 
-import net.vrallev.android.cat.Cat;
+import androidx.documentfile.provider.DocumentFile;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -47,7 +47,7 @@ abstract public class CmdAbstractStore extends FtpCmd {
     }
 
     public void doStorOrAppe(String param, boolean append) {
-        Cat.d("STOR/APPE executing with append = " + append);
+        Log.d("CmdAbstractStore", "STOR/APPE executing with append = " + append);
 
         File storeFile = inputPathToChrootedFile(sessionThread.getChrootDir(),
                 sessionThread.getWorkingDir(), param);
@@ -121,7 +121,7 @@ abstract public class CmdAbstractStore extends FtpCmd {
                 }
 
                 //file
-                if(docStoreFile == null && out == null){
+                if (docStoreFile == null && out == null) {
                     errString = "451 Couldn't open file \"" + param + "\" aka \""
                             + storeFile.getCanonicalPath() + "\" for writing\r\n";
                     break storing;
@@ -135,15 +135,14 @@ abstract public class CmdAbstractStore extends FtpCmd {
                             sessionThread.offset = -1;
                         }
                     }
-                }
-                catch (NullPointerException e){
+                } catch (NullPointerException e) {
                     errString = "451 Couldn't open file \"" + param + "\" aka \""
                             + storeFile.getCanonicalPath() + "\" for writing. Failed to create output stream.\r\n";
                     break storing;
                 }
 
             } catch (FileNotFoundException e) {
-                Cat.e("error : ", e);
+                Log.e("CmdAbstractStore", "error", e);
                 try {
                     errString = "451 Couldn't open file \"" + param + "\" aka \""
                             + storeFile.getCanonicalPath() + "\" for writing\r\n";
@@ -163,18 +162,18 @@ abstract public class CmdAbstractStore extends FtpCmd {
                 errString = "425 Couldn't open data socket\r\n";
                 break storing;
             }
-            Cat.d("Data socket ready");
+            Log.d("CmdAbstractStore", "Data socket ready");
             if (!early150) sessionThread.writeString("150 Data socket ready\r\n");
             byte[] buffer = new byte[SessionThread.DATA_CHUNK_SIZE];
 
             int numRead;
 
-            Cat.d("Mode is " + (sessionThread.isBinaryMode() ? "binary" : "ascii"));
+            Log.d("CmdAbstractStore", "Mode is " + (sessionThread.isBinaryMode() ? "binary" : "ascii"));
 
             while (true) {
                 switch (numRead = sessionThread.receiveFromDataSocket(buffer)) {
                     case -1:
-                        Cat.d("Returned from final read");
+                        Log.d("CmdAbstractStore", "Returned from final read");
                         // We're finished reading
                         break storing;
                     case 0:
@@ -193,7 +192,8 @@ abstract public class CmdAbstractStore extends FtpCmd {
                                 int startPos = 0, endPos;
                                 for (endPos = 0; endPos < numRead; endPos++) {
                                     if (buffer[endPos] == '\r') {
-                                        if (os != null) os.write(buffer, startPos, endPos - startPos);
+                                        if (os != null)
+                                            os.write(buffer, startPos, endPos - startPos);
                                         else out.write(buffer, startPos, endPos - startPos);
                                         // Our hacky method is to drop all \r
                                         startPos = endPos + 1;
@@ -203,12 +203,13 @@ abstract public class CmdAbstractStore extends FtpCmd {
                                 // left after handling the last \r
                                 if (startPos < numRead) {
                                     if (os != null) os.write(buffer, startPos, endPos - startPos);
-                                    else if (out != null) out.write(buffer, startPos, endPos - startPos);
+                                    else if (out != null)
+                                        out.write(buffer, startPos, endPos - startPos);
                                 }
                             }
                         } catch (IOException e) {
                             errString = "451 File IO problem. Device might be full.\r\n";
-                            Cat.d("Exception while storing: " + e);
+                            Log.d("CmdAbstractStore", "Exception while storing: " + e);
                             break storing;
                         }
                         break;
@@ -229,7 +230,7 @@ abstract public class CmdAbstractStore extends FtpCmd {
         }
 
         if (errString != null) {
-            Cat.i("STOR error: " + errString.trim());
+            Log.i("CmdAbstractStore", "STOR error: " + errString.trim());
             sessionThread.writeString(errString);
         } else {
             sessionThread.writeString("226 Transmission complete\r\n");
@@ -241,6 +242,6 @@ abstract public class CmdAbstractStore extends FtpCmd {
             }
         }
         sessionThread.closeDataSocket();
-        Cat.d("STOR finished");
+        Log.d("CmdAbstractStore", "STOR finished");
     }
 }

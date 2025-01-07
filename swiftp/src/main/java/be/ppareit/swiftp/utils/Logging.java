@@ -1,8 +1,7 @@
 package be.ppareit.swiftp.utils;
 
 import android.content.Context;
-
-import net.vrallev.android.cat.Cat;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,7 +29,7 @@ public class Logging {
 
     public void initializeLogging() {
         logging = FsSettings.isLoggingEnabled();
-        Cat.d("Logging enabled: " + logging);
+        Log.d("Swiftp", "Logging enabled: " + logging);
     }
 
     public boolean isLoggingEnabled() {
@@ -43,10 +42,8 @@ public class Logging {
             try (FileOutputStream fos = App.getAppContext().openFileOutput("connLog",
                     Context.MODE_PRIVATE | Context.MODE_APPEND)) {
                 fos.write(s.getBytes());
-            } catch (FileNotFoundException e) {
-                //
-            } catch (IOException e) {
-                //
+            } catch (Throwable e) {
+                Log.e("Swiftp", "saveLogging", e);
             }
         }).start();
     }
@@ -74,7 +71,7 @@ public class Logging {
             }
             return stringBuilder.toString();
         } catch (Exception e) {
-            //
+            Log.e("Swiftp", "readLogFile", e);
         }
         return "";
     }
@@ -84,17 +81,15 @@ public class Logging {
         new Thread(() -> {
             try (FileOutputStream fos = App.getAppContext().openFileOutput("connLog", Context.MODE_PRIVATE)) {
                 fos.write("".getBytes());
-            } catch (FileNotFoundException e) {
-                //
-            } catch (IOException e) {
-                //
+            } catch (Throwable e) {
+                Log.e("Swiftp", "clearLog", e);
             }
         }).start();
     }
 
     /* // todo keep some amount of the old log?
-    * Don't allow the log to keep growing or get too large.
-    * */
+     * Don't allow the log to keep growing or get too large.
+     * */
     private void controlSize() {
         final File file = new File(App.getAppContext().getFilesDir(), "connLog");
         if (file.length() >= 100000) clearLog();
