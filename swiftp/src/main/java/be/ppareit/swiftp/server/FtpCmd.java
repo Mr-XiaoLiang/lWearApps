@@ -185,7 +185,7 @@ public abstract class FtpCmd implements Runnable {
      * Some parameters shouldn't be logged or output (e.g. passwords), so the caller can
      * use silent==true in that case.
      */
-    static public String getParameter(String input, boolean silent) {
+    public static String getParameter(String input, boolean silent) {
         if (input == null) {
             return "";
         }
@@ -211,7 +211,7 @@ public abstract class FtpCmd implements Runnable {
     /**
      * A wrapper around getParameter, for when we don't want it to be silent.
      */
-    static public String getParameter(String input) {
+    public static String getParameter(String input) {
         return getParameter(input, false);
     }
 

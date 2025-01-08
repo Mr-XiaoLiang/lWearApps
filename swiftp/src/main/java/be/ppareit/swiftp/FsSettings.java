@@ -237,10 +237,6 @@ public class FsSettings {
         return i;
     }
 
-    public static boolean shouldTakeFullWakeLock() {
-        return sp.getBoolean("stayAwake", false);
-    }
-
     /**
      * @return the SharedPreferences for this application
      */

@@ -69,13 +69,13 @@ public class FsService extends Service implements Runnable {
     private static final String TAG = FsService.class.getSimpleName();
 
     // Service will check following actions when started through intent
-    static public final String ACTION_REQUEST_START = "be.ppareit.swiftp.REQUEST_START";
-    static public final String ACTION_REQUEST_STOP = "be.ppareit.swiftp.REQUEST_STOP";
+    public static final String ACTION_REQUEST_START = "be.ppareit.swiftp.REQUEST_START";
+    public static final String ACTION_REQUEST_STOP = "be.ppareit.swiftp.REQUEST_STOP";
 
     // Service will (global) broadcast when server start/stop
-    static public final String ACTION_STARTED = "be.ppareit.swiftp.FTPSERVER_STARTED";
-    static public final String ACTION_STOPPED = "be.ppareit.swiftp.FTPSERVER_STOPPED";
-    static public final String ACTION_FAILEDTOSTART = "be.ppareit.swiftp.FTPSERVER_FAILEDTOSTART";
+    public static final String ACTION_STARTED = "be.ppareit.swiftp.FTP_SERVER_STARTED";
+    public static final String ACTION_STOPPED = "be.ppareit.swiftp.FTP_SERVER_STOPPED";
+    public static final String ACTION_FAILED_TO_START = "be.ppareit.swiftp.FTP_SERVER_FAILED_TO_START";
 
     protected static Thread serverThread = null;
     protected boolean shouldExit = false;
@@ -90,9 +90,9 @@ public class FsService extends Service implements Runnable {
     private WifiLock wifiLock = null;
 
     private static boolean connectionWakelockRunning = false;
-    static Handler connWakeLockHandler = null;
-    static Message connWakeLockMessage = null;
-    static boolean useConnWakeLocks = false;
+    private static Handler connWakeLockHandler = null;
+    private static Message connWakeLockMessage = null;
+    private static boolean useConnWakeLocks = false;
 
 
     /**
@@ -274,7 +274,7 @@ public class FsService extends Service implements Runnable {
         if (!isConnectedToLocalNetwork()) {
             Log.w(TAG, "run: There is no local network, bailing out");
             stopSelf();
-            sendBroadcast(new Intent(ACTION_FAILEDTOSTART));
+            sendBroadcast(new Intent(ACTION_FAILED_TO_START));
             return;
         }
 
@@ -284,7 +284,7 @@ public class FsService extends Service implements Runnable {
         } catch (IOException e) {
             Log.w(TAG, "run: Unable to open port, bailing out.");
             stopSelf();
-            sendBroadcast(new Intent(ACTION_FAILEDTOSTART));
+            sendBroadcast(new Intent(ACTION_FAILED_TO_START));
             return;
         }
 
@@ -332,14 +332,8 @@ public class FsService extends Service implements Runnable {
     public void takeWakeLock() {
         if (wakeLock == null) {
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            if (FsSettings.shouldTakeFullWakeLock()) {
-                Log.d(TAG, "takeWakeLock: Taking full wake lock");
-                // Note: FULL_WAKE_LOCK is deprecated, officially not recommended, and is actually worse.
-                wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, TAG);
-            } else {
-                Log.d(TAG, "maybeTakeWakeLock: Taking partial wake lock");
-                wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
-            }
+            Log.d(TAG, "maybeTakeWakeLock: Taking partial wake lock");
+            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
             wakeLock.setReferenceCounted(false);
         }
         wakeLock.acquire();
@@ -394,7 +388,9 @@ public class FsService extends Service implements Runnable {
             @Override
             public void handleMessage(@androidx.annotation.NonNull Message msg) {
                 super.handleMessage(msg);
-                if (isConnWakelockRunning()) releaseWakelocks();
+                if (isConnWakelockRunning()) {
+                    releaseWakelocks();
+                }
             }
         };
     }

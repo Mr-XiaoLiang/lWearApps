@@ -495,7 +495,7 @@ public class SessionThread extends Thread {
         return pasvMode;
     }
 
-    static public ByteBuffer stringToBB(String s) {
+    public static ByteBuffer stringToBB(String s) {
         return ByteBuffer.wrap(s.getBytes());
     }
 
