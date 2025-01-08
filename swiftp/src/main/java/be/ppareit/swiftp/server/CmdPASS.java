@@ -52,7 +52,7 @@ public class CmdPASS extends FtpCmd implements Runnable {
         }
         if (attemptUsername.equals("anonymous") && FsSettings.allowAnonymous()) {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
-            final int anonMaxCon = Integer.parseInt(sp.getString("anon_max", "1"));
+            final int anonMaxCon = FsSettings.getAnonMaxConNumber();
             Logging logging = new Logging();
             final int newCount = AnonymousLimit.incrementAndGet();
             logging.appendLog("anon CURRENT client conn count: " + (newCount - 1));

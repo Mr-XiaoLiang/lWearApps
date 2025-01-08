@@ -208,15 +208,14 @@ public class FsSettings {
     }
 
     public static int getPortNumber() {
-        // TODO: port is always an number, so store this accordingly
-        String portString = sp.getString("portNum", "2121");
-        int port = Integer.valueOf(portString);
+        // port is always an number, so store this accordingly
+        int port = sp.getInt("portNum", 2121);
         Log.v(TAG, "Using port: " + port);
         return port;
     }
 
     public static int getPortNumberImplicit() {
-        // TODO: port is always an number, so store this accordingly
+        // port is always an number, so store this accordingly
         String portString = sp.getString("portNumImplicit",
                 App.getAppContext().getString(R.string.portnumber_default_implicit));
         int port = Integer.parseInt(portString);
@@ -233,37 +232,13 @@ public class FsSettings {
     }
 
     public static int getAnonMaxConNumber() {
-        String s = sp.getString("anon_max", "1");
-        int i = Integer.parseInt(s);
+        int i = sp.getInt("anon_max", 1);
         Log.v(TAG, "Using anon max connections: " + i);
         return i;
     }
 
     public static boolean shouldTakeFullWakeLock() {
         return sp.getBoolean("stayAwake", false);
-    }
-
-    public static int getTheme() {
-        String theme = sp.getString("theme", "0");
-        if (theme == null) {
-            return R.style.AppThemeDark;
-        }
-
-        switch (theme) {
-            case "0":
-                return R.style.AppThemeDark;
-            case "1":
-                return R.style.AppThemeLight;
-            case "2":
-                return R.style.AppThemeLight_DarkActionBar;
-            default:
-                return R.style.AppThemeDark;
-        }
-
-    }
-
-    public static boolean showNotificationIcon() {
-        return sp.getBoolean("show_notification_icon_preference", true);
     }
 
     /**
@@ -374,13 +349,6 @@ public class FsSettings {
      * */
     public static boolean isSystDisabled() {
         return sp.getBoolean("disableSyst", false);
-    }
-
-    /*
-     * Returns whether the banner text is disabled.
-     * */
-    public static boolean isBannerDisabled() {
-        return sp.getBoolean("disableBanner", false);
     }
 
     /*

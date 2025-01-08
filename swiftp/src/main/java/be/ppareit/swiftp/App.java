@@ -18,11 +18,11 @@ along with SwiFTP.  If not, see <http://www.gnu.org/licenses/>.
 */
 package be.ppareit.swiftp;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.util.Log;
 
@@ -34,6 +34,7 @@ public class App {
         App.mInstance = app;
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     public static void onCreate(Application app) {
         bind(app);
         IntentFilter intentFilter = new IntentFilter();
@@ -53,40 +54,6 @@ public class App {
      */
     public static Context getAppContext() {
         return mInstance.getApplicationContext();
-    }
-
-    /**
-     * @return true if this is the free version
-     */
-    public static boolean isFreeVersion() {
-        try {
-            Context context = getAppContext();
-            return context.getPackageName().contains("free");
-        } catch (Exception ignored) {
-        }
-        return false;
-    }
-
-    /**
-     * @return true if the paid version is installed on this device
-     */
-    public static boolean isPaidVersionInstalled() {
-        return isPackageInstalled("be.ppareit.swiftp");
-    }
-
-    /**
-     * @param packageName is the name of the package to check
-     * @return true if packageName is installed on this device
-     */
-    public static boolean isPackageInstalled(String packageName) {
-        try {
-            Context context = getAppContext();
-            PackageManager packageManager = context.getPackageManager();
-            packageManager.getPackageInfo(packageName, 0);
-        } catch (NameNotFoundException e) {
-            return false;
-        }
-        return true;
     }
 
     /**

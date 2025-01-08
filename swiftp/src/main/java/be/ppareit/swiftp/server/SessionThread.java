@@ -362,10 +362,7 @@ public class SessionThread extends Thread {
         Log.i(TAG, "SessionThread started");
         // Give client a welcome
         if (sendWelcomeBanner) {
-            if (FsSettings.isBannerDisabled()) {
-                new Logging().appendLog("Banner is disabled");
-                writeString("220 ready\r\n");
-            } else writeString("220 SwiFTP " + App.getVersion() + " ready\r\n");
+            writeString("220 ready\r\n");
         }
         logging.appendLog("Session started");
         // Main loop: read an incoming line and process it
