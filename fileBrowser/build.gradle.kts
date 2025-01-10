@@ -41,4 +41,5 @@ dependencies {
     implementation(libs.core.splashscreen)
     implementation(libs.appcompat)
     implementation(project(":basic"))
+    implementation(project(":wearBasic"))
 }

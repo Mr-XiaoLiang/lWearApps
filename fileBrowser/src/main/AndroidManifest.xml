@@ -34,6 +34,11 @@
             android:exported="true"
             android:taskAffinity=""
             android:theme="@style/MainActivityTheme.Starting" />
+        <activity
+            android:name="com.lollipop.filebrowser.page.FtpServiceActivity"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@style/MainActivityTheme.Starting"/>
     </application>
 
 </manifest>
