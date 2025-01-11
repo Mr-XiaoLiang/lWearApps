@@ -42,4 +42,6 @@ dependencies {
     implementation(libs.appcompat)
     implementation(project(":basic"))
     implementation(project(":wearBasic"))
+    implementation(project(":qrView"))
+    implementation(project(":swiftp"))
 }

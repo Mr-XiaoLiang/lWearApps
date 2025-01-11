@@ -4,4 +4,8 @@
     <string name="allow">同意</string>
     <string name="storage_size">存储空间\n%1$s / %2$s</string>
     <string name="fpt_service_running_mask">FPT服务正在运行\n请勿退出页面\n触摸点亮屏幕</string>
+    <string name="logo_storage">Storage</string>
+    <string name="logo_ftp">FTP</string>
+    <string name="label_ftp_button">文件传输</string>
+    <string name="ftp_login_info">账号: %1$s\n密码: %2$s</string>
 </resources>

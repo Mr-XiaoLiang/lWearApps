@@ -26,6 +26,9 @@ class MainActivity : FilePermissionActivity() {
         binding.storageButton.setOnClickListener {
             startActivity(Intent(this, FileBrowserActivity::class.java))
         }
+        binding.ftpButton.setOnClickListener {
+            startActivity(Intent(this, FtpServiceActivity::class.java))
+        }
     }
 
     override fun onResume(hasPermission: Boolean) {

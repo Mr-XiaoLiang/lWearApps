@@ -52,6 +52,18 @@
                 app:rectProgress="0.3" />
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ellipsize="none"
+                android:lines="1"
+                android:maxLines="1"
+                android:text="@string/logo_storage"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="#2fff"
+                android:textSize="50sp"
+                android:textStyle="bold|italic" />
+
+            <TextView
                 android:id="@+id/storageSizeView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -64,6 +76,51 @@
                 tools:text="存储空间\n50GB / 100GB" />
 
         </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/ftpButton"
+            android:layout_width="0px"
+            android:layout_height="100dp"
+            android:layout_marginTop="20dp"
+            app:cardBackgroundColor="@color/item_background"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/storageButton"
+            app:layout_constraintWidth_percent="0.8">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ellipsize="none"
+                android:lines="1"
+                android:maxLines="1"
+                android:text="@string/logo_ftp"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="#2fff"
+                android:textSize="50sp"
+                android:textStyle="bold|italic" />
+
+            <TextView
+                android:id="@+id/ftpLabelView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="end|bottom"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="8dp"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:text="@string/label_ftp_button" />
+
+        </androidx.cardview.widget.CardView>
+
+        <Space
+            android:id="@+id/footerSpace"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            app:layout_constraintDimensionRatio="4:1"
+            app:layout_constraintTop_toBottomOf="@id/ftpButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

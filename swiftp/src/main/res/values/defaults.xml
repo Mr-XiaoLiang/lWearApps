@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 Copyright 2011-2014 Pieter Pareit
 
 This file is part of SwiFTP.
@@ -20,8 +19,8 @@ along with SwiFTP.  If not, see <http://www.gnu.org/licenses/>.
 <resources>
     <!-- Don't translate the default resources -->
     <string name="chroot_default" translatable="false"></string>
-    <string name="username_default" translatable="false">ftp</string>
-    <string name="password_default" translatable="false">ftp</string>
+    <string name="username_default" translatable="false">lftp</string>
+    <string name="password_default" translatable="false">lftp</string>
     <string name="show_password_default" translatable="false">false</string>
     <string name="allow_anonymous_default" translatable="false">false</string>
     <string name="portnumber_default" translatable="false">2121</string>

@@ -36,13 +36,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <androidx.appcompat.widget.AppCompatImageView
+                    <com.lollipop.wear.widget.CircularImageView
+                        android:id="@+id/qrCodeView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="10dp"
                         android:background="@android:color/white"
                         android:padding="10dp"
                         android:src="#f00"
+                        app:circularMaxRadius="10dp"
                         app:layout_boxedEdges="all" />
                 </androidx.wear.widget.BoxInsetLayout>
 
@@ -63,6 +65,7 @@
                     android:gravity="center"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
+                    android:id="@+id/loginInfoView"
                     tools:text="name: ftp\npwd: ftp" />
             </androidx.wear.widget.BoxInsetLayout>
 

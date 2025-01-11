@@ -30,7 +30,7 @@ public class App {
 
     private static Application mInstance;
 
-    public static void bind(Application app) {
+    private static void bind(Application app) {
         App.mInstance = app;
     }
 
@@ -40,7 +40,7 @@ public class App {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(FsService.ACTION_STARTED);
         intentFilter.addAction(FsService.ACTION_STOPPED);
-        intentFilter.addAction(FsService.ACTION_FAILEDTOSTART);
+        intentFilter.addAction(FsService.ACTION_FAILED_TO_START);
 
         if (Build.VERSION.SDK_INT >= 33) {
             app.registerReceiver(new NsdService.ServerActionsReceiver(), intentFilter, FsService.RECEIVER_EXPORTED);
