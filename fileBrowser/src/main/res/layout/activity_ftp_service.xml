@@ -46,6 +46,17 @@
                         android:src="#f00"
                         app:circularMaxRadius="10dp"
                         app:layout_boxedEdges="all" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/connectStatusView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:padding="20dp"
+                        android:src="@drawable/baseline_warning_amber_24"
+                        android:tint="#333"
+                        app:layout_boxedEdges="all" />
+
                 </androidx.wear.widget.BoxInsetLayout>
 
             </FrameLayout>
@@ -60,12 +71,12 @@
                 app:layout_constraintTop_toBottomOf="@id/fastPanel">
 
                 <TextView
+                    android:id="@+id/loginInfoView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
-                    android:id="@+id/loginInfoView"
                     tools:text="name: ftp\npwd: ftp" />
             </androidx.wear.widget.BoxInsetLayout>
 
