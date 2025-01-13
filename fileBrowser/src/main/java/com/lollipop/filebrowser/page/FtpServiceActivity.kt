@@ -7,10 +7,14 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
+import be.ppareit.swiftp.App
 import be.ppareit.swiftp.FsService
 import be.ppareit.swiftp.FsSettings
 import com.lollipop.filebrowser.R
@@ -27,6 +31,14 @@ class FtpServiceActivity : AppCompatActivity() {
         BarcodeWriter(this.lifecycle)
     }
 
+    private val timerHandler by lazy {
+        Handler(Looper.getMainLooper())
+    }
+
+    private val screensaverTask = Runnable {
+        updateScreensaver()
+    }
+
     private var fsActionsReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action == null) {
@@ -39,8 +51,12 @@ class FtpServiceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        binding.qrCodeView.outlineProvider
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         updateQrCode(getString(R.string.app_name))
+
+        binding.maskPanel.setOnClickListener {
+            hideScreensaver()
+        }
 
         registerFsReceiver()
 
@@ -49,7 +65,6 @@ class FtpServiceActivity : AppCompatActivity() {
             getString(com.lollipop.swiftp.R.string.username_default),
             getString(com.lollipop.swiftp.R.string.password_default)
         )
-
         FsService.start()
     }
 
@@ -85,7 +100,6 @@ class FtpServiceActivity : AppCompatActivity() {
                 binding.qrCodeView.setImageBitmap(result.getOrNull())
             }
         }
-
     }
 
     private fun updateRunningState() {
@@ -94,14 +108,38 @@ class FtpServiceActivity : AppCompatActivity() {
         }
         val running = FsService.isRunning()
         if (running) {
+            postScreensaverTask()
             val address = FsService.getLocalInetAddress()
             binding.connectStatusView.isVisible = false
             updateQrCode("ftp://${address.hostAddress}:${FsSettings.getPortNumber()}")
         } else {
+            cancelScreensaverTask()
+            hideScreensaver()
             binding.pathView.text = getString(R.string.hint_ftp_service_error)
             binding.qrCodeView.setImageBitmap(null)
             binding.connectStatusView.isVisible = true
         }
+    }
+
+    private fun postScreensaverTask() {
+        timerHandler.removeCallbacks(screensaverTask)
+        if (FsService.isRunning()) {
+            // 30S后进入屏保
+            timerHandler.postDelayed(screensaverTask, 1000L * 30)
+        }
+    }
+
+    private fun cancelScreensaverTask() {
+        timerHandler.removeCallbacks(screensaverTask)
+    }
+
+    private fun hideScreensaver() {
+        binding.maskPanel.isVisible = false
+        postScreensaverTask()
+    }
+
+    private fun updateScreensaver() {
+        binding.maskPanel.isVisible = FsService.isRunning()
     }
 
 }

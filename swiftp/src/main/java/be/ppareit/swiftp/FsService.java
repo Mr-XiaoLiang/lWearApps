@@ -21,11 +21,13 @@ along with SwiFTP.  If not, see <http://www.gnu.org/licenses/>.
 package be.ppareit.swiftp;
 
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ServiceInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
@@ -161,6 +163,15 @@ public class FsService extends Service implements Runnable {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Notification notification = FsNotification.setupNotification(getApplicationContext());
+        if (notification != null) {
+            if (Build.VERSION.SDK_INT >= 34) {
+                startForeground(FsNotification.NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE);
+            } else {
+                startForeground(FsNotification.NOTIFICATION_ID, notification);
+            }
+        }
+
         //https://developer.android.com/reference/android/app/Service.html
         //if there are not any pending start commands to be delivered to the service, it will be called with a null intent object,
         if (intent != null && intent.getAction() != null) {
@@ -257,7 +268,7 @@ public class FsService extends Service implements Runnable {
         try {
             listenSocketSecure = new FTPSSockets().initServerSocket();
         } catch (Exception e) {
-            Log.e(TAG, "Unable to open FTPS implicit port, bailing out: " + e.getLocalizedMessage());
+            Log.e(TAG, "Unable to open FTPS implicit port", e);
         }
     }
 

@@ -9,4 +9,7 @@
     <string name="label_ftp_button">文件传输</string>
     <string name="ftp_login_info">账号: %1$s\n密码: %2$s</string>
     <string name="hint_ftp_service_error">请检查网络链接，并确保手机和电脑处于同一局域网内</string>
+    <string name="label_ftp_service_channel">FTP服务</string>
+    <string name="desc_ftp_service_channel">FTP服务的前台服务通知</string>
+    <string name="label_notification_ftp_service">FTP服务正在运行</string>
 </resources>
