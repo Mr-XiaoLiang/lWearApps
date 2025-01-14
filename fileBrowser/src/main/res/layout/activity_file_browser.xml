@@ -7,8 +7,13 @@
     android:background="@android:color/black">
 
     <androidx.wear.widget.BoxInsetLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="0px"
+        android:layout_height="0px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -19,11 +24,16 @@
 
     <androidx.wear.widget.CurvedTextView
         android:id="@+id/pathView"
+        android:layout_width="0px"
+        android:layout_height="0px"
         android:fontFamily="@font/roboto_regular"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:textColor="@android:color/white"
         android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="/storage/emulated/0/Android/media" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
