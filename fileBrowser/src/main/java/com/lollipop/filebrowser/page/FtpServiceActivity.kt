@@ -5,16 +5,17 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.WindowManager
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
-import be.ppareit.swiftp.App
+import androidx.wear.widget.CurvedTextView
 import be.ppareit.swiftp.FsService
 import be.ppareit.swiftp.FsSettings
 import com.lollipop.filebrowser.R
@@ -27,16 +28,16 @@ class FtpServiceActivity : AppCompatActivity() {
         ActivityFtpServiceBinding.inflate(layoutInflater)
     }
 
-    private val qrWriter by lazy {
-        BarcodeWriter(this.lifecycle)
-    }
-
     private val timerHandler by lazy {
         Handler(Looper.getMainLooper())
     }
 
     private val screensaverTask = Runnable {
         updateScreensaver()
+    }
+
+    private val qrDelegate by lazy {
+        QrDelegate(binding.qrCodeView, binding.pathView, BarcodeWriter(lifecycle))
     }
 
     private var fsActionsReceiver = object : BroadcastReceiver() {
@@ -52,6 +53,7 @@ class FtpServiceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        binding.connectStatusView.isVisible = false
         updateQrCode(getString(R.string.app_name))
 
         binding.maskPanel.setOnClickListener {
@@ -93,13 +95,7 @@ class FtpServiceActivity : AppCompatActivity() {
     }
 
     private fun updateQrCode(content: String) {
-        binding.pathView.text = content
-        binding.qrCodeView.post {
-            qrWriter.encode(content).size(binding.qrCodeView.width).loadBitmap { result ->
-                Log.e("FtpServiceActivity", "updateQrCode: $result")
-                binding.qrCodeView.setImageBitmap(result.getOrNull())
-            }
-        }
+        qrDelegate.updateQrCode(content)
     }
 
     private fun updateRunningState() {
@@ -115,8 +111,7 @@ class FtpServiceActivity : AppCompatActivity() {
         } else {
             cancelScreensaverTask()
             hideScreensaver()
-            binding.pathView.text = getString(R.string.hint_ftp_service_error)
-            binding.qrCodeView.setImageBitmap(null)
+            qrDelegate.hideQr(getString(R.string.hint_ftp_service_error))
             binding.connectStatusView.isVisible = true
         }
     }
@@ -140,6 +135,47 @@ class FtpServiceActivity : AppCompatActivity() {
 
     private fun updateScreensaver() {
         binding.maskPanel.isVisible = FsService.isRunning()
+    }
+
+    private class QrDelegate(
+        val qrView: ImageView,
+        val labelView: CurvedTextView,
+        val qrWriter: BarcodeWriter
+    ) {
+
+        private var currentMode = 0
+
+        fun updateQrCode(content: String) {
+            updateMode()
+            labelView.text = content
+            val localMode = currentMode
+            qrView.post {
+                qrWriter.encode(content).size(qrView.width).loadBitmap { result ->
+                    onQrResult(localMode, result)
+                }
+            }
+        }
+
+        private fun onQrResult(mode: Int, result: Result<Bitmap>) {
+            if (mode != currentMode) {
+                return
+            }
+            qrView.setImageBitmap(result.getOrNull())
+        }
+
+        fun hideQr(label: String) {
+            updateMode()
+            labelView.text = label
+            qrView.setImageBitmap(null)
+        }
+
+        private fun updateMode() {
+            currentMode++
+            if (currentMode == Int.MAX_VALUE) {
+                currentMode = 0
+            }
+        }
+
     }
 
 }

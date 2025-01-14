@@ -100,8 +100,13 @@ public class FsSettings {
             String uriString = sp.getString("uriString", "");
             return new ArrayList<>(Collections.singletonList(new FtpUser(username, password, chroot, uriString)));
         } else {
-            FtpUser defaultUser = new FtpUser(context.getString(R.string.username_default), context.getString(R.string.password_default), "\\", "");
-            return new ArrayList<>(Collections.singletonList(defaultUser));
+            FtpUser defaultUser = new FtpUser(
+                    context.getString(R.string.username_default),
+                    context.getString(R.string.password_default),
+                    "\\",
+                    ""
+            );
+            return Collections.singletonList(defaultUser);
         }
     }
 
