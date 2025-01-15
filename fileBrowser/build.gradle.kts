@@ -40,6 +40,9 @@ android {
 dependencies {
     implementation(libs.core.splashscreen)
     implementation(libs.appcompat)
+    implementation(libs.material)
+//    implementation(libs.activity)
+//    implementation(libs.constraintlayout)
     implementation(project(":basic"))
     implementation(project(":wearBasic"))
     implementation(project(":qrView"))

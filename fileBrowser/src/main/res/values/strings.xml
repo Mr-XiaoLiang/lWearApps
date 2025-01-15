@@ -12,4 +12,6 @@
     <string name="label_ftp_service_channel">FTP服务</string>
     <string name="desc_ftp_service_channel">FTP服务的前台服务通知</string>
     <string name="label_notification_ftp_service">FTP服务正在运行</string>
+    <string name="file_open">打开</string>
+    <string name="file_delete">删除</string>
 </resources>

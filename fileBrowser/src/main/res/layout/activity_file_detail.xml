@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    tools:context=".page.FileDetailActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.wear.widget.CurvedTextView
+            android:id="@+id/timeView"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@android:color/white"
+            android:textSize="11sp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="12:12" />
+
+        <Space
+            android:id="@+id/headerSpace"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            app:layout_constraintDimensionRatio="4:1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Space
+            android:id="@+id/contentAnchor"
+            android:layout_width="0px"
+            android:layout_height="0px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headerSpace"
+            app:layout_constraintWidth_percent="0.8" />
+
+        <TextView
+            android:id="@+id/fileNameView"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@id/contentAnchor"
+            app:layout_constraintStart_toStartOf="@id/contentAnchor"
+            app:layout_constraintTop_toBottomOf="@id/contentAnchor"
+            tools:text="temp_temp_temp_temp_temp.apk" />
+
+        <TextView
+            android:id="@+id/fileSizeView"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:textColor="#DDD"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@id/contentAnchor"
+            app:layout_constraintStart_toStartOf="@id/contentAnchor"
+            app:layout_constraintTop_toBottomOf="@id/fileNameView"
+            tools:text="13.45Mb" />
+
+        <TextView
+            android:id="@+id/fileTimeView"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textColor="#DDD"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@id/contentAnchor"
+            app:layout_constraintStart_toStartOf="@id/contentAnchor"
+            app:layout_constraintTop_toBottomOf="@id/fileSizeView"
+            tools:text="2025年1月15日修改" />
+
+        <TextView
+            android:id="@+id/filePathView"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textColor="#DDD"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@id/contentAnchor"
+            app:layout_constraintStart_toStartOf="@id/contentAnchor"
+            app:layout_constraintTop_toBottomOf="@id/fileTimeView"
+            tools:text="/sdcard/e/0/xxx/xxx/xxx/xx" />
+
+        <com.lollipop.wear.widget.CircularTextView
+            android:id="@+id/openButton"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="#20A49E"
+            android:gravity="center"
+            android:paddingVertical="6dp"
+            android:text="@string/file_open"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@id/contentAnchor"
+            app:layout_constraintStart_toStartOf="@id/contentAnchor"
+            app:layout_constraintTop_toBottomOf="@id/filePathView" />
+
+        <com.lollipop.wear.widget.CircularTextView
+            android:id="@+id/deleteButton"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="#20A49E"
+            android:gravity="center"
+            android:paddingVertical="6dp"
+            android:text="@string/file_delete"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@id/footerSpace"
+            app:layout_constraintEnd_toEndOf="@id/contentAnchor"
+            app:layout_constraintStart_toStartOf="@id/contentAnchor"
+            app:layout_constraintTop_toBottomOf="@id/openButton" />
+
+        <Space
+            android:id="@+id/footerSpace"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="4:1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
