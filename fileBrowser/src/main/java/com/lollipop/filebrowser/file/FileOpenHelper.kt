@@ -1,5 +1,6 @@
 package com.lollipop.filebrowser.file
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -20,7 +21,11 @@ object FileOpenHelper {
         val type = Files.probeContentType(filePath)
         Log.d(
             "FileOpenHelper",
-            "open: file = $filePath, name = $name, suffix = $suffix, type = $type"
+            "open: file = $filePath, name = $name, suffix = $suffix, type = $type， hasPermission = ${
+                checkInstallPermission(
+                    context
+                )
+            }"
         )
         if (APK.equals(suffix, ignoreCase = true) && !checkInstallPermission(context)) {
             return
@@ -45,6 +50,7 @@ object FileOpenHelper {
         )
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private fun checkInstallPermission(context: Context): Boolean {
         val pm = context.packageManager
         if (pm.canRequestPackageInstalls()) {
@@ -53,6 +59,7 @@ object FileOpenHelper {
             //跳转到该应用的安装应用的权限页面
             val packageURI = Uri.parse("package:" + context.packageName)
             val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageURI)
+            intent.resolveActivity(pm) ?: return true
             context.startActivity(intent)
         }
         return false
@@ -65,5 +72,4 @@ object FileOpenHelper {
         }
         return name.substring(index + 1)
     }
-
 }
