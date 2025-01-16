@@ -56,7 +56,7 @@ class FileBrowserActivity : FilePermissionActivity() {
         if (file.isDirectory) {
             start(this, file)
         } else {
-            FileOpenHelper.open(this, file)
+            FileDetailActivity.open(this, file)
         }
     }
 

@@ -14,4 +14,5 @@
     <string name="label_notification_ftp_service">FTP服务正在运行</string>
     <string name="file_open">打开</string>
     <string name="file_delete">删除</string>
+    <string name="file_last_modified">yyyy年MM月dd日 HH:mm:ss</string>
 </resources>
