@@ -1,11 +1,9 @@
 package com.lollipop.filebrowser.page
 
 import android.content.Context
-import android.content.Intent
 import android.icu.text.DecimalFormat
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.lollipop.filebrowser.R
 import com.lollipop.filebrowser.databinding.ActivityFileDetailBinding
 import com.lollipop.filebrowser.file.FileOpenHelper
@@ -13,25 +11,17 @@ import java.io.File
 import java.util.Date
 import java.util.Locale
 
-class FileDetailActivity : AppCompatActivity() {
+class FileDetailActivity : FileBasicActivity() {
 
     companion object {
 
-        private const val PARAMS_TARGET_FILE = "target_file"
-
         fun open(context: Context, file: File) {
-            context.startActivity(Intent(context, FileDetailActivity::class.java).apply {
-                putExtra(PARAMS_TARGET_FILE, file.path)
-            })
+            openBasic<FileDetailActivity>(context, file)
         }
     }
 
     private val binding by lazy {
         ActivityFileDetailBinding.inflate(layoutInflater)
-    }
-
-    private val targetFile by lazy {
-        File(intent.getStringExtra(PARAMS_TARGET_FILE) ?: "")
     }
 
     private val fileSizeFormat by lazy {

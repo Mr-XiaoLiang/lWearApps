@@ -21,9 +21,19 @@
         android:theme="@style/MainActivityTheme.Starting"
         tools:ignore="WearStandaloneAppFlag">
         <activity
+            android:name=".page.ImagePreviewActivity"
+            android:exported="true"
+            android:taskAffinity="">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".page.FileDetailActivity"
             android:exported="false"
-            android:taskAffinity=""/>
+            android:taskAffinity="" />
         <activity
             android:name=".page.MainActivity"
             android:exported="true"
@@ -41,7 +51,7 @@
         <activity
             android:name=".page.FtpServiceActivity"
             android:exported="false"
-            android:taskAffinity=""/>
+            android:taskAffinity="" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

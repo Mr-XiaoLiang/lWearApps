@@ -47,4 +47,8 @@ dependencies {
     implementation(project(":wearBasic"))
     implementation(project(":qrView"))
     implementation(project(":swiftp"))
+    implementation(libs.activity)
+    implementation(libs.constraintlayout)
+
+    implementation ("com.github.bumptech.glide:glide:4.15.0")
 }
