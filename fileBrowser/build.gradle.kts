@@ -15,8 +15,8 @@ android {
         applicationId = "com.lollipop.filebrowser"
         minSdk = 28
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 1_00_00
+        versionName = "1.0.0"
     }
 
     buildTypes {
