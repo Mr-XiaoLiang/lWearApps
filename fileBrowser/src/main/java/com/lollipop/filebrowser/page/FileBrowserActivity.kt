@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,8 +16,11 @@ import com.lollipop.filebrowser.databinding.ItemFileBinding
 import com.lollipop.filebrowser.databinding.ItemSpaceBinding
 import com.lollipop.filebrowser.file.FileOpenHelper
 import com.lollipop.filebrowser.file.FileType
+import com.lollipop.wear.basic.doAsync
+import com.lollipop.wear.basic.onUI
 import com.lollipop.wear.widget.CircularOutlineHelper
 import java.io.File
+import java.io.FileFilter
 
 class FileBrowserActivity : FilePermissionActivity() {
 
@@ -74,19 +78,32 @@ class FileBrowserActivity : FilePermissionActivity() {
         if (currentPath.isEmpty()) {
             currentPath = rootPath
         }
-        val currentFile = File(currentPath)
-        fileList.clear()
-        fileList.add(Item.SpaceItem)
-        currentFile.listFiles()?.let { list ->
-            val mutableList = list.toMutableList()
-            mutableList.sortBy { it.name }
-            mutableList.forEach {
-                fileList.add(Item.FileItem(it))
+        doAsync {
+            Log.d("FileBrowserActivity", "updateFileInfo: $currentPath")
+            val currentFile = File(currentPath)
+            val outList = mutableListOf<Item>()
+            outList.add(Item.SpaceItem)
+            currentFile.listFiles(AllFileFilter())?.let { list ->
+                val mutableList = list.toMutableList()
+                mutableList.sortBy { it.name }
+                mutableList.forEach {
+                    outList.add(Item.FileItem(it))
+                }
+            }
+            outList.add(Item.SpaceItem)
+            onUI {
+                fileList.clear()
+                fileList.addAll(outList)
+                updateFilePath(currentFile)
+                fileAdapter.notifyDataSetChanged()
             }
         }
-        fileList.add(Item.SpaceItem)
-        updateFilePath(currentFile)
-        fileAdapter.notifyDataSetChanged()
+    }
+
+    private class AllFileFilter : FileFilter {
+        override fun accept(file: File): Boolean {
+            return true
+        }
     }
 
     private fun updateFilePath(file: File) {
