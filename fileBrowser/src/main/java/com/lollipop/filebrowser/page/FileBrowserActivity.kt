@@ -183,7 +183,7 @@ class FileBrowserActivity : FilePermissionActivity() {
         }
 
         override fun getItemViewType(position: Int): Int {
-            return when (list[position]) {
+            when (list[position]) {
                 is Item.FileItem -> {
                     return TYPE_FILE
                 }
