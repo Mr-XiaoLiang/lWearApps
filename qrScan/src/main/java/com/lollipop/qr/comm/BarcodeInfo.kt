@@ -8,14 +8,12 @@ import androidx.annotation.CallSuper
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.lollipop.qr.BarcodeFormat
-import com.lollipop.qr.writer.TypedBarcodeWriter.Companion.encode
 import org.json.JSONArray
 import org.json.JSONObject
 
 sealed class BarcodeInfo {
 
     companion object {
-        private const val INFO_NAME = "infoName"
         private const val INFO_RAW = "infoRaw"
         private const val INFO_BARCODE_FORMAT = "infoBarcodeFormat"
     }
@@ -23,8 +21,6 @@ sealed class BarcodeInfo {
     protected inline fun <reified T : Any> T.className(): String {
         return this::class.java.name
     }
-
-    protected open val useBuildBarcodeValueOnly = false
 
     var rawValue: String = ""
         private set
@@ -34,39 +30,6 @@ sealed class BarcodeInfo {
     fun setRaw(value: String, f: BarcodeFormat) {
         rawValue = value
         format = f
-    }
-
-    fun toJson(): String {
-        val jsonObject = this.toJson { json, info ->
-            info.save(json)
-            json.put(INFO_NAME, className())
-        }
-        try {
-            return jsonObject.toString()
-        } catch (e: Throwable) {
-            e.printStackTrace()
-        }
-        return ""
-    }
-
-    fun fromJson(json: String): BarcodeInfo {
-        try {
-            val jsonObject = JSONObject(json)
-            if (jsonObject.has(INFO_NAME)) {
-                val name = jsonObject.optString(INFO_NAME)
-                val instance = Class.forName(name).getDeclaredConstructor().newInstance()
-                if (instance is BarcodeInfo) {
-                    instance.resume(jsonObject)
-                    return instance
-                }
-            }
-        } catch (e: Throwable) {
-            e.printStackTrace()
-        }
-        return Text().apply {
-            value = json
-            setRaw(json, BarcodeFormat.QR_CODE)
-        }
     }
 
     @CallSuper
@@ -81,18 +44,6 @@ sealed class BarcodeInfo {
         val formatName = json.optString(INFO_BARCODE_FORMAT)
         format = BarcodeFormat.entries.find { it.name == formatName } ?: BarcodeFormat.UNKNOWN
     }
-
-    fun getBarcodeValue(): String {
-        if (useBuildBarcodeValueOnly) {
-            return buildBarcodeValue()
-        }
-        if (rawValue.isNotEmpty()) {
-            return rawValue
-        }
-        return buildBarcodeValue()
-    }
-
-    protected abstract fun buildBarcodeValue(): String
 
     protected inline fun <reified T : Any> Collection<T>.mapToJson(map: (T) -> Any): JSONArray {
         val jsonArray = JSONArray()
@@ -165,9 +116,6 @@ sealed class BarcodeInfo {
             value = json.optString(VALUE)
         }
 
-        override fun buildBarcodeValue(): String {
-            return value
-        }
     }
 
     class Unknown : BarcodeInfo() {
@@ -188,9 +136,6 @@ sealed class BarcodeInfo {
             value = json.optString(VALUE)
         }
 
-        override fun buildBarcodeValue(): String {
-            return value
-        }
     }
 
     class Isbn : BarcodeInfo() {
@@ -210,9 +155,6 @@ sealed class BarcodeInfo {
             value = json.optString(VALUE)
         }
 
-        override fun buildBarcodeValue(): String {
-            return value
-        }
     }
 
     class Product : BarcodeInfo() {
@@ -232,9 +174,6 @@ sealed class BarcodeInfo {
             value = json.optString(VALUE)
         }
 
-        override fun buildBarcodeValue(): String {
-            return value
-        }
     }
 
     /**
@@ -284,35 +223,6 @@ sealed class BarcodeInfo {
             phones.fromJsonByObject(json, PHONES) { obj -> Phone.createBy(obj) }
             urls.clear()
             urls.fromJson(json, URLS) { obj -> obj.toString() }
-        }
-
-        override fun buildBarcodeValue(): String {
-            val info = this
-            val vCard = VCard(true, "${info.name.first}${info.name.last}")
-            vCard.add(
-                "N",
-                info.name.prefix,
-                info.name.last,
-                info.name.middle,
-                info.name.first,
-                info.name.suffix
-            )
-            vCard.add("ORG", info.organization)
-            vCard.add("TITLE", info.title)
-            info.phones.forEach {
-                vCard.add("TEL", arrayOf(it.type.name), it.number)
-            }
-            info.emails.forEach {
-                vCard.add("EMAIL", arrayOf(it.type.name), it.address)
-            }
-            info.urls.forEach {
-                vCard.add("URL", it)
-            }
-            info.addresses.forEach {
-                vCard.add("ADR", arrayOf(it.type.name), *it.lines)
-            }
-            vCard.end()
-            return vCard.toString()
         }
 
     }
@@ -388,11 +298,6 @@ sealed class BarcodeInfo {
             middleName = json.optString(MIDDLE_NAME) ?: ""
         }
 
-        override fun buildBarcodeValue(): String {
-            // TODO 不正确的序列化方法
-            return toJson()
-        }
-
     }
 
 
@@ -436,23 +341,6 @@ sealed class BarcodeInfo {
             organizer = json.optString(ORGANIZER)
             status = json.optString(STATUS)
             summary = json.optString(SUMMARY)
-        }
-
-        override fun buildBarcodeValue(): String {
-            val builder = StringBuilder()
-            builder.append("BEGIN:VCALENDAR\n")
-            builder.append("VERSION:2.0\n")
-            builder.append("BEGIN:VEVENT\n")
-            builder.append("SUMMARY:").append(summary).append("\n")
-            builder.append("DESCRIPTION:").append(description).append("\n")
-            builder.append("STATUS:").append(status).append("\n")
-            builder.append("ORGANIZER:").append(organizer).append("\n")
-            builder.append("LOCATION:").append(location).append("\n")
-            builder.append("DTSTART:").append(start.formatValue()).append("\n")
-            builder.append("DTEND:").append(end.formatValue()).append("\n")
-            builder.append("END:VEVENT\n")
-            builder.append("END:VCALENDAR")
-            return builder.toString()
         }
     }
 
@@ -512,18 +400,6 @@ sealed class BarcodeInfo {
             subject = json.optString(SUBJECT)
         }
 
-        /**
-         * mailto:AAAA?subject=BBBB&body=CCCCC
-         */
-        override fun buildBarcodeValue(): String {
-            val info = this
-            val address = info.address.encode()
-            val subject = info.subject.encode()
-            val body = info.body.encode()
-            val type = info.type.proto
-            return "mailto:${address}?subject=${subject}&body=${body}&type=${type}"
-        }
-
     }
 
     class GeoPoint : BarcodeInfo() {
@@ -546,13 +422,6 @@ sealed class BarcodeInfo {
             super.resume(json)
             lat = json.optDouble(LAT, 0.0)
             lng = json.optDouble(LNG, 0.0)
-        }
-
-        /**
-         * geo:123.456,789.123?q=123.456,789.123
-         */
-        override fun buildBarcodeValue(): String {
-            return "geo:${lat},${lng}"
         }
 
     }
@@ -615,12 +484,6 @@ sealed class BarcodeInfo {
             number = json.optString(NUMBER)
         }
 
-        /**
-         * tel:123456678
-         */
-        override fun buildBarcodeValue(): String {
-            return "tel:${number.encode()}"
-        }
     }
 
     class Sms : BarcodeInfo() {
@@ -645,14 +508,6 @@ sealed class BarcodeInfo {
             phoneNumber = json.optString(PHONE_NUMBER) ?: ""
         }
 
-        /**
-         * smsto:1111:AAAAAA
-         */
-        override fun buildBarcodeValue(): String {
-            val number = phoneNumber.encode()
-            val message = message.encode()
-            return "smsto:${number}:${message}"
-        }
     }
 
     class Url : BarcodeInfo() {
@@ -674,10 +529,6 @@ sealed class BarcodeInfo {
             super.resume(json)
             title = json.optString(TITLE) ?: ""
             url = json.optString(URL) ?: ""
-        }
-
-        override fun buildBarcodeValue(): String {
-            return url
         }
     }
 
@@ -717,18 +568,6 @@ sealed class BarcodeInfo {
             password = json.optString(PASSWORD) ?: ""
             ssid = json.optString(SSID) ?: ""
             username = json.optString(USERNAME) ?: ""
-        }
-
-        /**
-         * WIFI:T:WEP;S:AAAA;P:CCCCC;I:BBBB;H:true;
-         */
-        override fun buildBarcodeValue(): String {
-            val info = this
-            val type = info.encryptionType.proto
-            val ssid = info.ssid.encode()
-            val pwd = info.password.encode()
-            val name = info.username.encode()
-            return "WIFI:T:${type};S:${ssid};P:${pwd};I:${name};H:true;;"
         }
 
     }
