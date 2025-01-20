@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">FileSender</string>
+    <string name="hint_permission_camera">为了扫描二维码 ，需要使用到摄像头。\n请授予相机使用权限。</string>
+    <string name="btn_permission">授予权限</string>
+    <string name="btn_custom_uri">手动输入连接</string>
 </resources>

@@ -14,17 +14,85 @@
         android:background="#3f00" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/widgetGroup"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <com.lollipop.wear.widget.CircularImageView
+            android:id="@+id/backButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/action_bar_background"
+            android:padding="12dp"
+            android:src="@drawable/baseline_arrow_back_24"
+            app:circularMaxRadius="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/on_action_bar_background" />
+
+        <com.lollipop.wear.widget.CircularTextView
+            android:id="@+id/permissionHindTextView"
+            android:layout_width="0px"
             android:layout_height="wrap_content"
-            android:text="Hello World!"
+            android:background="@color/dialog_background"
+            android:gravity="center"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="16dp"
+            android:text="@string/hint_permission_camera"
+            android:textColor="@color/on_dialog_background"
+            android:textSize="18sp"
+            app:circularMaxRadius="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.8" />
+
+        <com.lollipop.wear.widget.CircularTextView
+            android:id="@+id/permissionButton"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/dialog_background"
+            android:gravity="center"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="16dp"
+            android:text="@string/btn_permission"
+            android:textColor="@color/on_dialog_background"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:circularMaxRadius="12dp"
+            app:layout_constraintEnd_toEndOf="@id/permissionHindTextView"
+            app:layout_constraintStart_toStartOf="@id/permissionHindTextView"
+            app:layout_constraintTop_toBottomOf="@id/permissionHindTextView" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/permissionHintPanel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="permissionHindTextView,permissionButton" />
+
+        <com.lollipop.wear.widget.CircularTextView
+            android:id="@+id/customButton"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@color/dialog_background"
+            android:gravity="center"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="16dp"
+            android:text="@string/btn_custom_uri"
+            android:textColor="@color/on_dialog_background"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:circularMaxRadius="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.8" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.lollipop.file.sender.scan.CameraFocusBoundsView

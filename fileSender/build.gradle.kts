@@ -13,10 +13,10 @@ android {
 
     defaultConfig {
         applicationId = "com.lollipop.file.sender"
-        minSdk = 21
+        minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 1_00_00
+        versionName = "1.0.0"
     }
 
     buildTypes {
@@ -45,5 +45,6 @@ dependencies {
     implementation(libs.constraintlayout)
 
     implementation(project(":qrScan"))
+    implementation(project(":basic"))
 
 }

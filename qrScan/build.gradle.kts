@@ -44,4 +44,6 @@ dependencies {
     implementation(libs.androidx.camera.view)
     // ML Kit
     implementation(libs.barcode.scanning)
+    // RenderScript
+    implementation(project(":renderScript"))
 }
