@@ -2,5 +2,15 @@
     <string name="app_name">FileSender</string>
     <string name="hint_permission_camera">为了扫描二维码 ，需要使用到摄像头。\n请授予相机使用权限。</string>
     <string name="btn_permission">授予权限</string>
-    <string name="btn_custom_uri">手动输入连接</string>
+    <string name="label_custom_uri">手动连接</string>
+    <string name="label_uri">地址</string>
+    <string name="label_pwd">密码</string>
+    <string name="label_name">账户名</string>
+    <string name="label_port">端口号</string>
+    <string name="prefix_ftp">FTP://</string>
+    <string name="ftp_default_name" translatable="false">lftp</string>
+    <string name="ftp_default_pwd" translatable="false">lftp</string>
+    <string name="ftp_default_port" translatable="false">2121</string>
+    <string name="label_connect">连接</string>
+
 </resources>

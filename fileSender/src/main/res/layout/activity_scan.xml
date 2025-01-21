@@ -83,7 +83,7 @@
             android:gravity="center"
             android:paddingHorizontal="12dp"
             android:paddingVertical="16dp"
-            android:text="@string/btn_custom_uri"
+            android:text="@string/label_custom_uri"
             android:textColor="@color/on_dialog_background"
             android:textSize="16sp"
             android:textStyle="bold"

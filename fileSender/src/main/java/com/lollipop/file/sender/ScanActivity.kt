@@ -1,6 +1,7 @@
 package com.lollipop.file.sender
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -62,7 +63,8 @@ class ScanActivity : AppCompatActivity(), OnBarcodeScanResultListener {
             )
         }
         binding.customButton.setOnClickListener {
-            // TODO("Not yet implemented")
+            startActivity(Intent(this, CustomLoginActivity::class.java))
+            finish()
         }
     }
 
