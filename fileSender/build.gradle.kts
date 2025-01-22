@@ -47,4 +47,7 @@ dependencies {
     implementation(project(":qrScan"))
     implementation(project(":basic"))
 
+    // https://mvnrepository.com/artifact/ftp4j/ftp4j
+    implementation(project(":ftp4j"))
+
 }

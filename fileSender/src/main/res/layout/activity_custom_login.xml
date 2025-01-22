@@ -67,13 +67,12 @@
                 android:layout_marginTop="12dp"
                 android:hint="@string/label_uri"
                 app:endIconMode="clear_text"
-                app:prefixText="@string/prefix_ftp"
                 app:startIconDrawable="@drawable/baseline_host_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:text="abcd.com" />
+                    android:text="@string/prefix_ftp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
