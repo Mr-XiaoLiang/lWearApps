@@ -2,8 +2,10 @@ package com.lollipop.file.sender.ftp
 
 interface FtpStateListener {
 
-    fun onConnectResult(result: Result<Array<String>>)
+    fun onConnectResult(result: RequestResult<Array<String>>)
 
-    fun onLoginResult(result: Result<Boolean>)
+    fun onLoginResult(result: RequestResult<Boolean>)
+
+    fun onOperationFails(e: Throwable)
 
 }
