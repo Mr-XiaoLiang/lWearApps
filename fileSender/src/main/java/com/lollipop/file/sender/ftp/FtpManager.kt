@@ -63,6 +63,7 @@ object FtpManager {
     ) {
 
         val impl = FTPClient()
+
         private val listenerManager = ListenerManager<FtpStateListener>()
 
         fun addListener(listener: FtpStateListener) {

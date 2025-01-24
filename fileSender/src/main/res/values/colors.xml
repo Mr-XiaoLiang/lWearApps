@@ -6,4 +6,6 @@
     <color name="on_action_bar_background">#333333</color>
     <color name="dialog_background">#FFFFFF</color>
     <color name="on_dialog_background">#333333</color>
+    <color name="content_background">#FFFFFF</color>
+    <color name="on_content_background">#333333</color>
 </resources>

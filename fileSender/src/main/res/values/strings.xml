@@ -12,5 +12,6 @@
     <string name="ftp_default_pwd" translatable="false">lftp</string>
     <string name="ftp_default_port" translatable="false">2121</string>
     <string name="label_connect">连接</string>
+    <string name="label_connect_list">连接列表</string>
 
 </resources>

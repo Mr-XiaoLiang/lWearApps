@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LWearApps">
         <activity
+            android:name=".ConnectListActivity"
+            android:exported="false" />
+        <activity
             android:name=".CustomLoginActivity"
             android:exported="false" />
         <activity

@@ -44,6 +44,8 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
 
+    implementation(libs.androidx.swiperefreshlayout)
+
     implementation(project(":qrScan"))
     implementation(project(":basic"))
 
