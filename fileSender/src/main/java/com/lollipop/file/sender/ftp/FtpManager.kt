@@ -1,16 +1,29 @@
 package com.lollipop.file.sender.ftp
 
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import com.lollipop.wear.basic.ListenerManager
+import com.lollipop.wear.data.FileHelper
+import com.lollipop.wear.data.PreferenceHelper
 import it.sauronsoftware.ftp4j.FTPClient
 import it.sauronsoftware.ftp4j.FTPDataTransferListener
 import it.sauronsoftware.ftp4j.FTPFile
+import org.json.JSONArray
+import org.json.JSONObject
 import java.io.File
 import java.util.concurrent.Executors
 
 object FtpManager {
+
+    private const val SP_FILE = "ftp.lp"
+
+    private const val KEY_LIST = "connectList"
+    private const val KEY_USERNAME = "username"
+    private const val KEY_PASSWORD = "password"
+    private const val KEY_HOST = "host"
+    private const val KEY_PORT = "port"
 
     private val clientMap = HashMap<String, Client>()
 
@@ -32,8 +45,62 @@ object FtpManager {
         return clientMap[token]
     }
 
-    fun removeClient(token: String) {
+    fun remove(token: String) {
         clientMap.remove(token)
+    }
+
+    fun list(): List<Client> {
+        return clientMap.values.toList()
+    }
+
+    fun connectList(): List<ConnectInfo> {
+        return clientMap.values.map { it.info }
+    }
+
+    fun read(context: Context) {
+        PreferenceHelper.from(context, SP_FILE).readJson { result ->
+            when (result) {
+                is FileHelper.FileResult.Failure -> {
+                    // 发生异常就不处理了
+                }
+
+                is FileHelper.FileResult.Success -> {
+                    val json = result.data
+                    val connectArray = json.optJSONArray(KEY_LIST)
+                    if (connectArray != null && connectArray.length() > 0) {
+                        for (index in 0 until connectArray.length()) {
+                            val item = connectArray.optJSONObject(index)
+                            val connectInfo = ConnectInfo(
+                                host = item.optString(KEY_HOST),
+                                port = item.optInt(KEY_PORT),
+                                username = item.optString(KEY_USERNAME),
+                                password = item.optString(KEY_PASSWORD)
+                            )
+                            if (connectInfo.host.isNotEmpty() && connectInfo.port > 0) {
+                                getOrCreate(connectInfo)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun save(context: Context) {
+        PreferenceHelper.from(context, SP_FILE).saveJson { json ->
+            val connectArray = JSONArray()
+            val list = connectList()
+            list.forEach { info ->
+                connectArray.put(
+                    JSONObject()
+                        .put(KEY_HOST, info.host)
+                        .put(KEY_PORT, info.port)
+                        .put(KEY_USERNAME, info.username)
+                        .put(KEY_PASSWORD, info.password)
+                )
+            }
+            json.put(KEY_LIST, connectArray)
+        }
     }
 
     private fun doAsync(operation: () -> Unit) {
@@ -62,7 +129,12 @@ object FtpManager {
         val info: ConnectInfo
     ) {
 
-        val impl = FTPClient()
+        private val impl by lazy {
+            FTPClient()
+        }
+
+        val ftpClient: FTPClient
+            get() = impl
 
         private val listenerManager = ListenerManager<FtpStateListener>()
 
@@ -137,6 +209,32 @@ object FtpManager {
                     }
                 }
                 return@tryRequest connectResult && loginResult
+            }
+        }
+
+        /**
+         * 是否已经连接并且登录FTP服务器
+         */
+        fun isConnected(callback: RequestCallback<Boolean>) {
+            tryRequest(callback) { impl.isConnected && impl.isAuthenticated }
+        }
+
+        /**
+         * 断开连接
+         * 会尝试在断开连接之前注销登录
+         */
+        fun disconnect(callback: RequestCallback<Boolean>) {
+            tryRequest(callback) {
+                if (impl.isConnected) {
+                    try {
+                        if (impl.isAuthenticated) {
+                            impl.logout()
+                        }
+                    } catch (_: Throwable) {
+                    }
+                    impl.disconnect(true)
+                }
+                true
             }
         }
 

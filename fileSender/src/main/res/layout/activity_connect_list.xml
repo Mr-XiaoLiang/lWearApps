@@ -13,24 +13,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/action_bar_background"
+        android:elevation="12dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
         tools:paddingTop="24dp">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/backButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="12dp"
-            android:padding="12dp"
-            android:src="@drawable/baseline_arrow_back_24"
-            app:tint="@color/on_action_bar_background" />
-
         <TextView
             android:id="@+id/titleView"
             android:layout_width="0px"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:layout_weight="1"
             android:text="@string/label_connect_list"
             android:textColor="@color/on_action_bar_background"
@@ -56,18 +49,12 @@
 
     </LinearLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0px"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/actionBar">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        app:layout_constraintTop_toBottomOf="@id/actionBar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

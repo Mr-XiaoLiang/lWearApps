@@ -1,7 +1,5 @@
 package com.lollipop.wear.data
 
-import org.json.JSONObject
-
 class DataStore<K, V> {
 
     private val dataMap = HashMap<K, V>()
