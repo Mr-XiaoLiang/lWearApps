@@ -136,6 +136,9 @@ object FtpManager {
         val ftpClient: FTPClient
             get() = impl
 
+        var connectStateCache: Boolean = false
+            private set
+
         private val listenerManager = ListenerManager<FtpStateListener>()
 
         fun addListener(listener: FtpStateListener) {
@@ -208,7 +211,8 @@ object FtpManager {
                         notifyLoginResult(RequestResult.failure(e))
                     }
                 }
-                return@tryRequest connectResult && loginResult
+                connectStateCache = connectResult && loginResult
+                return@tryRequest connectStateCache
             }
         }
 
@@ -216,7 +220,11 @@ object FtpManager {
          * 是否已经连接并且登录FTP服务器
          */
         fun isConnected(callback: RequestCallback<Boolean>) {
-            tryRequest(callback) { impl.isConnected && impl.isAuthenticated }
+            tryRequest(callback) {
+                val result = impl.isConnected && impl.isAuthenticated
+                connectStateCache = result
+                result
+            }
         }
 
         /**
@@ -234,6 +242,7 @@ object FtpManager {
                     }
                     impl.disconnect(true)
                 }
+                connectStateCache = impl.isConnected && impl.isAuthenticated
                 true
             }
         }

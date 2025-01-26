@@ -60,7 +60,13 @@ class ConnectListActivity : AppCompatActivity() {
     }
 
     private fun onItemClick(info: ConnectInfo) {
-        // TODO
+        val connectState = FtpManager.getOrCreate(info).connectStateCache
+        // 弹出提示框，如果没有连接，需要提示连接，如果已经连接，就提示打开或断开连接
+        if (connectState) {
+            // TODO 已经连接，提示打开或者断开
+        } else {
+            // TODO 没有连接，提示连接
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -125,6 +131,8 @@ class ConnectListActivity : AppCompatActivity() {
 
         private var changeMode = 0
 
+        private var stateReady = false
+
         init {
             binding.root.setOnClickListener {
                 onItemClick()
@@ -132,6 +140,9 @@ class ConnectListActivity : AppCompatActivity() {
         }
 
         private fun onItemClick() {
+            if (!stateReady) {
+                return
+            }
             onClickCallback(adapterPosition)
         }
 
@@ -144,6 +155,7 @@ class ConnectListActivity : AppCompatActivity() {
 
         fun bind(info: ConnectInfo) {
             updateMode()
+            stateReady = false
             binding.nameView.text = info.displayName
             binding.stateView.text = ""
             binding.stateIcon.setImageDrawable(null)
@@ -173,6 +185,7 @@ class ConnectListActivity : AppCompatActivity() {
         }
 
         private fun updateState(isConnected: Boolean) {
+            stateReady = true
             binding.stateView.setText(
                 if (isConnected) {
                     R.string.state_connected
