@@ -16,6 +16,7 @@ import com.lollipop.file.sender.databinding.ItemConnectItemBinding
 import com.lollipop.file.sender.ftp.ConnectInfo
 import com.lollipop.file.sender.ftp.FtpManager
 import com.lollipop.file.sender.ftp.RequestResult
+import com.lollipop.wear.basic.DialogHelper
 
 class ConnectListActivity : AppCompatActivity() {
 
@@ -62,10 +63,49 @@ class ConnectListActivity : AppCompatActivity() {
     private fun onItemClick(info: ConnectInfo) {
         val connectState = FtpManager.getOrCreate(info).connectStateCache
         // 弹出提示框，如果没有连接，需要提示连接，如果已经连接，就提示打开或断开连接
-        if (connectState) {
-            // TODO 已经连接，提示打开或者断开
+        val optionArray = if (connectState) {
+            // 已经连接，提示打开或者断开
+            arrayOf(R.string.option_open, R.string.option_disconnect)
         } else {
-            // TODO 没有连接，提示连接
+            // 没有连接，提示连接
+            arrayOf(R.string.option_connect)
+        }
+
+        DialogHelper.list(
+            this,
+            R.string.title_options,
+            optionArray
+        ) { dialog, option ->
+            dialog.dismiss()
+            onOptionDialogClick(option, info)
+        }
+    }
+
+    private fun onOptionDialogClick(option: Int, info: ConnectInfo) {
+        when (option) {
+            R.string.option_connect -> {
+                val loading = DialogHelper.loading(this, R.string.title_connecting)
+                FtpManager.getOrCreate(info).connect {
+                    loading.dismiss()
+                    connectInfoList.indexOf(info).takeIf { it >= 0 }?.let {
+                        itemAdapter.notifyItemChanged(it)
+                    }
+                }
+            }
+
+            R.string.option_disconnect -> {
+                val loading = DialogHelper.loading(this, R.string.title_disconnecting)
+                FtpManager.getOrCreate(info).disconnect {
+                    loading.dismiss()
+                    connectInfoList.indexOf(info).takeIf { it >= 0 }?.let {
+                        itemAdapter.notifyItemChanged(it)
+                    }
+                }
+            }
+
+            R.string.option_open -> {
+                // TODO open 打开详情页
+            }
         }
     }
 

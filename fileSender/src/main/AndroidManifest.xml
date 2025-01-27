@@ -16,18 +16,20 @@
         android:theme="@style/Theme.LWearApps">
         <activity
             android:name=".ConnectListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".CustomLoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ScanActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".CustomLoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ScanActivity"
+            android:exported="true">
+
         </activity>
     </application>
 

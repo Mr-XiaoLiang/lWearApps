@@ -17,4 +17,12 @@
     <string name="state_connected">已连接</string>
     <string name="state_disconnected">未连接</string>
 
+    <string name="title_options">选项</string>
+    <string name="option_connect">连接</string>
+    <string name="option_disconnect">断开</string>
+    <string name="option_open">打开</string>
+    <string name="option_cancel">取消</string>
+
+    <string name="title_connecting">连接中</string>
+    <string name="title_disconnecting">断开中</string>
 </resources>
