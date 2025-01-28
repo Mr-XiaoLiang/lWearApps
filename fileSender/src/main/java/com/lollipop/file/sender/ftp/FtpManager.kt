@@ -13,6 +13,7 @@ import it.sauronsoftware.ftp4j.FTPFile
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.util.Date
 import java.util.concurrent.Executors
 
 object FtpManager {
@@ -139,6 +140,8 @@ object FtpManager {
         var connectStateCache: Boolean = false
             private set
 
+        private var rootPath = ""
+
         private val listenerManager = ListenerManager<FtpStateListener>()
 
         fun addListener(listener: FtpStateListener) {
@@ -251,7 +254,30 @@ object FtpManager {
          * 当前目录的路径
          */
         fun currentDirectory(callback: RequestCallback<String>) {
-            tryRequest(callback) { impl.currentDirectory() }
+            tryRequest(callback) {
+                impl.currentDirectory().also {
+                    if (rootPath.isEmpty()) {
+                        rootPath = it
+                    }
+                }
+            }
+        }
+
+        /**
+         * 修改文件夹
+         */
+        fun changeDirectory(dirPath: String, callback: RequestCallback<Boolean>) {
+            tryRequest(callback) {
+                impl.changeDirectory(dirPath)
+                true
+            }
+        }
+
+        /**
+         * 修改时间
+         */
+        fun modifiedDate(filePath: String, callback: RequestCallback<Date>) {
+            tryRequest(callback) { impl.modifiedDate(filePath) }
         }
 
         /**
