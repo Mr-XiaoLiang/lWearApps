@@ -250,6 +250,15 @@ object FtpManager {
             }
         }
 
+        fun rootPath(callback: RequestCallback<String>) {
+            tryRequest(callback) {
+                if (rootPath.isEmpty()) {
+                    rootPath = impl.currentDirectory()
+                }
+                rootPath
+            }
+        }
+
         /**
          * 当前目录的路径
          */

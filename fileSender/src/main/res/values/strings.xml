@@ -26,4 +26,6 @@
     <string name="title_connecting">连接中</string>
     <string name="title_disconnecting">断开中</string>
     <string name="label_ftp_file_manager">FTP文件管理</string>
+
+    <string name="label_ftp_root">根目录</string>
 </resources>

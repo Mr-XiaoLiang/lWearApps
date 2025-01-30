@@ -13,15 +13,26 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lollipop.file.sender.databinding.ActivityFtpFileManagerBinding
 import com.lollipop.file.sender.databinding.ItemFtpCrumbsBinding
 import com.lollipop.file.sender.databinding.ItemFtpFileBinding
+import com.lollipop.file.sender.ftp.FtpManager
+import com.lollipop.file.sender.ftp.RequestResult
 import it.sauronsoftware.ftp4j.FTPFile
+import java.util.LinkedList
 
+/**
+ * 更新流程
+ * onResume -
+ */
 class FtpFileManagerActivity : AppCompatActivity() {
+
+    companion object {
+        private const val KEY_TOKEN = "key_token"
+    }
 
     private val binding by lazy {
         ActivityFtpFileManagerBinding.inflate(layoutInflater)
     }
 
-    private val crumbsList = mutableListOf<CrumbsInfo>()
+    private val crumbsList = LinkedList<CrumbsInfo>()
 
     private val fileList = mutableListOf<FTPFile>()
 
@@ -33,10 +44,19 @@ class FtpFileManagerActivity : AppCompatActivity() {
         FileAdapter(layoutInflater, fileList, ::onItemClick, ::onOptionClick)
     }
 
+    private var currentPath = ""
+    private val currentToken by lazy {
+        intent.getStringExtra(KEY_TOKEN) ?: ""
+    }
+
     private val crumbsOnBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
             handlerCrumbsBackPressed()
         }
+    }
+
+    private fun findClient(): FtpManager.Client? {
+        return FtpManager.findClient(currentToken)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,27 +97,90 @@ class FtpFileManagerActivity : AppCompatActivity() {
     }
 
     private fun onRefresh() {
-        // TODO
+        // TODO show loading
+        loadFileList()
     }
 
     private fun onCrumbsClick(info: CrumbsInfo) {
-        // TODO
+        if (crumbsList.indexOf(info) >= 0) {
+            while (crumbsList.isNotEmpty()) {
+                if (crumbsList.last().path == info.path) {
+                    break
+                }
+                crumbsList.removeLast()
+            }
+        } else {
+            crumbsList.addLast(info)
+        }
+        onCrumbsChanged()
     }
 
     private fun onItemClick(file: FTPFile) {
-        // TODO
+        when (file.type) {
+            FTPFile.TYPE_DIRECTORY -> {
+                val filePath = currentPath + "/" + file.name
+                crumbsList.addLast(CrumbsInfo(name = file.name, path = filePath))
+                onCrumbsChanged()
+            }
+
+            FTPFile.TYPE_LINK -> {
+                crumbsList.addLast(CrumbsInfo(name = file.name, path = file.link))
+                onCrumbsChanged()
+            }
+
+            FTPFile.TYPE_FILE -> {
+                // TODO 打开文件
+            }
+        }
+
     }
 
     private fun onOptionClick(file: FTPFile) {
-        // TODO
+        // TODO 选项对话框
     }
 
     private fun handlerCrumbsBackPressed() {
+        if (crumbsList.size > 1) {
+            crumbsList.removeLast()
+            onCrumbsChanged()
+        }
         // TODO
     }
 
     private fun onCrumbsChanged() {
         crumbsOnBackPressedCallback.isEnabled = crumbsList.size > 1
+        updateCurrentPath()
+    }
+
+    private fun updateCurrentPath() {
+        if (currentPath.isEmpty()) {
+            findClient()?.rootPath {
+                when (it) {
+                    is RequestResult.Success -> {
+                        val rootPath = it.data
+                        currentPath = rootPath
+                        crumbsList.clear()
+                        crumbsList.add(CrumbsInfo(getString(R.string.label_ftp_root), rootPath))
+                        onRefresh()
+                    }
+
+                    else -> {
+                        showError()
+                    }
+                }
+            }
+        } else {
+            currentPath = crumbsList.last().path
+            onRefresh()
+        }
+    }
+
+    private fun loadFileList() {
+        // TODO
+    }
+
+    private fun showError() {
+        // TODO
     }
 
     private class CrumbsAdapter(
@@ -222,7 +305,9 @@ class FtpFileManagerActivity : AppCompatActivity() {
 
     private class CrumbsInfo(
         val name: String,
-        val childList: List<FTPFile>
-    )
+        val path: String,
+    ) {
+        val childList = ArrayList<FTPFile>()
+    }
 
 }
