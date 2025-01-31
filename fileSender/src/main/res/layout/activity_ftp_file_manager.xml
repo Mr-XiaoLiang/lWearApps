@@ -46,6 +46,14 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/optionButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:src="@drawable/baseline_more_vert_24"
+            app:tint="@color/on_action_bar_background" />
+
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

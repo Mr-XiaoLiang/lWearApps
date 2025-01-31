@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lollipop.file.sender.databinding.ActivityFtpFileManagerBinding
 import com.lollipop.file.sender.databinding.ItemFtpCrumbsBinding
 import com.lollipop.file.sender.databinding.ItemFtpFileBinding
+import com.lollipop.file.sender.ftp.FileTransferStation
 import com.lollipop.file.sender.ftp.FtpManager
 import com.lollipop.file.sender.ftp.RequestResult
+import com.lollipop.wear.basic.DialogHelper
 import it.sauronsoftware.ftp4j.FTPFile
 import java.util.LinkedList
 
@@ -26,6 +28,30 @@ class FtpFileManagerActivity : AppCompatActivity() {
 
     companion object {
         private const val KEY_TOKEN = "key_token"
+        private val OPTION_FILE = arrayOf(
+            R.string.option_ftp_file_download,
+            R.string.option_ftp_file_copy,
+            R.string.option_ftp_file_move,
+            R.string.option_ftp_file_delete,
+            R.string.option_ftp_file_rename,
+        )
+        private val OPTION_FOLDER = arrayOf(
+            R.string.option_ftp_file_download,
+            R.string.option_ftp_file_copy,
+            R.string.option_ftp_file_move,
+            R.string.option_ftp_file_paste,
+            R.string.option_ftp_file_rename,
+            R.string.option_ftp_file_create_folder,
+            R.string.option_ftp_file_upload,
+            R.string.option_ftp_file_delete,
+        )
+        private val OPTION_LINK = arrayOf(
+            R.string.option_ftp_file_download,
+            R.string.option_ftp_file_copy,
+            R.string.option_ftp_file_move,
+            R.string.option_ftp_file_delete,
+            R.string.option_ftp_file_rename,
+        )
     }
 
     private val binding by lazy {
@@ -93,6 +119,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
         binding.backButton.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
         binding.closeButton.setOnClickListener { finish() }
         onBackPressedDispatcher.addCallback(crumbsOnBackPressedCallback)
+        binding.optionButton.setOnClickListener { showFileOption(OPTION_FOLDER, currentPath) }
         onCrumbsChanged()
     }
 
@@ -115,10 +142,14 @@ class FtpFileManagerActivity : AppCompatActivity() {
         onCrumbsChanged()
     }
 
+    private fun getFilePath(fileName: String): String {
+        return FileTransferStation.getFilePath(currentPath, fileName)
+    }
+
     private fun onItemClick(file: FTPFile) {
         when (file.type) {
             FTPFile.TYPE_DIRECTORY -> {
-                val filePath = currentPath + "/" + file.name
+                val filePath = getFilePath(file.name)
                 crumbsList.addLast(CrumbsInfo(name = file.name, path = filePath))
                 onCrumbsChanged()
             }
@@ -129,14 +160,38 @@ class FtpFileManagerActivity : AppCompatActivity() {
             }
 
             FTPFile.TYPE_FILE -> {
-                // TODO 打开文件
+                showFileOption(
+                    OPTION_FILE,
+                    getFilePath(file.name)
+                )
             }
         }
-
     }
 
     private fun onOptionClick(file: FTPFile) {
-        // TODO 选项对话框
+        val filePath = getFilePath(file.name)
+        when (file.type) {
+            FTPFile.TYPE_DIRECTORY -> {
+                showFileOption(
+                    OPTION_FOLDER,
+                    filePath
+                )
+            }
+
+            FTPFile.TYPE_LINK -> {
+                showFileOption(
+                    OPTION_LINK,
+                    filePath
+                )
+            }
+
+            FTPFile.TYPE_FILE -> {
+                showFileOption(
+                    OPTION_FILE,
+                    filePath
+                )
+            }
+        }
     }
 
     private fun handlerCrumbsBackPressed() {
@@ -145,6 +200,100 @@ class FtpFileManagerActivity : AppCompatActivity() {
             onCrumbsChanged()
         }
         // TODO
+    }
+
+    private fun showFileOption(
+        optionArray: Array<Int>,
+        filePath: String
+    ) {
+        DialogHelper.list(
+            context = this,
+            titleRes = R.string.title_options,
+            itemResList = optionArray
+        ) { dialog, option ->
+            dialog.dismiss()
+            onOptionClick(option, filePath)
+        }
+    }
+
+    private fun onOptionClick(option: Int, filePath: String) {
+        when (option) {
+            R.string.option_ftp_file_stash -> {
+                FileTransferStation.stashRemote(filePath)
+            }
+
+            R.string.option_ftp_file_download -> {
+                FileTransferStation.stashRemote(filePath)
+                FileTransferStation.pending = FileTransferStation.Pending.Download
+                chooseLocalPath()
+            }
+
+            R.string.option_ftp_file_copy -> {
+                FileTransferStation.stashRemote(filePath)
+                FileTransferStation.pending = FileTransferStation.Pending.Copy
+                chooseRemotePath()
+            }
+
+            R.string.option_ftp_file_move -> {
+                FileTransferStation.stashRemote(filePath)
+                FileTransferStation.pending = FileTransferStation.Pending.Move
+                chooseRemotePath()
+            }
+
+            R.string.option_ftp_file_paste -> {
+                when (FileTransferStation.pending) {
+                    FileTransferStation.Pending.Copy -> {
+                        FileTransferStation.copy(
+                            dirUri = filePath,
+                            files = FileTransferStation.remoteFiles(),
+                        )
+                        authorize()
+                    }
+
+                    FileTransferStation.Pending.Move -> {
+                        FileTransferStation.move(
+                            dirUri = filePath,
+                            files = FileTransferStation.remoteFiles(),
+                        )
+                        authorize()
+                    }
+
+                    else -> {
+                        // 粘贴对于其他的Pending来说无意义
+                    }
+                }
+            }
+
+            R.string.option_ftp_file_rename -> {
+                // TODO 显示对话框，修改名称
+                // FileTransferStation.rename(filePath, "")
+            }
+
+            R.string.option_ftp_file_create_folder -> {
+                // TODO 怎么创建文件夹？
+            }
+
+            R.string.option_ftp_file_upload -> {
+                // TODO 选择本地文件，然后上传流程
+            }
+
+            R.string.option_ftp_file_delete -> {
+                FileTransferStation.delete(filePath)
+                authorize()
+            }
+        }
+    }
+
+    private fun authorize() {
+        // TODO 批准执行流程
+    }
+
+    private fun chooseRemotePath() {
+        // TODO 选择远程路径
+    }
+
+    private fun chooseLocalPath() {
+        // TODO 选择本地路径
     }
 
     private fun onCrumbsChanged() {
@@ -176,11 +325,11 @@ class FtpFileManagerActivity : AppCompatActivity() {
     }
 
     private fun loadFileList() {
-        // TODO
+        // TODO 加载远程文件列表
     }
 
     private fun showError() {
-        // TODO
+        // TODO 显示错误信息
     }
 
     private class CrumbsAdapter(
