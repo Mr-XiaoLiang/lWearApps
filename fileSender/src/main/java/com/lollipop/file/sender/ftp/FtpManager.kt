@@ -316,6 +316,16 @@ object FtpManager {
             }
         }
 
+        fun cdAndList(
+            dirPath: String,
+            callback: RequestCallback<Array<FTPFile>>
+        ) {
+            tryRequest(callback) {
+                impl.changeDirectory(dirPath)
+                impl.list()
+            }
+        }
+
         /**
          * 获取当前路径下的文件列表
          */

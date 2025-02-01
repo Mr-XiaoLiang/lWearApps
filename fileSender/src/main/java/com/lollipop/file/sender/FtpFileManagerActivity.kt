@@ -1,5 +1,6 @@
 package com.lollipop.file.sender
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -125,6 +126,9 @@ class FtpFileManagerActivity : AppCompatActivity() {
 
     private fun onRefresh() {
         // TODO show loading
+        binding.swipeRefreshLayout.post {
+            binding.swipeRefreshLayout.isRefreshing = true
+        }
         loadFileList()
     }
 
@@ -199,7 +203,6 @@ class FtpFileManagerActivity : AppCompatActivity() {
             crumbsList.removeLast()
             onCrumbsChanged()
         }
-        // TODO
     }
 
     private fun showFileOption(
@@ -303,21 +306,13 @@ class FtpFileManagerActivity : AppCompatActivity() {
 
     private fun updateCurrentPath() {
         if (currentPath.isEmpty()) {
-            findClient()?.rootPath {
-                when (it) {
-                    is RequestResult.Success -> {
-                        val rootPath = it.data
-                        currentPath = rootPath
-                        crumbsList.clear()
-                        crumbsList.add(CrumbsInfo(getString(R.string.label_ftp_root), rootPath))
-                        onRefresh()
-                    }
-
-                    else -> {
-                        showError()
-                    }
-                }
-            }
+            findClient()?.rootPath(successNext {
+                val rootPath = it
+                currentPath = rootPath
+                crumbsList.clear()
+                crumbsList.add(CrumbsInfo(getString(R.string.label_ftp_root), rootPath))
+                onRefresh()
+            })
         } else {
             currentPath = crumbsList.last().path
             onRefresh()
@@ -325,7 +320,51 @@ class FtpFileManagerActivity : AppCompatActivity() {
     }
 
     private fun loadFileList() {
-        // TODO 加载远程文件列表
+        if (currentPath.isEmpty()) {
+            updateCurrentPath()
+            return
+        }
+        crumbsList.last?.childList?.also {
+            updateFileList(it)
+        }
+        val client = findClient() ?: return
+        // 更新目录，然后才刷新列表
+        client.cdAndList(currentPath, successNext { files ->
+            val ftpFileList = files.toList()
+            crumbsList.last?.childList?.also {
+                // 更新面包屑记录
+                it.clear()
+                it.addAll(ftpFileList)
+            }
+            updateFileList(ftpFileList)
+            // 刷新列表的时候，需要关闭下拉刷新
+            binding.swipeRefreshLayout.post {
+                binding.swipeRefreshLayout.isRefreshing = false
+            }
+        })
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun updateFileList(list: List<FTPFile>) {
+        fileList.clear()
+        fileList.addAll(list)
+        fileAdapter.notifyDataSetChanged()
+    }
+
+    private inline fun <reified T : Any> successNext(
+        crossinline callback: (T) -> Unit
+    ): FtpManager.RequestCallback<T> {
+        return FtpManager.RequestCallback { result ->
+            when (result) {
+                is RequestResult.Success -> {
+                    callback(result.data)
+                }
+
+                is RequestResult.Failure -> {
+                    showError()
+                }
+            }
+        }
     }
 
     private fun showError() {
