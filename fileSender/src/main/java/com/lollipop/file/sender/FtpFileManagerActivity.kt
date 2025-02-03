@@ -1,6 +1,7 @@
 package com.lollipop.file.sender
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.lollipop.file.sender.ftp.FileTransferStation
 import com.lollipop.file.sender.ftp.FtpManager
 import com.lollipop.file.sender.ftp.RequestResult
 import com.lollipop.wear.basic.DialogHelper
+import com.lollipop.wear.utils.FileChooseHelper
 import it.sauronsoftware.ftp4j.FTPFile
 import java.util.LinkedList
 
@@ -75,6 +77,14 @@ class FtpFileManagerActivity : AppCompatActivity() {
     private val currentToken by lazy {
         intent.getStringExtra(KEY_TOKEN) ?: ""
     }
+
+    private val localFileChooser = FileChooseHelper.fileChoose(
+        activity = this, callback = ::onLocalFileChoose
+    )
+
+    private val localFolderChooser = FileChooseHelper.folderChoose(
+        activity = this, callback = ::onLocalFolderChoose
+    )
 
     private val crumbsOnBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
@@ -144,6 +154,33 @@ class FtpFileManagerActivity : AppCompatActivity() {
             crumbsList.addLast(info)
         }
         onCrumbsChanged()
+    }
+
+    private fun onLocalFileChoose(uri: Uri?) {
+        uri ?: return
+        // 不管状态怎么样，先暂存文件
+        FileTransferStation.stashLocal(uri)
+        // 如果是上传模式，那么我们进入上传流程
+        if (FileTransferStation.pending == FileTransferStation.Pending.Upload) {
+            // 将上传的目标路径设置为当前路径，并且检索所有本地文件
+            FileTransferStation.upload(currentPath, FileTransferStation.localFiles())
+            // 触发工作流确认
+            authorize()
+        }
+    }
+
+    private fun onLocalFolderChoose(uri: Uri?) {
+        uri ?: return
+        // 选择文件夹一般是下载模式
+        if (FileTransferStation.pending == FileTransferStation.Pending.Download) {
+            // 将下载的目标路径设置为当前路径，并且检索所有本地文件
+            FileTransferStation.download(uri, FileTransferStation.remoteFiles())
+            // 触发工作流确认
+            authorize()
+        } else {
+            // 否则，记录一下文件夹
+            FileTransferStation.stashLocal(uri)
+        }
     }
 
     private fun getFilePath(fileName: String): String {
@@ -238,8 +275,11 @@ class FtpFileManagerActivity : AppCompatActivity() {
             }
 
             R.string.option_ftp_file_move -> {
+                // 移动文件，需要先暂存文件
                 FileTransferStation.stashRemote(filePath)
+                // 设置Pending类型，然后发起选择，等待结果
                 FileTransferStation.pending = FileTransferStation.Pending.Move
+                // 进入远程选择模式
                 chooseRemotePath()
             }
 
@@ -277,7 +317,9 @@ class FtpFileManagerActivity : AppCompatActivity() {
             }
 
             R.string.option_ftp_file_upload -> {
-                // TODO 选择本地文件，然后上传流程
+                // 先设置Pending类型，然后发起选择，等待结果
+                FileTransferStation.pending = FileTransferStation.Pending.Upload
+                localFileChooser.launch(Unit)
             }
 
             R.string.option_ftp_file_delete -> {
@@ -292,16 +334,41 @@ class FtpFileManagerActivity : AppCompatActivity() {
     }
 
     private fun chooseRemotePath() {
-        // TODO 选择远程路径
+        updateUIState()
     }
 
     private fun chooseLocalPath() {
-        // TODO 选择本地路径
+        localFolderChooser.launch(Unit)
     }
 
     private fun onCrumbsChanged() {
         crumbsOnBackPressedCallback.isEnabled = crumbsList.size > 1
         updateCurrentPath()
+    }
+
+    private fun updateUIState() {
+        // TODO 根据状态更新UI元素的内容
+        when (FileTransferStation.pending) {
+            FileTransferStation.Pending.None -> {
+                // TODO 无任何操作
+            }
+
+            FileTransferStation.Pending.Upload -> {
+                // TODO 显示上传按钮
+            }
+
+            FileTransferStation.Pending.Download -> {
+                // TODO 显示下载按钮
+            }
+
+            FileTransferStation.Pending.Copy -> {
+                // TODO 显示粘贴按钮
+            }
+
+            FileTransferStation.Pending.Move -> {
+                // TODO 显示移动按钮
+            }
+        }
     }
 
     private fun updateCurrentPath() {
