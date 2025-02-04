@@ -47,6 +47,11 @@
         <attr name="circularMaxRadius" />
     </declare-styleable>
 
+    <declare-styleable name="CircularOutlineLinearGroup">
+        <attr name="circularMaxRadius" />
+        <attr name="gapMaxRadius" format="dimension" />
+    </declare-styleable>
+
     <declare-styleable name="RectProgressView">
         <attr name="rectProgress" format="float" />
         <attr name="rectMode" format="enum">

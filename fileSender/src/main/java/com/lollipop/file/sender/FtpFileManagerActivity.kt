@@ -12,9 +12,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import com.lollipop.file.sender.databinding.ActivityFtpFileManagerBinding
 import com.lollipop.file.sender.databinding.ItemFtpCrumbsBinding
 import com.lollipop.file.sender.databinding.ItemFtpFileBinding
+import com.lollipop.file.sender.databinding.ItemSpaceBinding
 import com.lollipop.file.sender.ftp.FileTransferStation
 import com.lollipop.file.sender.ftp.FtpManager
 import com.lollipop.file.sender.ftp.RequestResult
@@ -63,7 +65,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
 
     private val crumbsList = LinkedList<CrumbsInfo>()
 
-    private val fileList = mutableListOf<FTPFile>()
+    private val fileList = mutableListOf<Any>()
 
     private val crumbsAdapter by lazy {
         CrumbsAdapter(layoutInflater, crumbsList, ::onCrumbsClick)
@@ -115,6 +117,11 @@ class FtpFileManagerActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom)
             insets
         }
+        ViewCompat.setOnApplyWindowInsetsListener(binding.controlBar) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom)
+            insets
+        }
     }
 
     private fun initView() {
@@ -132,6 +139,11 @@ class FtpFileManagerActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(crumbsOnBackPressedCallback)
         binding.optionButton.setOnClickListener { showFileOption(OPTION_FOLDER, currentPath) }
         onCrumbsChanged()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 
     private fun onRefresh() {
@@ -372,7 +384,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
     }
 
     private fun updateCurrentPath() {
-        if (currentPath.isEmpty()) {
+        if (currentPath.isEmpty() || crumbsList.isEmpty()) {
             findClient()?.rootPath(successNext {
                 val rootPath = it
                 currentPath = rootPath
@@ -415,6 +427,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
     private fun updateFileList(list: List<FTPFile>) {
         fileList.clear()
         fileList.addAll(list)
+        fileList.add(SpaceInfo)
         fileAdapter.notifyDataSetChanged()
     }
 
@@ -467,35 +480,120 @@ class FtpFileManagerActivity : AppCompatActivity() {
 
     private class FileAdapter(
         private val layoutInflater: LayoutInflater,
-        private val data: List<FTPFile>,
+        private val data: List<Any>,
         private val clickCallback: (FTPFile) -> Unit,
         private val optionClickCallback: (FTPFile) -> Unit
-    ) : RecyclerView.Adapter<FileHolder>() {
+    ) : RecyclerView.Adapter<ItemHolder>() {
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileHolder {
-            return FileHolder(
-                ItemFtpFileBinding.inflate(layoutInflater, parent, false),
-                ::onItemClick,
-                ::onOptionClick
-            )
+        companion object {
+            private const val ITEM_TYPE_SPACE = 0
+            private const val ITEM_TYPE_FILE = 1
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
+            return when (viewType) {
+                ITEM_TYPE_FILE -> {
+                    ItemHolder.FileHolder(
+                        ItemFtpFileBinding.inflate(layoutInflater, parent, false),
+                        ::onItemClick,
+                        ::onOptionClick
+                    )
+                }
+
+                else -> {
+                    ItemHolder.SpacerHolder(
+                        ItemSpaceBinding.inflate(layoutInflater, parent, false)
+                    )
+                }
+            }
+
         }
 
         private fun onItemClick(index: Int) {
-            clickCallback(data[index])
+            val any = data[index]
+            if (any is FTPFile) {
+                clickCallback(any)
+            }
         }
 
         private fun onOptionClick(index: Int) {
-            optionClickCallback(data[index])
+            val any = data[index]
+            if (any is FTPFile) {
+                optionClickCallback(any)
+            }
         }
 
         override fun getItemCount(): Int {
             return data.size
         }
 
-        override fun onBindViewHolder(holder: FileHolder, position: Int) {
-            holder.bind(data[position])
+        override fun getItemViewType(position: Int): Int {
+            return when (data[position]) {
+                is FTPFile -> ITEM_TYPE_FILE
+                else -> ITEM_TYPE_SPACE
+            }
         }
 
+        override fun onBindViewHolder(holder: ItemHolder, position: Int) {
+            when (holder) {
+                is ItemHolder.FileHolder -> {
+                    val any = data[position]
+                    if (any is FTPFile) {
+                        holder.bind(any)
+                    }
+                }
+
+                is ItemHolder.SpacerHolder -> {
+                }
+            }
+        }
+
+    }
+
+    private sealed class ItemHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        class SpacerHolder(
+            private val binding: ItemSpaceBinding
+        ) : ItemHolder(binding)
+
+        class FileHolder(
+            val binding: ItemFtpFileBinding,
+            private val itemClickCallback: (Int) -> Unit,
+            private val optionClickCallback: (Int) -> Unit
+        ) : ItemHolder(binding) {
+
+            init {
+                binding.root.setOnClickListener {
+                    onItemClick()
+                }
+                binding.optionButton.setOnClickListener {
+                    onOptionButtonClick()
+                }
+            }
+
+            private fun onItemClick() {
+                itemClickCallback(adapterPosition)
+            }
+
+            private fun onOptionButtonClick() {
+                optionClickCallback(adapterPosition)
+            }
+
+            fun bind(file: FTPFile) {
+                binding.fileNameView.text = file.name
+                binding.fileTypeIconView.setImageResource(getFileTypeIcon(file))
+            }
+
+            private fun getFileTypeIcon(file: FTPFile): Int {
+                return when (file.type) {
+                    FTPFile.TYPE_DIRECTORY -> R.drawable.baseline_folder_24
+                    FTPFile.TYPE_FILE -> R.drawable.baseline_file_24px
+                    FTPFile.TYPE_LINK -> R.drawable.baseline_file_link_24px
+                    else -> R.drawable.baseline_file_24px
+                }
+            }
+
+        }
     }
 
     private class CrumbsHolder(
@@ -519,44 +617,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
 
     }
 
-    private class FileHolder(
-        val binding: ItemFtpFileBinding,
-        private val itemClickCallback: (Int) -> Unit,
-        private val optionClickCallback: (Int) -> Unit
-    ) : RecyclerView.ViewHolder(binding.root) {
-
-        init {
-            binding.root.setOnClickListener {
-                onItemClick()
-            }
-            binding.optionButton.setOnClickListener {
-                onOptionButtonClick()
-            }
-        }
-
-        private fun onItemClick() {
-            itemClickCallback(adapterPosition)
-        }
-
-        private fun onOptionButtonClick() {
-            optionClickCallback(adapterPosition)
-        }
-
-        fun bind(file: FTPFile) {
-            binding.fileNameView.text = file.name
-            binding.fileTypeIconView.setImageResource(getFileTypeIcon(file))
-        }
-
-        private fun getFileTypeIcon(file: FTPFile): Int {
-            return when (file.type) {
-                FTPFile.TYPE_DIRECTORY -> R.drawable.baseline_folder_24
-                FTPFile.TYPE_FILE -> R.drawable.baseline_file_24px
-                FTPFile.TYPE_LINK -> R.drawable.baseline_file_link_24px
-                else -> R.drawable.baseline_file_24px
-            }
-        }
-
-    }
+    private object SpaceInfo
 
     private class CrumbsInfo(
         val name: String,

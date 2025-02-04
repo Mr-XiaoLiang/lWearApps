@@ -9,7 +9,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lollipop.file.sender.databinding.ActivityConnectListBinding
@@ -54,7 +53,8 @@ class ConnectListActivity : AppCompatActivity() {
             startActivity(Intent(this, ScanActivity::class.java))
         }
         binding.customButton.setOnClickListener {
-            startActivity(Intent(this, CustomLoginActivity::class.java))
+//            startActivity(Intent(this, CustomLoginActivity::class.java))
+            startActivity(Intent(this, FtpFileManagerActivity::class.java))
         }
         binding.recyclerView.adapter = itemAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
