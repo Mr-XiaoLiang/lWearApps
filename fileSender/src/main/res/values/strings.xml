@@ -30,7 +30,7 @@
     <string name="label_ftp_root">根目录</string>
 
     <string name="option_ftp_file_download">下载文件</string>
-    <string name="option_ftp_file_stash">放入中转站</string>
+    <string name="option_ftp_file_hold">放入中转站</string>
     <string name="option_ftp_file_move">移动文件</string>
     <string name="option_ftp_file_copy">复制文件</string>
     <string name="option_ftp_file_delete">删除文件</string>
@@ -38,5 +38,7 @@
     <string name="option_ftp_file_rename">重命名文件</string>
     <string name="option_ftp_file_upload">上传文件</string>
     <string name="option_ftp_file_paste">粘贴文件</string>
+    <string name="option_ftp_file_current_hold">当前暂存</string>
+    <string name="option_ftp_file_current_flow">任务队列</string>
 
 </resources>

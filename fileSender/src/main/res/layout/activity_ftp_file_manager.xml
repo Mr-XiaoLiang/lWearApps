@@ -78,78 +78,58 @@
             android:clipToPadding="false" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <com.lollipop.wear.widget.CircularTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/controlBar"
-        android:elevation="24dp"
-        android:layout_marginHorizontal="6dp"
-        android:layout_marginVertical="12dp"
-        android:layout_weight="1"
-        android:background="@color/floating_action_button_background"
-        android:gravity="center"
-        android:paddingVertical="12dp"
-        android:text="@string/option_ftp_file_paste"
-        android:textColor="@color/on_floating_action_button_background"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        />
-
-    <com.lollipop.wear.widget.CircularFrameLayout
+    <com.google.android.material.button.MaterialButtonGroup
         android:id="@+id/controlBar"
+        style="?attr/materialSplitButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:circularMaxRadius="20dp"
-        app:gapMaxRadius="6dp"
-        android:elevation="24dp"
-        android:layout_marginHorizontal="6dp"
-        android:layout_marginVertical="12dp"
+        android:layout_marginHorizontal="12dp"
         app:layout_constraintBottom_toBottomOf="parent">
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <Button
+            android:id="@+id/pasteControlButton"
+            style="?attr/materialSplitButtonIconFilledStyle"
+            android:layout_width="0px"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:elevation="24dp"
-                android:layout_width="0px"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/floating_action_button_background"
-                android:gravity="center"
-                android:paddingVertical="12dp"
-                android:text="@string/option_ftp_file_paste"
-                android:textColor="@color/on_floating_action_button_background"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/option_ftp_file_paste"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:elevation="24dp"
-                android:layout_width="0px"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/floating_action_button_background"
-                android:gravity="center"
-                android:paddingVertical="12dp"
-                android:text="@string/option_ftp_file_paste"
-                android:textColor="@color/on_floating_action_button_background"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+        <Button
+            android:id="@+id/uploadControlButton"
+            style="?attr/materialSplitButtonIconFilledStyle"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/option_ftp_file_upload"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:elevation="24dp"
-                android:layout_width="0px"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/floating_action_button_background"
-                android:gravity="center"
-                android:paddingVertical="12dp"
-                android:text="@string/option_ftp_file_paste"
-                android:textColor="@color/on_floating_action_button_background"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/holdControlButton"
+            style="?attr/materialSplitButtonIconFilledStyle"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/option_ftp_file_current_hold"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-    </com.lollipop.wear.widget.CircularFrameLayout>
+        <Button
+            android:id="@+id/flowControlButton"
+            style="?attr/materialSplitButtonIconFilledStyle"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/option_ftp_file_current_flow"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </com.google.android.material.button.MaterialButtonGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

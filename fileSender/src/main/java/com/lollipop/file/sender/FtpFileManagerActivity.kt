@@ -5,11 +5,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
@@ -171,7 +173,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
     private fun onLocalFileChoose(uri: Uri?) {
         uri ?: return
         // 不管状态怎么样，先暂存文件
-        FileTransferStation.stashLocal(uri)
+        FileTransferStation.holdLocal(uri)
         // 如果是上传模式，那么我们进入上传流程
         if (FileTransferStation.pending == FileTransferStation.Pending.Upload) {
             // 将上传的目标路径设置为当前路径，并且检索所有本地文件
@@ -191,7 +193,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
             authorize()
         } else {
             // 否则，记录一下文件夹
-            FileTransferStation.stashLocal(uri)
+            FileTransferStation.holdLocal(uri)
         }
     }
 
@@ -270,25 +272,25 @@ class FtpFileManagerActivity : AppCompatActivity() {
 
     private fun onOptionClick(option: Int, filePath: String) {
         when (option) {
-            R.string.option_ftp_file_stash -> {
-                FileTransferStation.stashRemote(filePath)
+            R.string.option_ftp_file_hold -> {
+                FileTransferStation.holdRemote(filePath)
             }
 
             R.string.option_ftp_file_download -> {
-                FileTransferStation.stashRemote(filePath)
+                FileTransferStation.holdRemote(filePath)
                 FileTransferStation.pending = FileTransferStation.Pending.Download
                 chooseLocalPath()
             }
 
             R.string.option_ftp_file_copy -> {
-                FileTransferStation.stashRemote(filePath)
+                FileTransferStation.holdRemote(filePath)
                 FileTransferStation.pending = FileTransferStation.Pending.Copy
                 chooseRemotePath()
             }
 
             R.string.option_ftp_file_move -> {
                 // 移动文件，需要先暂存文件
-                FileTransferStation.stashRemote(filePath)
+                FileTransferStation.holdRemote(filePath)
                 // 设置Pending类型，然后发起选择，等待结果
                 FileTransferStation.pending = FileTransferStation.Pending.Move
                 // 进入远程选择模式
@@ -359,27 +361,25 @@ class FtpFileManagerActivity : AppCompatActivity() {
     }
 
     private fun updateUIState() {
-        // TODO 根据状态更新UI元素的内容
-        when (FileTransferStation.pending) {
-            FileTransferStation.Pending.None -> {
-                // TODO 无任何操作
-            }
-
-            FileTransferStation.Pending.Upload -> {
-                // TODO 显示上传按钮
-            }
-
-            FileTransferStation.Pending.Download -> {
-                // TODO 显示下载按钮
-            }
-
-            FileTransferStation.Pending.Copy -> {
-                // TODO 显示粘贴按钮
-            }
-
-            FileTransferStation.Pending.Move -> {
-                // TODO 显示移动按钮
-            }
+        val pending = FileTransferStation.pending
+        val hasPaste = FileTransferStation.remoteFileCount > 0 && pending.oneOf(
+            FileTransferStation.Pending.Copy,
+            FileTransferStation.Pending.Move
+        )
+        val hasUpload = FileTransferStation.localFileCount > 0 && pending.oneOf(
+            FileTransferStation.Pending.Upload,
+        )
+        val hasFile = FileTransferStation.allFiles.isNotEmpty()
+        val hasFlow = FileTransferStation.allFlows.isNotEmpty()
+        if (hasPaste || hasUpload || hasFile || hasFlow) {
+            // 如果暂存文件是空的，并且没有等待的操作，那么就隐藏按钮
+            binding.controlBar.isVisible = true
+            binding.pasteControlButton.isVisible = hasPaste
+            binding.uploadControlButton.isVisible = hasUpload
+            binding.holdControlButton.isVisible = hasFile
+            binding.flowControlButton.isVisible = hasFlow
+        } else {
+            binding.controlBar.isVisible = false
         }
     }
 
@@ -449,6 +449,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
 
     private fun showError() {
         // TODO 显示错误信息
+        Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show()
     }
 
     private class CrumbsAdapter(

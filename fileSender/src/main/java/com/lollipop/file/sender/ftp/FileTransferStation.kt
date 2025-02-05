@@ -5,35 +5,68 @@ import java.util.LinkedList
 
 object FileTransferStation {
 
-    val fileList = LinkedList<FtsTarget>()
+    private val fileList = LinkedList<FtsTarget>()
 
-    val flowList = LinkedList<Options>()
+    private val flowList = LinkedList<Options>()
+
+    var localFileCount = 0
+        private set
+    var remoteFileCount = 0
+        private set
 
     var pending: Pending = Pending.None
 
+    val allFiles: List<FtsTarget>
+        get() {
+            return fileList
+        }
+
+    val allFlows: List<Options>
+        get() {
+            return flowList
+        }
+
     fun remoteFiles(): List<FtsTarget.Remote> {
-        return fileList.filterIsInstance<FtsTarget.Remote>().toList()
+        return fileList.filterIsInstance<FtsTarget.Remote>()
     }
 
     fun localFiles(): List<FtsTarget.Local> {
-        return fileList.filterIsInstance<FtsTarget.Local>().toList()
+        return fileList.filterIsInstance<FtsTarget.Local>()
     }
 
     /**
      * 暂存远程文件
      */
-    fun stashRemote(ftpPath: String) {
+    fun holdRemote(ftpPath: String) {
         if (ftpPath.isEmpty()) {
             return
         }
+        remoteFileCount++
         fileList.addLast(FtsTarget.Remote(ftpPath))
     }
 
     /**
      * 暂存本地文件
      */
-    fun stashLocal(fileUri: Uri) {
+    fun holdLocal(fileUri: Uri) {
+        if (fileUri == Uri.EMPTY || fileUri.path.isNullOrEmpty()) {
+            return
+        }
+        localFileCount++
         fileList.addLast(FtsTarget.Local(fileUri))
+    }
+
+    /**
+     * 释放文件
+     */
+    fun release(file: FtsTarget) {
+        if (fileList.remove(file)) {
+            if (file is FtsTarget.Local) {
+                localFileCount--
+            } else if (file is FtsTarget.Remote) {
+                remoteFileCount--
+            }
+        }
     }
 
     /**
@@ -147,7 +180,12 @@ object FileTransferStation {
         Download,
         Upload,
         Copy,
-        Move,
+        Move;
+
+        fun oneOf(vararg pending: Pending): Boolean {
+            return pending.any { it == this }
+        }
+
     }
 
 }
