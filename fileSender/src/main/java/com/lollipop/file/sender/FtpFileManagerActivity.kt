@@ -140,16 +140,24 @@ class FtpFileManagerActivity : AppCompatActivity() {
         binding.closeButton.setOnClickListener { finish() }
         onBackPressedDispatcher.addCallback(crumbsOnBackPressedCallback)
         binding.optionButton.setOnClickListener { showFileOption(OPTION_FOLDER, currentPath) }
+
+        binding.pasteControlButton.setOnClickListener {
+            paste(currentPath)
+        }
+        binding.uploadControlButton.setOnClickListener {
+            upload()
+        }
+        binding.holdControlButton.setOnClickListener {
+            // TODO 当前暂存的文件清单
+        }
+        binding.flowControlButton.setOnClickListener {
+            authorize()
+        }
+
         onCrumbsChanged()
     }
 
-    override fun onResume() {
-        super.onResume()
-
-    }
-
     private fun onRefresh() {
-        // TODO show loading
         binding.swipeRefreshLayout.post {
             binding.swipeRefreshLayout.isRefreshing = true
         }
@@ -176,10 +184,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
         FileTransferStation.holdLocal(uri)
         // 如果是上传模式，那么我们进入上传流程
         if (FileTransferStation.pending == FileTransferStation.Pending.Upload) {
-            // 将上传的目标路径设置为当前路径，并且检索所有本地文件
-            FileTransferStation.upload(currentPath, FileTransferStation.localFiles())
-            // 触发工作流确认
-            authorize()
+            upload()
         }
     }
 
@@ -298,27 +303,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
             }
 
             R.string.option_ftp_file_paste -> {
-                when (FileTransferStation.pending) {
-                    FileTransferStation.Pending.Copy -> {
-                        FileTransferStation.copy(
-                            dirUri = filePath,
-                            files = FileTransferStation.remoteFiles(),
-                        )
-                        authorize()
-                    }
-
-                    FileTransferStation.Pending.Move -> {
-                        FileTransferStation.move(
-                            dirUri = filePath,
-                            files = FileTransferStation.remoteFiles(),
-                        )
-                        authorize()
-                    }
-
-                    else -> {
-                        // 粘贴对于其他的Pending来说无意义
-                    }
-                }
+                paste(filePath)
             }
 
             R.string.option_ftp_file_rename -> {
@@ -343,8 +328,43 @@ class FtpFileManagerActivity : AppCompatActivity() {
         }
     }
 
+    private fun upload() {
+        // 将上传的目标路径设置为当前路径，并且检索所有本地文件
+        FileTransferStation.upload(currentPath, FileTransferStation.localFiles())
+        // 触发工作流确认
+        authorize()
+    }
+
+    private fun paste(filePath: String) {
+        when (FileTransferStation.pending) {
+            FileTransferStation.Pending.Copy -> {
+                FileTransferStation.copy(
+                    dirUri = filePath,
+                    files = FileTransferStation.remoteFiles(),
+                )
+                authorize()
+            }
+
+            FileTransferStation.Pending.Move -> {
+                FileTransferStation.move(
+                    dirUri = filePath,
+                    files = FileTransferStation.remoteFiles(),
+                )
+                authorize()
+            }
+
+            else -> {
+                FileTransferStation.copy(
+                    dirUri = filePath,
+                    files = FileTransferStation.remoteFiles(),
+                )
+                authorize()
+            }
+        }
+    }
+
     private fun authorize() {
-        // TODO 批准执行流程
+        FtpFlowAuthorizeDialog.show(this)
     }
 
     private fun chooseRemotePath() {

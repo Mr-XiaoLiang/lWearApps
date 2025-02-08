@@ -40,5 +40,7 @@
     <string name="option_ftp_file_paste">粘贴文件</string>
     <string name="option_ftp_file_current_hold">当前暂存</string>
     <string name="option_ftp_file_current_flow">任务队列</string>
+    <string name="execute">开始执行</string>
+    <string name="hint_empty_flow">当前还没有待执行的任务</string>
 
 </resources>
