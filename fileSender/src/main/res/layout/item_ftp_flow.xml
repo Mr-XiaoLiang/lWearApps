@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="5">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/contentView"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="8"
+        android:background="@color/content_background">
+
+        <Space
+            android:id="@+id/contentEdge"
+            android:layout_width="0px"
+            android:layout_height="1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.625" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/dragButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:paddingVertical="12dp"
+            android:src="@drawable/baseline_drag_indicator_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/on_content_background" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/closeButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:paddingVertical="12dp"
+            android:src="@drawable/baseline_close_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/contentEdge"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/colorError" />
+
+        <ImageView
+            android:id="@+id/startLine"
+            android:layout_width="2dp"
+            android:layout_height="0px"
+            android:layout_marginVertical="12dp"
+            android:alpha="0.5"
+            android:background="@color/on_content_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/dragButton"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/endLine"
+            android:layout_width="2dp"
+            android:layout_height="0px"
+            android:layout_marginVertical="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/closeButton"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.lollipop.wear.widget.CircularImageView
+            android:id="@+id/fromIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="8dp"
+            android:background="@color/hint_content_background"
+            android:padding="4dp"
+            android:src="@drawable/baseline_cloud_24"
+            app:layout_constraintBottom_toBottomOf="@id/fromView"
+            app:layout_constraintStart_toEndOf="@id/startLine"
+            app:layout_constraintTop_toTopOf="@id/fromView"
+            app:tint="@color/on_hint_content_background" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/fromView"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@id/endLine"
+            app:layout_constraintStart_toEndOf="@id/fromIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="/src/temp/temp.txt" />
+
+        <com.lollipop.wear.widget.CircularTextView
+            android:id="@+id/optionHintView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:background="@color/floating_action_button_background"
+            android:paddingHorizontal="22dp"
+            android:paddingVertical="4dp"
+            android:textColor="@color/on_floating_action_button_background"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/targetView"
+            app:layout_constraintStart_toEndOf="@id/startLine"
+            app:layout_constraintTop_toBottomOf="@id/fromView"
+            app:layout_goneMarginTop="12dp"
+            tools:text="下载到" />
+
+        <com.lollipop.wear.widget.CircularImageView
+            android:id="@+id/targetIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="8dp"
+            android:background="@color/hint_content_background"
+            android:padding="4dp"
+            android:src="@drawable/baseline_cloud_24"
+            app:layout_constraintBottom_toBottomOf="@id/targetView"
+            app:layout_constraintStart_toEndOf="@id/startLine"
+            app:layout_constraintTop_toTopOf="@id/targetView"
+            app:tint="@color/on_hint_content_background" />
+
+        <TextView
+            android:id="@+id/targetView"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/endLine"
+            app:layout_constraintStart_toEndOf="@id/targetIcon"
+            tools:text="/src/temp/temp.txt" />
+
+        <View
+            android:id="@+id/secondaryConfirmationPanel"
+            android:layout_width="0px"
+            android:layout_height="0px"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/endLine"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.4" />
+
+        <com.lollipop.wear.widget.CircularImageView
+            android:id="@+id/deleteConfirmationButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:background="?attr/colorError"
+            android:padding="12dp"
+            android:src="@drawable/baseline_delete_24"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/secondaryConfirmationPanel"
+            app:layout_constraintEnd_toStartOf="@id/cancelConfirmationButton"
+            app:layout_constraintStart_toStartOf="@id/secondaryConfirmationPanel"
+            app:layout_constraintTop_toTopOf="@id/secondaryConfirmationPanel"
+            app:tint="?attr/colorOnError"
+            tools:visibility="visible" />
+
+        <com.lollipop.wear.widget.CircularImageView
+            android:id="@+id/cancelConfirmationButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/hint_content_background"
+            android:padding="12dp"
+            android:src="@drawable/baseline_arrow_right_24"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/deleteConfirmationButton"
+            app:layout_constraintEnd_toEndOf="@id/secondaryConfirmationPanel"
+            app:layout_constraintStart_toEndOf="@id/deleteConfirmationButton"
+            app:layout_constraintTop_toTopOf="@id/deleteConfirmationButton"
+            app:tint="@color/on_hint_content_background"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

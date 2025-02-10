@@ -155,6 +155,10 @@ object FileTransferStation {
         flowList.add(Options.Delete(FtsTarget.Remote(path)))
     }
 
+    fun removeFlowOption(it: Options) {
+        flowList.remove(it)
+    }
+
     sealed class FtsTarget {
 
         class Local(val uri: Uri) : FtsTarget()
@@ -169,9 +173,9 @@ object FileTransferStation {
 
         class Delete(val target: FtsTarget) : Options()
 
-        class Transmission(val from: FtsTarget, val to: FtsTarget) : Options()
+        class Transmission(val from: FtsTarget, val target: FtsTarget) : Options()
 
-        class Rename(val target: FtsTarget.Remote, val to: FtsTarget.Remote) : Options()
+        class Rename(val from: FtsTarget.Remote, val target: FtsTarget.Remote) : Options()
 
     }
 

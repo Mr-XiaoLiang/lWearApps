@@ -11,4 +11,7 @@
 
     <color name="floating_action_button_background">#009688</color>
     <color name="on_floating_action_button_background">#D1F8F4</color>
+
+    <color name="hint_content_background">#66EBE0</color>
+    <color name="on_hint_content_background">#D9FFFB</color>
 </resources>

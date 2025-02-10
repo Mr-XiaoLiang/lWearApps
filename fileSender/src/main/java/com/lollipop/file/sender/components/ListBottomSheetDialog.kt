@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.lollipop.file.sender.R
@@ -61,9 +62,26 @@ abstract class ListBottomSheetDialog : BottomSheetDialogFragment() {
         }
     }
 
-    protected abstract fun initView(binding: DialogBasicFtpListBinding)
+    protected open fun initView(binding: DialogBasicFtpListBinding) {
+        initContentView(binding.contentContainer)
+    }
+
+    protected fun bindLinearLayoutManager(
+        recyclerView: RecyclerView,
+        orientation: Int = RecyclerView.VERTICAL,
+        reverseLayout: Boolean = false
+    ) {
+        recyclerView.layoutManager = LinearLayoutManager(
+            recyclerView.context,
+            orientation,
+            reverseLayout
+        )
+    }
+
+    protected abstract fun initContentView(recyclerView: RecyclerView)
 
     protected fun setExecuteButton(resId: Int, callback: () -> Unit) {
+        binding.executeButton.isVisible = true
         binding.executeButton.text = getString(resId)
         binding.executeButton.setOnClickListener {
             callback()
