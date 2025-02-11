@@ -2,9 +2,15 @@ package com.lollipop.file.sender.ftp
 
 sealed class RequestResult<T : Any> {
 
-    class Success<T : Any>(val data: T) : RequestResult<T>()
+    abstract val isSuccess: Boolean
 
-    class Failure<T : Any>(val error: Throwable) : RequestResult<T>()
+    class Success<T : Any>(val data: T) : RequestResult<T>() {
+        override val isSuccess: Boolean = true
+    }
+
+    class Failure<T : Any>(val error: Throwable) : RequestResult<T>() {
+        override val isSuccess: Boolean = false
+    }
 
     companion object {
         fun <T : Any> success(data: T): RequestResult<T> {

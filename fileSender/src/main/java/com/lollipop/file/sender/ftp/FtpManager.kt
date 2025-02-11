@@ -260,10 +260,63 @@ object FtpManager {
         }
 
         /**
+         * 重命名
+         */
+        fun rename(srcPath: String, newPath: String, callback: RequestCallback<Boolean>) {
+            tryRequest(callback) {
+                impl.rename(srcPath, newPath)
+                true
+            }
+        }
+
+        /**
+         * 重命名
+         */
+        fun renameSync(srcPath: String, newPath: String): RequestResult<Boolean> {
+            return tryOperation {
+                impl.rename(srcPath, newPath)
+                true
+            }
+        }
+
+        /**
+         * 创建文件夹
+         */
+        fun createDirectory(dirName: String, callback: RequestCallback<Boolean>) {
+            tryRequest(callback) {
+                impl.createDirectory(dirName)
+                true
+            }
+        }
+
+        /**
+         * 创建文件夹
+         */
+        fun createDirectorySync(dirName: String): RequestResult<Boolean> {
+            return tryOperation {
+                impl.createDirectory(dirName)
+                true
+            }
+        }
+
+        /**
          * 当前目录的路径
          */
         fun currentDirectory(callback: RequestCallback<String>) {
             tryRequest(callback) {
+                impl.currentDirectory().also {
+                    if (rootPath.isEmpty()) {
+                        rootPath = it
+                    }
+                }
+            }
+        }
+
+        /**
+         * 当前目录的路径
+         */
+        fun currentDirectorySync(): RequestResult<String> {
+            return tryOperation {
                 impl.currentDirectory().also {
                     if (rootPath.isEmpty()) {
                         rootPath = it
@@ -283,10 +336,27 @@ object FtpManager {
         }
 
         /**
+         * 修改文件夹
+         */
+        fun changeDirectorySync(dirPath: String): RequestResult<Boolean> {
+            return tryOperation {
+                impl.changeDirectory(dirPath)
+                true
+            }
+        }
+
+        /**
          * 修改时间
          */
         fun modifiedDate(filePath: String, callback: RequestCallback<Date>) {
             tryRequest(callback) { impl.modifiedDate(filePath) }
+        }
+
+        /**
+         * 修改时间
+         */
+        fun modifiedDateSync(filePath: String): RequestResult<Date> {
+            return tryOperation { impl.modifiedDate(filePath) }
         }
 
         /**
@@ -297,10 +367,27 @@ object FtpManager {
         }
 
         /**
+         * 指定路径下的文件的大小
+         */
+        fun fileSizeSync(filePath: String): RequestResult<Long> {
+            return tryOperation { impl.fileSize(filePath) }
+        }
+
+        /**
          * 删除指定路径下的文件
          */
         fun deleteFile(filePath: String, callback: RequestCallback<Boolean>) {
             tryRequest(callback) {
+                impl.deleteFile(filePath)
+                true
+            }
+        }
+
+        /**
+         * 删除指定路径下的文件
+         */
+        fun deleteFileSync(filePath: String): RequestResult<Boolean> {
+            return tryOperation {
                 impl.deleteFile(filePath)
                 true
             }
@@ -316,6 +403,19 @@ object FtpManager {
             }
         }
 
+        /**
+         * 删除指定路径下的文件夹
+         */
+        fun deleteDirectorySync(dirPath: String): RequestResult<Boolean> {
+            return tryOperation {
+                impl.deleteDirectory(dirPath)
+                true
+            }
+        }
+
+        /**
+         * 切换路径并获取当前路径下的文件列表
+         */
         fun cdAndList(
             dirPath: String,
             callback: RequestCallback<Array<FTPFile>>
@@ -355,6 +455,19 @@ object FtpManager {
         }
 
         /**
+         * 上传文件
+         */
+        fun uploadSync(
+            file: File,
+            listener: FTPDataTransferListener
+        ) {
+            tryOperation {
+                impl.upload(file, OnUiFTPDataTransferListener(mainThread, listener))
+                true
+            }
+        }
+
+        /**
          * 下载文件
          */
         fun download(
@@ -364,6 +477,24 @@ object FtpManager {
             callback: RequestCallback<Boolean>
         ) {
             tryRequest(callback) {
+                impl.download(
+                    remoteFileName,
+                    localFile,
+                    OnUiFTPDataTransferListener(mainThread, listener)
+                )
+                true
+            }
+        }
+
+        /**
+         * 下载文件
+         */
+        fun downloadSync(
+            remoteFileName: String,
+            localFile: File,
+            listener: FTPDataTransferListener
+        ) {
+            tryOperation {
                 impl.download(
                     remoteFileName,
                     localFile,
