@@ -5,21 +5,26 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import it.sauronsoftware.ftp4j.FTPAbortedException
-import it.sauronsoftware.ftp4j.FTPDataTransferException
-import it.sauronsoftware.ftp4j.FTPDataTransferListener
+import com.lollipop.file.sender.ftp.fts.ExecuteCallbackHandlerWrapper
+import com.lollipop.file.sender.ftp.fts.FTSExecuteCallback
+import com.lollipop.file.sender.ftp.fts.FTSOption
+import com.lollipop.file.sender.ftp.fts.FTSTask
+import com.lollipop.file.sender.ftp.fts.FtsTarget
 import java.io.File
 import java.util.LinkedList
 import java.util.concurrent.Executors
 
 object FileTransferStation {
 
-    private const val PROGRESS_MAX = 1F
-    private const val PROGRESS_MIN = 0F
+    const val PROGRESS_MAX = 1F
+    const val PROGRESS_MIN = 0F
+    const val PROGRESS_INDEFINITE = -1F
 
     private val fileList = LinkedList<FtsTarget>()
 
-    private val flowList = LinkedList<Options>()
+    private val flowList = LinkedList<FTSOption>()
+
+    private val taskList = ArrayList<FTSTask>()
 
     private var cacheDir: File? = null
 
@@ -43,9 +48,14 @@ object FileTransferStation {
             return fileList
         }
 
-    val allFlows: List<Options>
+    val allFlows: List<FTSOption>
         get() {
             return flowList
+        }
+
+    val allTasks: List<FTSTask>
+        get() {
+            return taskList
         }
 
     fun init(context: Context) {
@@ -105,8 +115,17 @@ object FileTransferStation {
         if (dirUri.isEmpty()) {
             return
         }
+        val tempDir = cacheDir ?: return
         files.forEach {
-            flowList.add(Options.Transmission(it, FtsTarget.Remote(dirUri, isDir = true)))
+            val tempFile = File(tempDir, createFileName())
+            flowList.add(FTSOption.Cache(it, FtsTarget.Cache(tempFile)))
+            flowList.add(
+                FTSOption.Upload(
+                    FtsTarget.Cache(tempFile),
+                    FtsTarget.Remote(dirUri, isDir = true)
+                )
+            )
+            flowList.add(FTSOption.Delete(FtsTarget.Cache(tempFile)))
         }
     }
 
@@ -120,8 +139,12 @@ object FileTransferStation {
         if (dirUri == Uri.EMPTY) {
             return
         }
+        val tempDir = cacheDir ?: return
         files.forEach {
-            flowList.add(Options.Transmission(it, FtsTarget.Local(dirUri)))
+            val tempFile = File(tempDir, createFileName())
+
+            flowList.add(FTSOption.Download(it, FtsTarget.Cache(tempFile)))
+            flowList.add(FTSOption.Save(FtsTarget.Cache(tempFile), FtsTarget.Local(dirUri)))
         }
     }
 
@@ -140,10 +163,10 @@ object FileTransferStation {
             val fileName = findFileName(file.path)
             // 暂存到自己的目录
             val cacheFile = File(tempDir, fileName)
-            flowList.add(Options.Transmission(file, FtsTarget.Cache(cacheFile)))
+            flowList.add(FTSOption.Download(file, FtsTarget.Cache(cacheFile)))
             // 上传到目标目录
             flowList.add(
-                Options.Transmission(
+                FTSOption.Upload(
                     FtsTarget.Cache(cacheFile),
                     FtsTarget.Remote(dirUri, isDir = true)
                 )
@@ -171,7 +194,7 @@ object FileTransferStation {
      */
     fun rename(target: String, newName: String, isDir: Boolean) {
         flowList.add(
-            Options.Rename(
+            FTSOption.Rename(
                 FtsTarget.Remote(target, isDir),
                 FtsTarget.Remote(newName, isDir)
             )
@@ -181,182 +204,18 @@ object FileTransferStation {
     /**
      * 执行FTP操作
      */
-    fun executeOptions(client: FtpManager.Client, list: List<Options>, callback: ExecuteCallback) {
-        onUI {
-            callback.onStart()
-        }
-        if (list.isEmpty()) {
-            // 如果为空，那么就给他们1轮时间来结束
-            onUI {
-                callback.onEnd(emptyList())
-            }
-            return
-        }
-        doAsync {
-            val pendingList = ArrayList<Options>()
-            pendingList.addAll(list)
-            val count = pendingList.size
-            val resultList = ArrayList<ExecuteResult>()
-            for (index in pendingList.indices) {
-                val option = pendingList[index]
-                try {
-                    when (option) {
-                        is Options.Delete -> {
-                            deleteFile(client, option.target) { progress ->
-                                callback.onProgress(count, index, option, progress)
-                            }
-                        }
-
-                        is Options.Transmission -> {
-                            transmission(client, option.from, option.target) { progress ->
-                                callback.onProgress(count, index, option, progress)
-                            }
-                        }
-
-                        is Options.Rename -> {
-                            renameRemote(client, option) { progress ->
-                                callback.onProgress(count, index, option, progress)
-                            }
-                        }
-                    }
-                } catch (e: Throwable) {
-                    resultList.add(ExecuteResult.Failed(option, e))
-                    Log.e("FileTransferStation", "executeOptions: $index/$count", e)
-                }
-            }
-        }
-    }
-
-    private fun transmission(
+    fun executeOptions(
         client: FtpManager.Client,
-        from: FtsTarget,
-        to: FtsTarget,
-        callback: (Float) -> Unit
+        list: List<FTSOption>,
+        callback: FTSExecuteCallback
     ) {
-        when (to) {
-            is FtsTarget.Cache -> {
-                transmissionToCache(client, from, to, callback)
-            }
-
-            is FtsTarget.Local -> {
-                transmissionToLocal(client, from, to, callback)
-            }
-
-            is FtsTarget.Remote -> {
-                when (from) {
-                    is FtsTarget.Cache -> {
-                        transmissionToRemote(client, from, to, callback)
-                    }
-
-                    is FtsTarget.Local -> {
-                        throw IllegalArgumentException("from is local, not support")
-                    }
-
-                    is FtsTarget.Remote -> {
-                        throw IllegalArgumentException("from is remote, not support")
-                    }
-                }
-            }
-        }
-    }
-
-    private fun transmissionToLocal(
-        client: FtpManager.Client,
-        from: FtsTarget,
-        to: FtsTarget.Local,
-        callback: (Float) -> Unit
-    ) {
-        callback(PROGRESS_MIN)
-        // TODO
-    }
-
-    private fun transmissionToRemote(
-        client: FtpManager.Client,
-        from: FtsTarget.Cache,
-        to: FtsTarget.Remote,
-        callback: (Float) -> Unit
-    ) {
-        when (val changeDirResult = client.changeDirectorySync(to.path)) {
-            is RequestResult.Success -> {
-                callback(PROGRESS_MIN)
-                val fromFile = from.file
-                val fileLength = fromFile.length()
-                client.uploadSync(fromFile, object : FTPDataTransferListener {
-                    override fun started() {}
-
-                    override fun transferred(length: Int) {
-                        callback(length.toFloat() / fileLength)
-                    }
-
-                    override fun completed() {
-                        callback(PROGRESS_MAX)
-                    }
-
-                    override fun aborted() {
-                        throw FTPAbortedException()
-                    }
-
-                    override fun failed() {
-                        throw FTPDataTransferException()
-                    }
-                })
-            }
-
-            is RequestResult.Failure -> {
-                throw changeDirResult.error
-            }
-        }
-    }
-
-    private fun transmissionToCache(
-        client: FtpManager.Client,
-        from: FtsTarget,
-        to: FtsTarget.Cache,
-        callback: (Float) -> Unit
-    ) {
-        callback(PROGRESS_MIN)
-        // TODO
-    }
-
-    private fun renameRemote(
-        client: FtpManager.Client,
-        option: Options.Rename,
-        callback: (Float) -> Unit
-    ) {
-        callback(PROGRESS_MIN)
-        client.rename(option.from.path, option.target.path) {
-            callback(PROGRESS_MAX)
-        }
-    }
-
-    private fun deleteFile(
-        client: FtpManager.Client,
-        target: FtsTarget,
-        callback: (Float) -> Unit
-    ) {
-        when (target) {
-            is FtsTarget.Cache -> {
-                val cacheFile = target.file
-                cacheFile.delete()
-                callback(PROGRESS_MAX)
-            }
-
-            is FtsTarget.Local -> {
-                // 本地的远程URI不能被删除
-                callback(PROGRESS_MAX)
-            }
-
-            is FtsTarget.Remote -> {
-                callback(PROGRESS_MIN)
-                if (target.isDir) {
-                    client.deleteDirectorySync(target.path)
-                    callback(PROGRESS_MAX)
-                } else {
-                    client.deleteFileSync(target.path)
-                    callback(PROGRESS_MAX)
-                }
-            }
-        }
+        val task = FTSTask(
+            client.info.token,
+            list.toTypedArray(),
+            ExecuteCallbackHandlerWrapper(mainThread, 50, callback)
+        )
+        taskList.add(task)
+        executor.execute(task)
     }
 
     private fun doAsync(callback: () -> Unit) {
@@ -391,36 +250,24 @@ object FileTransferStation {
         return path.substring(index + 1)
     }
 
+    fun findDirPath(path: String): String {
+        val index = path.lastIndexOf("/")
+        if (index < 0) {
+            return path
+        }
+        return path.substring(0, index)
+    }
+
     fun getFilePath(dir: String, fileName: String): String {
         return "$dir/$fileName"
     }
 
     fun delete(path: String, isDir: Boolean) {
-        flowList.add(Options.Delete(FtsTarget.Remote(path, isDir)))
+        flowList.add(FTSOption.Delete(FtsTarget.Remote(path, isDir)))
     }
 
-    fun removeFlowOption(it: Options) {
+    fun removeFlowOption(it: FTSOption) {
         flowList.remove(it)
-    }
-
-    sealed class FtsTarget {
-
-        class Local(val uri: Uri) : FtsTarget()
-
-        class Remote(val path: String, val isDir: Boolean) : FtsTarget()
-
-        class Cache(val file: File) : FtsTarget()
-
-    }
-
-    sealed class Options {
-
-        class Delete(val target: FtsTarget) : Options()
-
-        class Transmission(val from: FtsTarget, val target: FtsTarget) : Options()
-
-        class Rename(val from: FtsTarget.Remote, val target: FtsTarget.Remote) : Options()
-
     }
 
     enum class Pending {
@@ -433,37 +280,6 @@ object FileTransferStation {
         fun oneOf(vararg pending: Pending): Boolean {
             return pending.any { it == this }
         }
-
-    }
-
-    class ExecuteCallbackWrapper(
-        val onStartCallback: () -> Unit,
-        val onProgressCallback: (count: Int, index: Int, option: Options, progress: Float) -> Unit,
-        val onEndCallback: (list: List<ExecuteResult>) -> Unit
-    ) : ExecuteCallback {
-        override fun onStart() {
-            onStartCallback()
-        }
-
-        override fun onProgress(count: Int, index: Int, option: Options, progress: Float) {
-            onProgressCallback(count, index, option, progress)
-        }
-
-        override fun onEnd(list: List<ExecuteResult>) {
-            onEndCallback(list)
-        }
-    }
-
-    interface ExecuteCallback {
-        fun onStart()
-        fun onProgress(count: Int, index: Int, option: Options, progress: Float)
-        fun onEnd(list: List<ExecuteResult>)
-    }
-
-    sealed class ExecuteResult {
-
-        class Success(val option: Options) : ExecuteResult()
-        class Failed(val option: Options, val error: Throwable) : ExecuteResult()
 
     }
 
