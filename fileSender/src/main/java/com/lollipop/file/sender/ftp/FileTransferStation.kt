@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import com.lollipop.file.sender.ftp.fts.ExecuteCallbackHandlerWrapper
+import com.lollipop.file.sender.ftp.fts.FTSContextProvider
 import com.lollipop.file.sender.ftp.fts.FTSExecuteCallback
 import com.lollipop.file.sender.ftp.fts.FTSOption
 import com.lollipop.file.sender.ftp.fts.FTSTask
@@ -207,6 +208,7 @@ object FileTransferStation {
     fun executeOptions(
         client: FtpManager.Client,
         list: List<FTSOption>,
+        contextProvider: FTSContextProvider,
         callback: FTSExecuteCallback
     ) {
         val task = FTSTask(

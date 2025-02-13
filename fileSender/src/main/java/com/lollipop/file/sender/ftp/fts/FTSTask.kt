@@ -6,6 +6,7 @@ import com.lollipop.file.sender.ftp.FtpManager
 class FTSTask(
     val ftpToken: String,
     val optionArray: Array<FTSOption>,
+    val contextProvider: FTSContextProvider,
     val callback: FTSExecuteCallback
 ) : Runnable {
 
@@ -30,27 +31,32 @@ class FTSTask(
                 val result = try {
                     when (option) {
                         is FTSOption.Cache -> {
-                            FTSCacheExecutor.execute(client, option, stepCallback)
+                            FTSCacheExecutor.execute(client, option, contextProvider, stepCallback)
                         }
 
                         is FTSOption.Delete -> {
-                            FTSDeleteExecutor.execute(client, option, stepCallback)
+                            FTSDeleteExecutor.execute(client, option, contextProvider, stepCallback)
                         }
 
                         is FTSOption.Download -> {
-                            FTSDownloadExecutor.execute(client, option, stepCallback)
+                            FTSDownloadExecutor.execute(
+                                client,
+                                option,
+                                contextProvider,
+                                stepCallback
+                            )
                         }
 
                         is FTSOption.Rename -> {
-                            FTSRenameExecutor.execute(client, option, stepCallback)
+                            FTSRenameExecutor.execute(client, option, contextProvider, stepCallback)
                         }
 
                         is FTSOption.Save -> {
-                            FTSSaveExecutor.execute(client, option, stepCallback)
+                            FTSSaveExecutor.execute(client, option, contextProvider, stepCallback)
                         }
 
                         is FTSOption.Upload -> {
-                            FTSUploadExecutor.execute(client, option, stepCallback)
+                            FTSUploadExecutor.execute(client, option, contextProvider, stepCallback)
                         }
                     }
                 } catch (e: Throwable) {
