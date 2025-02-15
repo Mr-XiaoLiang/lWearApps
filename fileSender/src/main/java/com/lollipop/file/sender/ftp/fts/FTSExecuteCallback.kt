@@ -1,6 +1,9 @@
 package com.lollipop.file.sender.ftp.fts
 
 import android.os.Handler
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 
 interface FTSExecuteCallback {
     fun onStart()
@@ -8,7 +11,12 @@ interface FTSExecuteCallback {
     fun onEnd(list: List<ExecuteResult>)
 }
 
-class ExecuteCallbackSimpleWrapper(
+interface FTSExecuteDispatcher {
+    fun add(callback: FTSExecuteCallback)
+    fun remove(callback: FTSExecuteCallback)
+}
+
+class FTSExecuteCallbackSimpleWrapper(
     val onStartCallback: () -> Unit,
     val onProgressCallback: (count: Int, index: Int, option: FTSOption, progress: Float) -> Unit,
     val onEndCallback: (list: List<ExecuteResult>) -> Unit
@@ -26,12 +34,112 @@ class ExecuteCallbackSimpleWrapper(
     }
 }
 
-class ExecuteCallbackHandlerWrapper(
+class FTSExecuteCallbackCacheWrapper(
+    private val impl: FTSExecuteCallback
+) : FTSExecuteCallback {
+
+    var isStart = false
+        private set
+
+    var isEnd = false
+        private set
+
+    var count = 0
+        private set
+    var index = 0
+        private set
+    var currentOption: FTSOption? = null
+        private set
+    var currentProgress = 0F
+        private set
+
+    override fun onStart() {
+        isStart = true
+        impl.onStart()
+    }
+
+    override fun onProgress(count: Int, index: Int, option: FTSOption, progress: Float) {
+        this.count = count
+        this.index = index
+        this.currentOption = option
+        this.currentProgress = progress
+        impl.onProgress(count, index, option, progress)
+    }
+
+    override fun onEnd(list: List<ExecuteResult>) {
+        isEnd
+        impl.onEnd(list)
+    }
+
+}
+
+class FTSExecuteCallbackDispatcher : FTSExecuteCallback, FTSExecuteDispatcher {
+    private val callbackList = ArrayList<FTSExecuteCallback>()
+
+    override fun add(callback: FTSExecuteCallback) {
+        callbackList.add(callback)
+    }
+
+    override fun remove(callback: FTSExecuteCallback) {
+        callbackList.remove(callback)
+    }
+
+    override fun onStart() {
+        callbackList.forEach {
+            it.onStart()
+        }
+    }
+
+    override fun onProgress(count: Int, index: Int, option: FTSOption, progress: Float) {
+        callbackList.forEach {
+            it.onProgress(count, index, option, progress)
+        }
+    }
+
+    override fun onEnd(list: List<ExecuteResult>) {
+        callbackList.forEach {
+            it.onEnd(list)
+        }
+    }
+}
+
+class FTSExecuteCallbackWithLifecycle(
+    private val lifecycle: Lifecycle,
+    private val dispatcher: FTSExecuteDispatcher,
+    private val cancelOn: Lifecycle.Event = Lifecycle.Event.ON_DESTROY,
+    private val callback: FTSExecuteCallback
+) : FTSExecuteCallback, LifecycleEventObserver {
+
+    init {
+        dispatcher.add(this)
+        lifecycle.addObserver(this)
+    }
+
+    override fun onStart() {
+        callback.onStart()
+    }
+
+    override fun onProgress(count: Int, index: Int, option: FTSOption, progress: Float) {
+        callback.onProgress(count, index, option, progress)
+    }
+
+    override fun onEnd(list: List<ExecuteResult>) {
+        callback.onEnd(list)
+    }
+
+    override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+        if (event == cancelOn) {
+            dispatcher.remove(this)
+            lifecycle.removeObserver(this)
+        }
+    }
+}
+
+class FTSExecuteCallbackHandlerWrapper(
     private val handler: Handler,
     private val limitTime: Long,
     private val callback: FTSExecuteCallback
-) :
-    FTSExecuteCallback {
+) : FTSExecuteCallback {
 
     private var currentCount = 0
     private var currentIndex = 0

@@ -7,10 +7,33 @@ class FTSTask(
     val ftpToken: String,
     val optionArray: Array<FTSOption>,
     val contextProvider: FTSContextProvider,
-    val callback: FTSExecuteCallback
-) : Runnable {
+) : Runnable, FTSExecuteDispatcher {
 
     private val resultList = ArrayList<ExecuteResult>()
+
+    private val dispatcher = FTSExecuteCallbackDispatcher()
+    private val callback = FTSExecuteCallbackCacheWrapper(dispatcher)
+
+    val isStart: Boolean
+        get() = callback.isStart
+    val isEnd: Boolean
+        get() = callback.isEnd
+    val count: Int
+        get() = callback.count
+    val index: Int
+        get() = callback.index
+    val currentOption: FTSOption?
+        get() = callback.currentOption
+    val currentProgress: Float
+        get() = callback.currentProgress
+
+    override fun add(callback: FTSExecuteCallback) {
+        dispatcher.add(callback)
+    }
+
+    override fun remove(callback: FTSExecuteCallback) {
+        dispatcher.remove(callback)
+    }
 
     override fun run() {
         callback.onStart()

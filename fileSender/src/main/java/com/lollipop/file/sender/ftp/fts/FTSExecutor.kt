@@ -25,8 +25,34 @@ interface FTSExecutor<O : FTSOption> {
 
 }
 
+abstract class BasicFTSExecutor<O : FTSOption> : FTSExecutor<O> {
 
-object FTSCacheExecutor : FTSExecutor<FTSOption.Cache> {
+    fun illegalArgument(msg: String): FTSExecutorResult.Fail {
+        return FTSExecutorResult.illegalArgument(msg)
+    }
+
+    protected fun copyFile(
+        inputStream: InputStream,
+        outputStream: OutputStream,
+        callback: (Long) -> Unit
+    ) {
+        val buffer = ByteArray(1024 * 4)
+        var writeCount = 0L
+        do {
+            val readCount = inputStream.read(buffer)
+            if (readCount < 0) {
+                break
+            }
+            outputStream.write(buffer, 0, readCount)
+            writeCount += readCount
+            callback(writeCount)
+        } while (true)
+        outputStream.flush()
+    }
+
+}
+
+object FTSCacheExecutor : BasicFTSExecutor<FTSOption.Cache>() {
     override fun execute(
         client: FtpManager.Client,
         option: FTSOption.Cache,
@@ -35,14 +61,17 @@ object FTSCacheExecutor : FTSExecutor<FTSOption.Cache> {
     ): FTSExecutorResult {
         val fromUri = option.from.uri
         val targetFile = option.target.file
-        val contentResolver = contextProvider.getAppContext()?.contentResolver
-            ?: return FTSExecutorResult.Fail(Throwable("ContentResolver is null"))
+        val appContext =
+            contextProvider.getAppContext() ?: return illegalArgument("AppContext is null")
+        val contentResolver = appContext.contentResolver
+            ?: return illegalArgument("ContentResolver is null")
         val inputStream = contentResolver.openInputStream(fromUri)
-            ?: return FTSExecutorResult.Fail(Throwable("InputStream is null"))
+            ?: return illegalArgument("InputStream is null")
+        val allCount = DocumentFile.fromSingleUri(appContext, fromUri)?.length() ?: 0
         inputStream.use { i ->
             targetFile.outputStream().use { o ->
                 copyFile(i, o) { writeCount ->
-                    TODO("进度需要计算")
+                    callback.onProgress(writeCount.toFloat() / allCount)
                 }
             }
         }
@@ -50,15 +79,7 @@ object FTSCacheExecutor : FTSExecutor<FTSOption.Cache> {
     }
 }
 
-private fun copyFile(
-    inputStream: InputStream,
-    outputStream: OutputStream,
-    callback: (Long) -> Unit
-) {
-    TODO("复制内容")
-}
-
-object FTSDeleteExecutor : FTSExecutor<FTSOption.Delete> {
+object FTSDeleteExecutor : BasicFTSExecutor<FTSOption.Delete>() {
     override fun execute(
         client: FtpManager.Client,
         option: FTSOption.Delete,
@@ -73,7 +94,7 @@ object FTSDeleteExecutor : FTSExecutor<FTSOption.Delete> {
                 return if (result) {
                     FTSExecutorResult.Success
                 } else {
-                    FTSExecutorResult.Fail(Throwable("File delete failed"))
+                    illegalArgument("File delete failed")
                 }
             }
 
@@ -99,7 +120,7 @@ object FTSDeleteExecutor : FTSExecutor<FTSOption.Delete> {
     }
 }
 
-object FTSDownloadExecutor : FTSExecutor<FTSOption.Download> {
+object FTSDownloadExecutor : BasicFTSExecutor<FTSOption.Download>() {
     override fun execute(
         client: FtpManager.Client,
         option: FTSOption.Download,
@@ -146,7 +167,7 @@ object FTSDownloadExecutor : FTSExecutor<FTSOption.Download> {
     }
 }
 
-object FTSRenameExecutor : FTSExecutor<FTSOption.Rename> {
+object FTSRenameExecutor : BasicFTSExecutor<FTSOption.Rename>() {
     override fun execute(
         client: FtpManager.Client,
         option: FTSOption.Rename,
@@ -159,7 +180,7 @@ object FTSRenameExecutor : FTSExecutor<FTSOption.Rename> {
     }
 }
 
-object FTSSaveExecutor : FTSExecutor<FTSOption.Save> {
+object FTSSaveExecutor : BasicFTSExecutor<FTSOption.Save>() {
     override fun execute(
         client: FtpManager.Client,
         option: FTSOption.Save,
@@ -170,18 +191,19 @@ object FTSSaveExecutor : FTSExecutor<FTSOption.Save> {
         val fromFile = from.file
         val target = option.target
         val appContext = contextProvider.getAppContext()
-            ?: return FTSExecutorResult.Fail(Throwable("App context is null"))
+            ?: return illegalArgument("App context is null")
         val outDir = DocumentFile.fromTreeUri(appContext, target.uri)
-            ?: return FTSExecutorResult.Fail(Throwable("Document file is null"))
+            ?: return illegalArgument("Document file is null")
         val targetName = findNewName(outDir.listFiles(), fromFile.name)
         val targetFile = outDir.createFile(getFileMimeType(fromFile), targetName)
-            ?: return FTSExecutorResult.Fail(Throwable("Target file is null"))
+            ?: return illegalArgument("Target file is null")
         val outSteam = appContext.contentResolver.openOutputStream(targetFile.uri)
-            ?: return FTSExecutorResult.Fail(Throwable("Output stream is null"))
+            ?: return illegalArgument("Output stream is null")
+        val allCount = fromFile.length()
         outSteam.use { o ->
             fromFile.inputStream().use { i ->
                 copyFile(i, o) { writeCount ->
-                    TODO("进度需要计算")
+                    callback.onProgress(writeCount.toFloat() / allCount)
                 }
             }
         }
@@ -220,7 +242,7 @@ object FTSSaveExecutor : FTSExecutor<FTSOption.Save> {
 
 }
 
-object FTSUploadExecutor : FTSExecutor<FTSOption.Upload> {
+object FTSUploadExecutor : BasicFTSExecutor<FTSOption.Upload>() {
     override fun execute(
         client: FtpManager.Client,
         option: FTSOption.Upload,
@@ -283,6 +305,11 @@ sealed class FTSExecutorResult {
                 }
             }
         }
+
+        fun illegalArgument(msg: String): Fail {
+            return Fail(IllegalArgumentException(msg))
+        }
+
     }
 
 }
