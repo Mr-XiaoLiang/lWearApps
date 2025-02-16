@@ -34,7 +34,7 @@
             app:tint="@color/on_content_background" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/closeButton"
+            android:id="@+id/stateButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -62,7 +62,7 @@
             android:layout_height="0px"
             android:layout_marginVertical="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/closeButton"
+            app:layout_constraintEnd_toStartOf="@id/stateButton"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.lollipop.wear.widget.CircularImageView

@@ -8,7 +8,7 @@ import android.util.Log
 import com.lollipop.file.sender.ftp.fts.FTSContextProvider
 import com.lollipop.file.sender.ftp.fts.FTSOption
 import com.lollipop.file.sender.ftp.fts.FTSTask
-import com.lollipop.file.sender.ftp.fts.FtsTarget
+import com.lollipop.file.sender.ftp.fts.FTSTarget
 import java.io.File
 import java.util.LinkedList
 import java.util.concurrent.Executors
@@ -19,7 +19,7 @@ object FileTransferStation {
     const val PROGRESS_MIN = 0F
     const val PROGRESS_INDEFINITE = -1F
 
-    private val fileList = LinkedList<FtsTarget>()
+    private val fileList = LinkedList<FTSTarget>()
 
     private val flowList = LinkedList<FTSOption>()
 
@@ -42,7 +42,7 @@ object FileTransferStation {
 
     var pending: Pending = Pending.None
 
-    val allFiles: List<FtsTarget>
+    val allFiles: List<FTSTarget>
         get() {
             return fileList
         }
@@ -61,12 +61,12 @@ object FileTransferStation {
         cacheDir = context.cacheDir
     }
 
-    fun remoteFiles(): List<FtsTarget.Remote> {
-        return fileList.filterIsInstance<FtsTarget.Remote>()
+    fun remoteFiles(): List<FTSTarget.Remote> {
+        return fileList.filterIsInstance<FTSTarget.Remote>()
     }
 
-    fun localFiles(): List<FtsTarget.Local> {
-        return fileList.filterIsInstance<FtsTarget.Local>()
+    fun localFiles(): List<FTSTarget.Local> {
+        return fileList.filterIsInstance<FTSTarget.Local>()
     }
 
     /**
@@ -77,7 +77,7 @@ object FileTransferStation {
             return
         }
         remoteFileCount++
-        fileList.addLast(FtsTarget.Remote(ftpPath, isDir))
+        fileList.addLast(FTSTarget.Remote(ftpPath, isDir))
     }
 
     /**
@@ -88,17 +88,17 @@ object FileTransferStation {
             return
         }
         localFileCount++
-        fileList.addLast(FtsTarget.Local(fileUri))
+        fileList.addLast(FTSTarget.Local(fileUri))
     }
 
     /**
      * 释放文件
      */
-    fun release(file: FtsTarget) {
+    fun release(file: FTSTarget) {
         if (fileList.remove(file)) {
-            if (file is FtsTarget.Local) {
+            if (file is FTSTarget.Local) {
                 localFileCount--
-            } else if (file is FtsTarget.Remote) {
+            } else if (file is FTSTarget.Remote) {
                 remoteFileCount--
             }
         }
@@ -107,7 +107,7 @@ object FileTransferStation {
     /**
      * 上传本地文件到FTP
      */
-    fun upload(dirUri: String, files: List<FtsTarget.Local>) {
+    fun upload(dirUri: String, files: List<FTSTarget.Local>) {
         if (files.isEmpty()) {
             return
         }
@@ -117,21 +117,21 @@ object FileTransferStation {
         val tempDir = cacheDir ?: return
         files.forEach {
             val tempFile = File(tempDir, createFileName())
-            flowList.add(FTSOption.Cache(it, FtsTarget.Cache(tempFile)))
+            flowList.add(FTSOption.Cache(it, FTSTarget.Cache(tempFile)))
             flowList.add(
                 FTSOption.Upload(
-                    FtsTarget.Cache(tempFile),
-                    FtsTarget.Remote(dirUri, isDir = true)
+                    FTSTarget.Cache(tempFile),
+                    FTSTarget.Remote(dirUri, isDir = true)
                 )
             )
-            flowList.add(FTSOption.Delete(FtsTarget.Cache(tempFile)))
+            flowList.add(FTSOption.Delete(FTSTarget.Cache(tempFile)))
         }
     }
 
     /**
      * 下载FTP文件到本地
      */
-    fun download(dirUri: Uri, files: List<FtsTarget.Remote>) {
+    fun download(dirUri: Uri, files: List<FTSTarget.Remote>) {
         if (files.isEmpty()) {
             return
         }
@@ -142,15 +142,15 @@ object FileTransferStation {
         files.forEach {
             val tempFile = File(tempDir, createFileName())
 
-            flowList.add(FTSOption.Download(it, FtsTarget.Cache(tempFile)))
-            flowList.add(FTSOption.Save(FtsTarget.Cache(tempFile), FtsTarget.Local(dirUri)))
+            flowList.add(FTSOption.Download(it, FTSTarget.Cache(tempFile)))
+            flowList.add(FTSOption.Save(FTSTarget.Cache(tempFile), FTSTarget.Local(dirUri)))
         }
     }
 
     /**
      * 复制FTP之间的文件
      */
-    fun copy(dirUri: String, files: List<FtsTarget.Remote>) {
+    fun copy(dirUri: String, files: List<FTSTarget.Remote>) {
         if (dirUri.isEmpty()) {
             return
         }
@@ -162,12 +162,12 @@ object FileTransferStation {
             val fileName = findFileName(file.path)
             // 暂存到自己的目录
             val cacheFile = File(tempDir, fileName)
-            flowList.add(FTSOption.Download(file, FtsTarget.Cache(cacheFile)))
+            flowList.add(FTSOption.Download(file, FTSTarget.Cache(cacheFile)))
             // 上传到目标目录
             flowList.add(
                 FTSOption.Upload(
-                    FtsTarget.Cache(cacheFile),
-                    FtsTarget.Remote(dirUri, isDir = true)
+                    FTSTarget.Cache(cacheFile),
+                    FTSTarget.Remote(dirUri, isDir = true)
                 )
             )
         }
@@ -176,7 +176,7 @@ object FileTransferStation {
     /**
      * 移动FTP之间的文件
      */
-    fun move(dirUri: String, files: List<FtsTarget.Remote>) {
+    fun move(dirUri: String, files: List<FTSTarget.Remote>) {
         if (dirUri.isEmpty()) {
             return
         }
@@ -194,8 +194,8 @@ object FileTransferStation {
     fun rename(target: String, newName: String, isDir: Boolean) {
         flowList.add(
             FTSOption.Rename(
-                FtsTarget.Remote(target, isDir),
-                FtsTarget.Remote(newName, isDir)
+                FTSTarget.Remote(target, isDir),
+                FTSTarget.Remote(newName, isDir)
             )
         )
     }
@@ -263,7 +263,7 @@ object FileTransferStation {
     }
 
     fun delete(path: String, isDir: Boolean) {
-        flowList.add(FTSOption.Delete(FtsTarget.Remote(path, isDir)))
+        flowList.add(FTSOption.Delete(FTSTarget.Remote(path, isDir)))
     }
 
     fun removeFlowOption(it: FTSOption) {

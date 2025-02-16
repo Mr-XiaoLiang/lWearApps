@@ -87,7 +87,7 @@ object FTSDeleteExecutor : BasicFTSExecutor<FTSOption.Delete>() {
         callback: FTSOptionCallback
     ): FTSExecutorResult {
         when (val target = option.target) {
-            is FtsTarget.Cache -> {
+            is FTSTarget.Cache -> {
                 val cacheFile = target.file
                 val result = cacheFile.delete()
                 callback.onProgress(PROGRESS_MAX)
@@ -98,13 +98,13 @@ object FTSDeleteExecutor : BasicFTSExecutor<FTSOption.Delete>() {
                 }
             }
 
-            is FtsTarget.Local -> {
+            is FTSTarget.Local -> {
                 // 本地的远程URI不能被删除
                 callback.onProgress(PROGRESS_MAX)
                 return FTSExecutorResult.Success
             }
 
-            is FtsTarget.Remote -> {
+            is FTSTarget.Remote -> {
                 callback.onProgress(PROGRESS_MIN)
                 if (target.isDir) {
                     val result = client.deleteDirectorySync(target.path)

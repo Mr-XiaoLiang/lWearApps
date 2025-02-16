@@ -43,7 +43,10 @@
     <string name="execute">开始执行</string>
     <string name="hint_empty_flow">当前还没有待执行的任务</string>
 
-    <string name="flow_item_option_hint_transmission">传输到</string>
+    <string name="flow_item_option_hint_cache">缓存至</string>
+    <string name="flow_item_option_hint_download">下载至</string>
+    <string name="flow_item_option_hint_save">保存至</string>
+    <string name="flow_item_option_hint_upload">上传至</string>
     <string name="flow_item_option_hint_rename">重命名为</string>
     <string name="flow_item_option_hint_delete">删除</string>
 
