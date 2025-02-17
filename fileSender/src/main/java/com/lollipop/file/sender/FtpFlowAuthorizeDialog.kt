@@ -2,13 +2,11 @@ package com.lollipop.file.sender
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.lollipop.file.sender.components.FTSOptionListDialog
 import com.lollipop.file.sender.databinding.ItemFtpFlowBinding
 import com.lollipop.file.sender.ftp.FileTransferStation
 import com.lollipop.file.sender.ftp.fts.FTSOption
-import com.lollipop.file.sender.ftp.fts.FTSTarget
 
 class FtpFlowAuthorizeDialog : FTSOptionListDialog() {
 

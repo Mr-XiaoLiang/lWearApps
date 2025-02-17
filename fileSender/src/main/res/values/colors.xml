@@ -14,4 +14,13 @@
 
     <color name="hint_content_background">#66EBE0</color>
     <color name="on_hint_content_background">#D9FFFB</color>
+
+    <color name="warning_content_background">#FF9800</color>
+    <color name="on_warning_content_background">#FFF3E0</color>
+    <color name="error_content_background">#F44336</color>
+    <color name="on_error_content_background">#FFEBEE</color>
+    <color name="success_content_background">#4CAF50</color>
+    <color name="on_success_content_background">#E8F5E9</color>
+    <color name="info_content_background">#2196F3</color>
+    <color name="on_info_content_background">#E3F2FD</color>
 </resources>

@@ -1,6 +1,8 @@
 package com.lollipop.file.sender.components
 
+import android.content.res.ColorStateList
 import androidx.core.view.isVisible
+import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.lollipop.file.sender.R
 import com.lollipop.file.sender.databinding.ItemFtpFlowBinding
@@ -37,14 +39,25 @@ abstract class FTSOptionListDialog : ListBottomSheetDialog() {
 
         private fun onStateButtonClick() {
             when (state) {
-                OptionState.ERROR -> TODO()
-                OptionState.SUCCESS -> TODO()
-                OptionState.WAITING -> TODO()
+                OptionState.ERROR -> {
+                    // 出现异常也暂时没有操作
+                }
+
+                OptionState.SUCCESS -> {
+                    // 成功了就暂时没有操作
+                }
+
+                OptionState.WAITING -> {
+                    // 等待中也暂时没有操作
+                }
+
                 OptionState.Building -> {
                     expandDeletePanel()
                 }
 
-                OptionState.HIDE -> TODO()
+                OptionState.HIDE -> {
+                    // 隐藏了就没有操作了
+                }
             }
         }
 
@@ -126,11 +139,59 @@ abstract class FTSOptionListDialog : ListBottomSheetDialog() {
         private fun updateState(state: OptionState) {
             this.state = state
             when (state) {
-                OptionState.ERROR -> TODO()
-                OptionState.SUCCESS -> TODO()
-                OptionState.WAITING -> TODO()
-                OptionState.Building -> TODO()
-                OptionState.HIDE -> TODO()
+                OptionState.ERROR -> {
+                    binding.stateButton.isVisible = true
+                    binding.stateButton.setImageResource(R.drawable.baseline_warning_24)
+                    ImageViewCompat.setImageTintList(
+                        binding.stateButton,
+                        ColorStateList.valueOf(
+                            binding.root.context.getColor(
+                                R.color.error_content_background
+                            )
+                        )
+                    )
+                    binding.stateLoadingIcon.isVisible = false
+                }
+
+                OptionState.SUCCESS -> {
+                    binding.stateButton.isVisible = true
+                    binding.stateButton.setImageResource(R.drawable.baseline_done_24)
+                    ImageViewCompat.setImageTintList(
+                        binding.stateButton,
+                        ColorStateList.valueOf(
+                            binding.root.context.getColor(
+                                R.color.success_content_background
+                            )
+                        )
+                    )
+                    binding.stateLoadingIcon.isVisible = false
+                }
+
+                OptionState.WAITING -> {
+                    binding.stateButton.isVisible = false
+                    binding.stateLoadingIcon.isVisible = true
+                    binding.stateLoadingIcon.show()
+                    binding.stateLoadingIcon.isIndeterminate = true
+                }
+
+                OptionState.Building -> {
+                    binding.stateButton.isVisible = true
+                    binding.stateButton.setImageResource(R.drawable.baseline_close_24)
+                    ImageViewCompat.setImageTintList(
+                        binding.stateButton,
+                        ColorStateList.valueOf(
+                            binding.root.context.getColor(
+                                R.color.error_content_background
+                            )
+                        )
+                    )
+                    binding.stateLoadingIcon.isVisible = false
+                }
+
+                OptionState.HIDE -> {
+                    binding.stateButton.isVisible = false
+                    binding.stateLoadingIcon.isVisible = false
+                }
             }
         }
 
