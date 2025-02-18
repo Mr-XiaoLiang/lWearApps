@@ -7,8 +7,8 @@ import android.os.Looper
 import android.util.Log
 import com.lollipop.file.sender.ftp.fts.FTSContextProvider
 import com.lollipop.file.sender.ftp.fts.FTSOption
-import com.lollipop.file.sender.ftp.fts.FTSTask
 import com.lollipop.file.sender.ftp.fts.FTSTarget
+import com.lollipop.file.sender.ftp.fts.FTSTask
 import java.io.File
 import java.util.LinkedList
 import java.util.concurrent.Executors
@@ -42,6 +42,9 @@ object FileTransferStation {
 
     var pending: Pending = Pending.None
 
+    var currentClientToken: String = ""
+        private set
+
     val allFiles: List<FTSTarget>
         get() {
             return fileList
@@ -59,6 +62,10 @@ object FileTransferStation {
 
     fun init(context: Context) {
         cacheDir = context.cacheDir
+    }
+
+    fun updateCurrentClient(client: FtpManager.Client?) {
+        currentClientToken = client?.info?.token ?: ""
     }
 
     fun remoteFiles(): List<FTSTarget.Remote> {

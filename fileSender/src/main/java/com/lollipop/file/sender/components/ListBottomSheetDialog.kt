@@ -80,11 +80,11 @@ abstract class ListBottomSheetDialog : BottomSheetDialogFragment() {
 
     protected abstract fun initContentView(recyclerView: RecyclerView)
 
-    protected fun setExecuteButton(resId: Int, callback: () -> Unit) {
+    protected fun setExecuteButton(resId: Int, callback: (View) -> Unit) {
         binding.executeButton.isVisible = true
         binding.executeButton.text = getString(resId)
         binding.executeButton.setOnClickListener {
-            callback()
+            callback(it)
         }
     }
 

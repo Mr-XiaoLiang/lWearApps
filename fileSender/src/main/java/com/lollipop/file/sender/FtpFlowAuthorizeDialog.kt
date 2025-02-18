@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lollipop.file.sender.components.FTSOptionListDialog
 import com.lollipop.file.sender.databinding.ItemFtpFlowBinding
 import com.lollipop.file.sender.ftp.FileTransferStation
+import com.lollipop.file.sender.ftp.FtpManager
+import com.lollipop.file.sender.ftp.fts.FTSContextProviderWrapper
 import com.lollipop.file.sender.ftp.fts.FTSOption
 
 class FtpFlowAuthorizeDialog : FTSOptionListDialog() {
@@ -19,7 +21,19 @@ class FtpFlowAuthorizeDialog : FTSOptionListDialog() {
     }
 
     override fun initContentView(recyclerView: RecyclerView) {
-        setExecuteButton(R.string.execute) {
+        setExecuteButton(R.string.execute) { view ->
+            val client = FtpManager.findClient(FileTransferStation.currentClientToken)
+            if (client != null) {
+                val ftsTask = FileTransferStation.executeOptions(
+                    client,
+                    FileTransferStation.allFlows,
+                    FTSContextProviderWrapper(view.context)
+                )
+                // TODO 打开任务列表
+                dismiss()
+            } else {
+                // TODO
+            }
             // TODO("Not yet implemented")
         }
         bindLinearLayoutManager(recyclerView, RecyclerView.VERTICAL)
