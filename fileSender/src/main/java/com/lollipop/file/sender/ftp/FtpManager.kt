@@ -28,12 +28,19 @@ object FtpManager {
 
     private val clientMap = HashMap<String, Client>()
 
+    var currentClientToken: String = ""
+        private set
+
     private val executor by lazy {
         Executors.newCachedThreadPool()
     }
 
     private val mainThread by lazy {
         Handler(Looper.getMainLooper())
+    }
+
+    fun updateCurrentClient(client: Client?) {
+        currentClientToken = client?.info?.token ?: ""
     }
 
     fun getOrCreate(info: ConnectInfo): Client {
@@ -44,6 +51,10 @@ object FtpManager {
 
     fun findClient(token: String): Client? {
         return clientMap[token]
+    }
+
+    fun currentClient(): Client? {
+        return findClient(currentClientToken)
     }
 
     fun remove(token: String) {

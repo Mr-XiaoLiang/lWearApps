@@ -27,23 +27,12 @@ object FileTransferStation {
 
     private var cacheDir: File? = null
 
-    private val executor by lazy {
-        Executors.newSingleThreadExecutor()
-    }
-
-    private val mainThread by lazy {
-        Handler(Looper.getMainLooper())
-    }
-
     var localFileCount = 0
         private set
     var remoteFileCount = 0
         private set
 
     var pending: Pending = Pending.None
-
-    var currentClientToken: String = ""
-        private set
 
     val allFiles: List<FTSTarget>
         get() {
@@ -62,10 +51,6 @@ object FileTransferStation {
 
     fun init(context: Context) {
         cacheDir = context.cacheDir
-    }
-
-    fun updateCurrentClient(client: FtpManager.Client?) {
-        currentClientToken = client?.info?.token ?: ""
     }
 
     fun remoteFiles(): List<FTSTarget.Remote> {
@@ -205,44 +190,6 @@ object FileTransferStation {
                 FTSTarget.Remote(newName, isDir)
             )
         )
-    }
-
-    /**
-     * 执行FTP操作
-     */
-    fun executeOptions(
-        client: FtpManager.Client,
-        list: List<FTSOption>,
-        contextProvider: FTSContextProvider,
-    ): FTSTask {
-        val task = FTSTask(
-            client.info.token,
-            list.toTypedArray(),
-            contextProvider,
-        )
-        taskList.add(task)
-        executor.execute(task)
-        return task
-    }
-
-    private fun doAsync(callback: () -> Unit) {
-        executor.execute {
-            try {
-                callback()
-            } catch (e: Throwable) {
-                Log.e("FileTransferStation", "doAsync: ", e)
-            }
-        }
-    }
-
-    private fun onUI(callback: () -> Unit) {
-        mainThread.post {
-            try {
-                callback()
-            } catch (e: Throwable) {
-                Log.e("FileTransferStation", "onUI: ", e)
-            }
-        }
     }
 
     private fun createFileName(): String {

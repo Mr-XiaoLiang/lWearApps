@@ -9,6 +9,7 @@ import com.lollipop.file.sender.ftp.FileTransferStation
 import com.lollipop.file.sender.ftp.FtpManager
 import com.lollipop.file.sender.ftp.fts.FTSContextProviderWrapper
 import com.lollipop.file.sender.ftp.fts.FTSOption
+import com.lollipop.file.sender.ftp.fts.FTSTaskManager
 
 class FtpFlowAuthorizeDialog : FTSOptionListDialog() {
 
@@ -22,9 +23,9 @@ class FtpFlowAuthorizeDialog : FTSOptionListDialog() {
 
     override fun initContentView(recyclerView: RecyclerView) {
         setExecuteButton(R.string.execute) { view ->
-            val client = FtpManager.findClient(FileTransferStation.currentClientToken)
+            val client = FtpManager.currentClient()
             if (client != null) {
-                val ftsTask = FileTransferStation.executeOptions(
+                val ftsTask = FTSTaskManager.execute(
                     client,
                     FileTransferStation.allFlows,
                     FTSContextProviderWrapper(view.context)
@@ -32,9 +33,8 @@ class FtpFlowAuthorizeDialog : FTSOptionListDialog() {
                 // TODO 打开任务列表
                 dismiss()
             } else {
-                // TODO
+                // TODO 提示用户客户端未连接
             }
-            // TODO("Not yet implemented")
         }
         bindLinearLayoutManager(recyclerView, RecyclerView.VERTICAL)
         recyclerView.adapter = adapter

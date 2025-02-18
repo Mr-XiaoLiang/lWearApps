@@ -4,6 +4,7 @@ import com.lollipop.file.sender.ftp.FileTransferStation
 import com.lollipop.file.sender.ftp.FtpManager
 
 class FTSTask(
+    val taskId: String,
     val ftpToken: String,
     val optionArray: Array<FTSOption>,
     val contextProvider: FTSContextProvider,
