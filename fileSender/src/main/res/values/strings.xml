@@ -49,5 +49,6 @@
     <string name="flow_item_option_hint_upload">上传至</string>
     <string name="flow_item_option_hint_rename">重命名为</string>
     <string name="flow_item_option_hint_delete">删除</string>
+    <string name="ftp_client_not_found">请先连接到一个FTP服务器</string>
 
 </resources>

@@ -2,6 +2,7 @@ package com.lollipop.file.sender
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.lollipop.file.sender.components.FTSOptionListDialog
 import com.lollipop.file.sender.databinding.ItemFtpFlowBinding
@@ -33,7 +34,11 @@ class FtpFlowAuthorizeDialog : FTSOptionListDialog() {
                 // TODO 打开任务列表
                 dismiss()
             } else {
-                // TODO 提示用户客户端未连接
+                Toast.makeText(
+                    view.context,
+                    getString(R.string.ftp_client_not_found),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
         bindLinearLayoutManager(recyclerView, RecyclerView.VERTICAL)
