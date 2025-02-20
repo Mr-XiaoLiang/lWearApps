@@ -14,6 +14,10 @@ import com.lollipop.file.sender.ftp.fts.FTSTaskManager
 
 class FtpFlowAuthorizeDialog : FTSOptionListDialog() {
 
+    companion object {
+        const val TAG = "FtpFlowAuthorizeDialog"
+    }
+
     private val emptyStatePanel by lazy {
         createHintPanel(R.drawable.baseline_mitre_24px, R.string.hint_empty_flow)
     }
@@ -31,7 +35,9 @@ class FtpFlowAuthorizeDialog : FTSOptionListDialog() {
                     FileTransferStation.allFlows,
                     FTSContextProviderWrapper(view.context)
                 )
-                // TODO 打开任务列表
+                FTSTaskStateDialog()
+                    .setTaskId(ftsTask.taskId)
+                    .show(parentFragmentManager, FTSTaskStateDialog.TAG)
                 dismiss()
             } else {
                 Toast.makeText(
