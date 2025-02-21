@@ -24,6 +24,10 @@ object FTSTaskManager {
         return "${clientToken}:${timeHash}"
     }
 
+    fun findTask(clientToken: String, taskId: String): FTSTask? {
+        return getChannel(clientToken).find(taskId)
+    }
+
     /**
      * 执行任务
      * @param client 客户端
@@ -72,6 +76,10 @@ object FTSTaskManager {
         fun add(task: FTSTask) {
             executor.execute(task)
             taskMap[task.taskId] = task
+        }
+
+        fun find(taskId: String): FTSTask? {
+            return taskMap[taskId]
         }
 
     }

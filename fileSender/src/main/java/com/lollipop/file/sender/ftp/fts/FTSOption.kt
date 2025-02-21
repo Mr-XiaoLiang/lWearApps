@@ -2,6 +2,10 @@ package com.lollipop.file.sender.ftp.fts
 
 sealed class FTSOption {
 
+    val id: Int by lazy {
+        System.identityHashCode(this)
+    }
+
     class Delete(val target: FTSTarget) : FTSOption()
 
     /**
@@ -34,6 +38,5 @@ sealed class FTSOption {
      * @param target 目标文件
      */
     class Rename(val from: FTSTarget.Remote, val target: FTSTarget.Remote) : FTSOption()
-
 
 }

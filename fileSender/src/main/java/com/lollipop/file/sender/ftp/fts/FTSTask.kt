@@ -1,7 +1,10 @@
 package com.lollipop.file.sender.ftp.fts
 
+import androidx.lifecycle.Lifecycle
 import com.lollipop.file.sender.ftp.FileTransferStation
 import com.lollipop.file.sender.ftp.FtpManager
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 
 class FTSTask(
     val taskId: String,
@@ -10,7 +13,8 @@ class FTSTask(
     val contextProvider: FTSContextProvider,
 ) : Runnable, FTSExecuteDispatcher {
 
-    private val resultList = ArrayList<ExecuteResult>()
+    private val resultList = CopyOnWriteArrayList<ExecuteResult>()
+    private val resultOptionMap = ConcurrentHashMap<Int, ExecuteResult>()
 
     private val dispatcher = FTSExecuteCallbackDispatcher()
     private val callback = FTSExecuteCallbackCacheWrapper(dispatcher)
@@ -28,6 +32,15 @@ class FTSTask(
     val currentProgress: Float
         get() = callback.currentProgress
 
+    val result: List<ExecuteResult>
+        get() {
+            return resultList
+        }
+
+    fun findResult(id: Int): ExecuteResult? {
+        return resultOptionMap[id]
+    }
+
     override fun add(callback: FTSExecuteCallback) {
         dispatcher.add(callback)
     }
@@ -36,12 +49,27 @@ class FTSTask(
         dispatcher.remove(callback)
     }
 
+    fun addWithLifecycle(
+        lifecycle: Lifecycle,
+        cancelOn: Lifecycle.Event = Lifecycle.Event.ON_DESTROY,
+        callbackImpl: FTSExecuteCallback
+    ): FTSExecuteCallbackWithLifecycle {
+        val impl = FTSExecuteCallbackWithLifecycle(lifecycle, this, cancelOn, callbackImpl)
+        add(impl)
+        return impl
+    }
+
+    private fun addResult(result: ExecuteResult) {
+        resultOptionMap[result.optionId] = result
+        resultList.add(result)
+    }
+
     override fun run() {
         callback.onStart()
         val client = FtpManager.findClient(ftpToken)
         if (client == null) {
             optionArray.forEach {
-                resultList.add(ExecuteResult.Failed(it, Throwable("Client is not found")))
+                addResult(ExecuteResult.Failed(it, Throwable("Client is not found")))
             }
             callback.onEnd(resultList)
             return
@@ -89,15 +117,15 @@ class FTSTask(
                 stepCallback.onProgress(FileTransferStation.PROGRESS_MAX)
                 when (result) {
                     is FTSExecutorResult.Fail -> {
-                        resultList.add(ExecuteResult.Failed(option, result.error))
+                        addResult(ExecuteResult.Failed(option, result.error))
                     }
 
                     FTSExecutorResult.Success -> {
-                        resultList.add(ExecuteResult.Success(option))
+                        addResult(ExecuteResult.Success(option))
                     }
                 }
             } catch (e: Throwable) {
-                resultList.add(ExecuteResult.Failed(option, e))
+                addResult(ExecuteResult.Failed(option, e))
             }
         }
         callback.onEnd(resultList)

@@ -36,7 +36,7 @@ class FtpFlowAuthorizeDialog : FTSOptionListDialog() {
                     FTSContextProviderWrapper(view.context)
                 )
                 FTSTaskStateDialog()
-                    .setTaskId(ftsTask.taskId)
+                    .setTaskId(ftsTask.ftpToken, ftsTask.taskId)
                     .show(parentFragmentManager, FTSTaskStateDialog.TAG)
                 dismiss()
             } else {
