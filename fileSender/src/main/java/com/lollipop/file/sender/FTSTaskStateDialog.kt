@@ -12,6 +12,7 @@ import com.lollipop.file.sender.components.FTSOptionListDialog
 import com.lollipop.file.sender.databinding.ItemFtpFlowBinding
 import com.lollipop.file.sender.ftp.fts.ExecuteResult
 import com.lollipop.file.sender.ftp.fts.FTSExecuteCallback
+import com.lollipop.file.sender.ftp.fts.FTSExecuteCallbackDispatcher
 import com.lollipop.file.sender.ftp.fts.FTSExecuteCallbackHandlerWrapper
 import com.lollipop.file.sender.ftp.fts.FTSOption
 import com.lollipop.file.sender.ftp.fts.FTSTask
@@ -31,6 +32,7 @@ class FTSTaskStateDialog : FTSOptionListDialog() {
     private var currentTask: FTSTask? = null
     private val itemList = ArrayList<ItemInfo>()
     private val itemAdapter = ItemAdapter(itemList)
+    private var currentOptionIndex = -1
 
     private val taskListener = FTSExecuteCallbackHandlerWrapper(
         Handler(Looper.getMainLooper()),
@@ -92,32 +94,17 @@ class FTSTaskStateDialog : FTSOptionListDialog() {
         }
         if (task.isEnd) {
             onTaskEnd(task.result)
-        } else if (task.isStart) {
-            onTaskRunning()
+            currentOptionIndex = -1
         } else {
-            onTaskPending()
-        }
-        itemList.clear()
-        task.optionArray.forEach { option ->
-            val result = task.findResult(option.id)
-            val state = when (result) {
-                null -> {
-                    OptionState.WAITING
-                }
-
-                is ExecuteResult.Success -> {
-                    OptionState.SUCCESS
-                }
-
-                is ExecuteResult.Failed -> {
-                    OptionState.ERROR
-                }
-
+            currentOptionIndex = task.index
+            itemList.clear()
+            task.optionArray.forEach { option ->
+                val result = task.findResult(option.id)
+                itemList.add(ItemInfo(option, getStateByResult(result)))
             }
-            itemList.add(ItemInfo(option, state))
+            onTaskRunning()
+            task.add(taskListener)
         }
-        itemAdapter.notifyDataSetChanged()
-        task.add(taskListener)
     }
 
     override fun onStop() {
@@ -125,27 +112,66 @@ class FTSTaskStateDialog : FTSOptionListDialog() {
         currentTask?.remove(taskListener)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun onTaskEnd(list: List<ExecuteResult>) {
-        // TODO()
+        itemList.clear()
+        list.forEach { result ->
+            when (result) {
+                is ExecuteResult.Success -> {
+                    itemList.add(ItemInfo(result.option, OptionState.SUCCESS))
+                }
+
+                is ExecuteResult.Failed -> {
+                    itemList.add(ItemInfo(result.option, OptionState.ERROR))
+                }
+            }
+        }
+        itemAdapter.notifyDataSetChanged()
     }
 
-    private fun onTaskPending() {
-        // TODO()
-    }
-
+    @SuppressLint("NotifyDataSetChanged")
     private fun onTaskRunning() {
-        // TODO()
+        itemAdapter.notifyDataSetChanged()
     }
 
     private fun onTaskProgressChanged(count: Int, index: Int, option: FTSOption, progress: Float) {
-        // TODO()
+        if (currentOptionIndex != index) {
+            itemList.forEachIndexed { i, item ->
+                if (item.option.id != option.id) {
+                    if (item.state is OptionState.RUNNING) {
+                        currentTask?.findResult(item.option.id)?.let { result ->
+                            item.state = getStateByResult(result)
+                            itemAdapter.notifyItemChanged(i)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getStateByResult(result: ExecuteResult?): OptionState {
+        return when (result) {
+            null -> {
+                OptionState.WAITING
+            }
+
+            is ExecuteResult.Success -> {
+                OptionState.SUCCESS
+            }
+
+            is ExecuteResult.Failed -> {
+                OptionState.ERROR
+            }
+        }
     }
 
     private class ItemAdapter(
         private val data: List<ItemInfo>,
-    ) : RecyclerView.Adapter<ItemHolder>() {
+    ) : RecyclerView.Adapter<StateItemHolder>() {
 
         private var layoutInflater: LayoutInflater? = null
+
+        private val stateDispatcher = FTSExecuteCallbackDispatcher()
 
         private fun getLayoutInflater(parent: ViewGroup): LayoutInflater {
             return layoutInflater ?: LayoutInflater.from(parent.context).also {
@@ -153,24 +179,54 @@ class FTSTaskStateDialog : FTSOptionListDialog() {
             }
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
-            return ItemHolder(
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StateItemHolder {
+            return StateItemHolder(
                 ItemFtpFlowBinding.inflate(getLayoutInflater(parent), parent, false),
-                ::onCloseClick
             )
-        }
-
-        private fun onCloseClick(position: Int) {
-            // 不处理
         }
 
         override fun getItemCount(): Int {
             return data.size
         }
 
-        override fun onBindViewHolder(holder: ItemHolder, position: Int) {
+        override fun onBindViewHolder(holder: StateItemHolder, position: Int) {
             val info = data[position]
-            holder.bind(info.option, info.state)
+            holder.bind(info)
+            stateDispatcher.add(holder)
+        }
+
+        override fun onViewRecycled(holder: StateItemHolder) {
+            super.onViewRecycled(holder)
+            stateDispatcher.remove(holder)
+        }
+
+    }
+
+    private class StateItemHolder(
+        binding: ItemFtpFlowBinding
+    ) : ItemHolder(binding, {}), FTSExecuteCallback {
+
+        private var itemInfo: ItemInfo? = null
+
+        fun bind(info: ItemInfo) {
+            this.itemInfo = info
+            bind(info.option, info.state)
+        }
+
+        // 不需要管
+        override fun onStart() {
+        }
+
+        override fun onProgress(count: Int, index: Int, option: FTSOption, progress: Float) {
+            if (option.id == currentOptionId) {
+                val newState = OptionState.RUNNING(progress)
+                itemInfo?.state = newState
+                updateState(newState)
+            }
+        }
+
+        // 不需要管
+        override fun onEnd(list: List<ExecuteResult>) {
         }
 
     }

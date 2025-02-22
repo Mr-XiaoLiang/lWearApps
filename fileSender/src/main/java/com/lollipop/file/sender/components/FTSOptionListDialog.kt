@@ -12,12 +12,16 @@ import com.lollipop.file.sender.ftp.fts.FTSTarget
 abstract class FTSOptionListDialog : ListBottomSheetDialog() {
 
 
-    protected class ItemHolder(
+    protected open class ItemHolder(
         private val binding: ItemFtpFlowBinding,
         private val onCloseClick: (Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        private var state = OptionState.HIDE
+        protected var state: OptionState = OptionState.HIDE
+            private set
+
+        protected var currentOptionId: Int = 0
+            private set
 
         init {
             binding.stateButton.setOnClickListener {
@@ -29,6 +33,7 @@ abstract class FTSOptionListDialog : ListBottomSheetDialog() {
             binding.cancelConfirmationButton.setOnClickListener {
                 closeDeletePanel()
             }
+            binding.stateLoadingIcon.max = 100
         }
 
         private fun onDeleteButtonClick() {
@@ -57,6 +62,10 @@ abstract class FTSOptionListDialog : ListBottomSheetDialog() {
 
                 OptionState.HIDE -> {
                     // 隐藏了就没有操作了
+                }
+
+                is OptionState.RUNNING -> {
+                    // 运行中也暂时没有操作
                 }
             }
         }
@@ -87,6 +96,7 @@ abstract class FTSOptionListDialog : ListBottomSheetDialog() {
         }
 
         fun bind(option: FTSOption, state: OptionState = OptionState.HIDE) {
+            currentOptionId = option.id
             resetDeletePanel()
             val hasFrom = hasFrom(option)
             binding.fromView.isVisible = hasFrom
@@ -136,7 +146,7 @@ abstract class FTSOptionListDialog : ListBottomSheetDialog() {
             updateState(state)
         }
 
-        private fun updateState(state: OptionState) {
+        protected fun updateState(state: OptionState) {
             this.state = state
             when (state) {
                 OptionState.ERROR -> {
@@ -191,6 +201,14 @@ abstract class FTSOptionListDialog : ListBottomSheetDialog() {
                 OptionState.HIDE -> {
                     binding.stateButton.isVisible = false
                     binding.stateLoadingIcon.isVisible = false
+                }
+
+                is OptionState.RUNNING -> {
+                    binding.stateButton.isVisible = false
+                    binding.stateLoadingIcon.isVisible = true
+                    binding.stateLoadingIcon.show()
+                    binding.stateLoadingIcon.isIndeterminate = false
+                    binding.stateLoadingIcon.progress = (state.progress * 100).toInt()
                 }
             }
         }
@@ -260,12 +278,13 @@ abstract class FTSOptionListDialog : ListBottomSheetDialog() {
         }
     }
 
-    protected enum class OptionState {
-        ERROR,
-        SUCCESS,
-        WAITING,
-        Building,
-        HIDE
+    protected sealed class OptionState {
+        data object ERROR : OptionState()
+        data object SUCCESS : OptionState()
+        data object WAITING : OptionState()
+        data object Building : OptionState()
+        data object HIDE : OptionState()
+        class RUNNING(val progress: Float) : OptionState()
     }
 
 }

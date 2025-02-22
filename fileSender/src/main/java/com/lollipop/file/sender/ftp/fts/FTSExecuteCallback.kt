@@ -1,6 +1,7 @@
 package com.lollipop.file.sender.ftp.fts
 
 import android.os.Handler
+import androidx.collection.ArraySet
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -74,7 +75,7 @@ class FTSExecuteCallbackCacheWrapper(
 }
 
 class FTSExecuteCallbackDispatcher : FTSExecuteCallback, FTSExecuteDispatcher {
-    private val callbackList = ArrayList<FTSExecuteCallback>()
+    private val callbackList = ArraySet<FTSExecuteCallback>()
 
     override fun add(callback: FTSExecuteCallback) {
         callbackList.add(callback)
