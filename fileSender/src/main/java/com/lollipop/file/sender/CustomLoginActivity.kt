@@ -66,30 +66,30 @@ class CustomLoginActivity : AppCompatActivity() {
             log.e("Invalid uri, uriStr.isEmpty()")
             return
         }
-        val uriInfo = try {
-            uriStr.toUri()
-        } catch (e: Throwable) {
-            binding.uriInputLayout.error = getString(R.string.error_uri_invalid)
-            log.e("Invalid uri", e)
-            return
-        }
-        if (uriInfo.host == null || TextUtils.isEmpty(uriInfo.host) || TextUtils.isEmpty(uriInfo.scheme)) {
-            binding.uriInputLayout.error = getString(R.string.error_uri_invalid)
-            log.e("Invalid uri, uriInfo.host == null || TextUtils.isEmpty(uriInfo.host) || TextUtils.isEmpty(uriInfo.scheme)")
-            return
-        }
-        val uriPath = try {
-            uriInfo.toString()
-        } catch (e: Throwable) {
-            log.e("Invalid uri", e)
-            binding.uriInputLayout.error = getString(R.string.error_uri_invalid)
-            return
-        }
-        if (uriPath.isEmpty()) {
-            binding.uriInputLayout.error = getString(R.string.error_uri_invalid)
-            log.e("Invalid uri, uriPath.isNullOrEmpty()")
-            return
-        }
+//        val uriInfo = try {
+//            uriStr.toUri()
+//        } catch (e: Throwable) {
+//            binding.uriInputLayout.error = getString(R.string.error_uri_invalid)
+//            log.e("Invalid uri", e)
+//            return
+//        }
+//        if (uriInfo.host == null || TextUtils.isEmpty(uriInfo.host) || TextUtils.isEmpty(uriInfo.scheme)) {
+//            binding.uriInputLayout.error = getString(R.string.error_uri_invalid)
+//            log.e("Invalid uri, uriInfo.host == null || TextUtils.isEmpty(uriInfo.host) || TextUtils.isEmpty(uriInfo.scheme)")
+//            return
+//        }
+//        val uriPath = try {
+//            uriInfo.toString()
+//        } catch (e: Throwable) {
+//            log.e("Invalid uri", e)
+//            binding.uriInputLayout.error = getString(R.string.error_uri_invalid)
+//            return
+//        }
+//        if (uriPath.isEmpty()) {
+//            binding.uriInputLayout.error = getString(R.string.error_uri_invalid)
+//            log.e("Invalid uri, uriPath.isNullOrEmpty()")
+//            return
+//        }
         val port = binding.portInputLayout.editText?.text?.toString()?.trim() ?: ""
         if (port.isEmpty()) {
             binding.portInputLayout.error = getString(R.string.error_port_empty)
@@ -110,25 +110,25 @@ class CustomLoginActivity : AppCompatActivity() {
         binding.nameInputLayout.error = null
         binding.pwdInputLayout.error = null
 
-        val connectInfo = ConnectInfo(uriPath, portInt, username, password)
+        val connectInfo = ConnectInfo(uriStr, portInt, username, password)
         val loading = DialogHelper.loading(this, R.string.connecting)
         FtpManager.getOrCreate(connectInfo).connect { result ->
             loading.dismiss()
-            var msg = R.string.connect_success
-            when (result) {
+            val isSuccess = when (result) {
                 is RequestResult.Success -> {
                     log.d("Connect success: ${result.data}")
-                    if (result.data) {
-                        msg = R.string.connect_success
-                    } else {
-                        msg = R.string.connect_failed
-                    }
+                    result.data
                 }
 
                 is RequestResult.Failure -> {
                     log.e("Connect failed", result.error)
-                    msg = R.string.connect_failed
+                    false
                 }
+            }
+            val msg = if (isSuccess) {
+                R.string.connect_success
+            } else {
+                R.string.connect_failed
             }
             DialogHelper.alert(
                 context = this,
@@ -136,7 +136,7 @@ class CustomLoginActivity : AppCompatActivity() {
                 positiveRes = R.string.ok,
                 onPositive = {
                     it.dismiss()
-                    if (result.isSuccess) {
+                    if (isSuccess) {
                         finish()
                     }
                 }
