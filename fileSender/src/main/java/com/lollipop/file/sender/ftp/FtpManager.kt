@@ -225,14 +225,20 @@ object FtpManager {
                     notifyConnectResult(RequestResult.failure(e))
                 }
                 if (connectResult) {
-                    try {
-                        log.d("connect.login")
-                        impl.login(info.username, info.password)
-                        notifyLoginResult(RequestResult.success(true))
+                    if (info.isAnonymous) {
                         loginResult = true
-                    } catch (e: Throwable) {
-                        log.e("connect.login.error", e)
-                        notifyLoginResult(RequestResult.failure(e))
+                        log.d("connect.login.skip")
+                        notifyLoginResult(RequestResult.success(true))
+                    } else {
+                        try {
+                            log.d("connect.login")
+                            impl.login(info.username, info.password)
+                            notifyLoginResult(RequestResult.success(true))
+                            loginResult = true
+                        } catch (e: Throwable) {
+                            log.e("connect.login.error", e)
+                            notifyLoginResult(RequestResult.failure(e))
+                        }
                     }
                 }
                 connectStateCache = connectResult && loginResult
@@ -245,7 +251,10 @@ object FtpManager {
          */
         fun isConnected(callback: RequestCallback<Boolean>) {
             tryRequest(callback) {
-                val result = impl.isConnected && impl.isAuthenticated
+                var result = impl.isConnected
+                if (!info.isAnonymous) {
+                    result = result && impl.isAuthenticated
+                }
                 connectStateCache = result
                 result
             }

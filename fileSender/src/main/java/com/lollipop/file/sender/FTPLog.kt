@@ -19,6 +19,10 @@ class FTPLog(val prefix: String) {
         return "$prefix: $msg"
     }
 
+    private fun buildMsg(msg: String, e: Throwable): String {
+        return "$prefix: $msg: ${e.message}"
+    }
+
     fun d(msg: String) {
         Log.d(TAG, buildMsg(msg))
     }
@@ -27,7 +31,7 @@ class FTPLog(val prefix: String) {
         if (e == null) {
             Log.e(TAG, buildMsg(msg))
         } else {
-            Log.e(TAG, buildMsg(msg), e)
+            Log.e(TAG, buildMsg(msg, e), e)
         }
     }
 

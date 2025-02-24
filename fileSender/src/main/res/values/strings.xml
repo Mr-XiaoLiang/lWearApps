@@ -7,7 +7,6 @@
     <string name="label_pwd">密码</string>
     <string name="label_name">账户名</string>
     <string name="label_port">端口号</string>
-    <string name="prefix_ftp">ftp://</string>
     <string name="ftp_default_name" translatable="false">lftp</string>
     <string name="ftp_default_pwd" translatable="false">lftp</string>
     <string name="ftp_default_port" translatable="false">2121</string>

@@ -106,7 +106,7 @@ class ConnectListActivity : AppCompatActivity() {
             }
 
             R.string.option_open -> {
-                // TODO open 打开详情页
+                FtpFileManagerActivity.start(this, info.token)
             }
         }
     }

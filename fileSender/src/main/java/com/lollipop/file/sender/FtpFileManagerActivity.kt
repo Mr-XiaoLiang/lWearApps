@@ -1,6 +1,9 @@
 package com.lollipop.file.sender
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -35,6 +38,18 @@ class FtpFileManagerActivity : AppCompatActivity() {
 
     companion object {
         private const val KEY_TOKEN = "key_token"
+
+        fun start(context: Context, token: String) {
+            context.startActivity(
+                Intent(context, FtpFileManagerActivity::class.java).apply {
+                    putExtra(KEY_TOKEN, token)
+                    if (context !is Activity) {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                }
+            )
+        }
+
         private val OPTION_FILE = arrayOf(
             R.string.option_ftp_file_download,
             R.string.option_ftp_file_copy,

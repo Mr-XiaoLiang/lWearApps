@@ -4,7 +4,8 @@ class ConnectInfo(
     val host: String,
     val port: Int,
     var username: String = "",
-    var password: String = ""
+    var password: String = "",
+    var isAnonymous: Boolean = false,
 ) {
 
     val token: String by lazy {

@@ -2,10 +2,8 @@ package com.lollipop.file.sender
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.lollipop.file.sender.databinding.ActivityCustomLoginBinding
@@ -104,13 +102,20 @@ class CustomLoginActivity : AppCompatActivity() {
         }
         val username = binding.nameInputLayout.editText?.text?.toString()?.trim() ?: ""
         val password = binding.pwdInputLayout.editText?.text?.toString()?.trim() ?: ""
+        val isAnonymous = binding.anonymousSwitch.isChecked
 
         binding.uriInputLayout.error = null
         binding.portInputLayout.error = null
         binding.nameInputLayout.error = null
         binding.pwdInputLayout.error = null
 
-        val connectInfo = ConnectInfo(uriStr, portInt, username, password)
+        val connectInfo = ConnectInfo(
+            host = uriStr,
+            port = portInt,
+            username = username,
+            password = password,
+            isAnonymous = isAnonymous
+        )
         val loading = DialogHelper.loading(this, R.string.connecting)
         FtpManager.getOrCreate(connectInfo).connect { result ->
             loading.dismiss()
