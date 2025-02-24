@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="action_bar_background">#000000</color>
+    <color name="on_action_bar_background">#D3D3D3</color>
+    <color name="dialog_background">#3A3A3A</color>
+    <color name="on_dialog_background">#E0E0E0</color>
+    <color name="content_background">#4B4B4B</color>
+    <color name="on_content_background">#EDEDED</color>
+
+    <color name="floating_action_button_background">#00453E</color>
+    <color name="on_floating_action_button_background">#6B8782</color>
+
+    <color name="hint_content_background">#275753</color>
+    <color name="on_hint_content_background">#A7C8C5</color>
+
+    <color name="warning_content_background">#925701</color>
+    <color name="on_warning_content_background">#A9A295</color>
+    <color name="error_content_background">#8E2720</color>
+    <color name="on_error_content_background">#B4A6A9</color>
+    <color name="success_content_background">#317134</color>
+    <color name="on_success_content_background">#889088</color>
+    <color name="info_content_background">#13568A</color>
+    <color name="on_info_content_background">#8F979E</color>
+</resources>

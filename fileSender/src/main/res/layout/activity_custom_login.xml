@@ -139,6 +139,7 @@
                 android:layout_marginBottom="24dp"
                 android:text="@string/label_connect"
                 android:textStyle="bold"
+                android:id="@+id/connectButton"
                 app:icon="@drawable/baseline_done_24" />
 
         </LinearLayout>

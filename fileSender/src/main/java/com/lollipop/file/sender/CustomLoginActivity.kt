@@ -2,16 +2,26 @@ package com.lollipop.file.sender
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.lollipop.file.sender.databinding.ActivityCustomLoginBinding
+import com.lollipop.file.sender.ftp.ConnectInfo
+import com.lollipop.file.sender.ftp.FtpManager
+import com.lollipop.file.sender.ftp.RequestResult
+import com.lollipop.wear.basic.DialogHelper
 
 class CustomLoginActivity : AppCompatActivity() {
 
     private val binding by lazy {
         ActivityCustomLoginBinding.inflate(layoutInflater)
+    }
+
+    private val log by lazy {
+        FTPLog.with(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +52,95 @@ class CustomLoginActivity : AppCompatActivity() {
         binding.scanButton.setOnClickListener {
             startActivity(Intent(this, ScanActivity::class.java))
             finish()
+        }
+        binding.connectButton.setOnClickListener {
+            login()
+        }
+    }
+
+    private fun login() {
+        log.d("login")
+        val uriStr = binding.uriInputLayout.editText?.text?.toString()?.trim() ?: ""
+        if (uriStr.isEmpty()) {
+            binding.uriInputLayout.error = getString(R.string.error_uri_empty)
+            log.e("Invalid uri, uriStr.isEmpty()")
+            return
+        }
+        val uriInfo = try {
+            uriStr.toUri()
+        } catch (e: Throwable) {
+            binding.uriInputLayout.error = getString(R.string.error_uri_invalid)
+            log.e("Invalid uri", e)
+            return
+        }
+        if (uriInfo.host == null || TextUtils.isEmpty(uriInfo.host) || TextUtils.isEmpty(uriInfo.scheme)) {
+            binding.uriInputLayout.error = getString(R.string.error_uri_invalid)
+            log.e("Invalid uri, uriInfo.host == null || TextUtils.isEmpty(uriInfo.host) || TextUtils.isEmpty(uriInfo.scheme)")
+            return
+        }
+        val uriPath = try {
+            uriInfo.toString()
+        } catch (e: Throwable) {
+            log.e("Invalid uri", e)
+            binding.uriInputLayout.error = getString(R.string.error_uri_invalid)
+            return
+        }
+        if (uriPath.isEmpty()) {
+            binding.uriInputLayout.error = getString(R.string.error_uri_invalid)
+            log.e("Invalid uri, uriPath.isNullOrEmpty()")
+            return
+        }
+        val port = binding.portInputLayout.editText?.text?.toString()?.trim() ?: ""
+        if (port.isEmpty()) {
+            binding.portInputLayout.error = getString(R.string.error_port_empty)
+            log.e("Invalid port, port.isEmpty()")
+            return
+        }
+        val portInt = port.toIntOrNull()
+        if (portInt == null) {
+            binding.portInputLayout.error = getString(R.string.error_port_invalid)
+            log.e("Invalid port, portInt == null")
+            return
+        }
+        val username = binding.nameInputLayout.editText?.text?.toString()?.trim() ?: ""
+        val password = binding.pwdInputLayout.editText?.text?.toString()?.trim() ?: ""
+
+        binding.uriInputLayout.error = null
+        binding.portInputLayout.error = null
+        binding.nameInputLayout.error = null
+        binding.pwdInputLayout.error = null
+
+        val connectInfo = ConnectInfo(uriPath, portInt, username, password)
+        val loading = DialogHelper.loading(this, R.string.connecting)
+        FtpManager.getOrCreate(connectInfo).connect { result ->
+            loading.dismiss()
+            var msg = R.string.connect_success
+            when (result) {
+                is RequestResult.Success -> {
+                    log.d("Connect success: ${result.data}")
+                    if (result.data) {
+                        msg = R.string.connect_success
+                    } else {
+                        msg = R.string.connect_failed
+                    }
+                }
+
+                is RequestResult.Failure -> {
+                    log.e("Connect failed", result.error)
+                    msg = R.string.connect_failed
+                }
+            }
+            DialogHelper.alert(
+                context = this,
+                messageRes = msg,
+                positiveRes = R.string.ok,
+                onPositive = {
+                    it.dismiss()
+                    if (result.isSuccess) {
+                        finish()
+                    }
+                }
+            )
         }
     }
 

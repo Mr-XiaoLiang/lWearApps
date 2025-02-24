@@ -27,6 +27,35 @@ object DialogHelper {
             .show()
     }
 
+    fun alert(
+        context: Context,
+        messageRes: Int,
+        positiveRes: Int = 0,
+        titleRes: Int = 0,
+        negativeRes: Int = 0,
+        onPositive: ((DialogInterface) -> Unit) = { it.dismiss() },
+        onNegative: ((DialogInterface) -> Unit) = { it.dismiss() }
+    ): AlertDialog {
+        return MaterialAlertDialogBuilder(context)
+            .setMessage(messageRes)
+            .also {
+                if (titleRes != 0) {
+                    it.setTitle(titleRes)
+                }
+                if (positiveRes != 0) {
+                    it.setPositiveButton(positiveRes) { dialog, _ ->
+                        onPositive(dialog)
+                    }
+                }
+                if (negativeRes != 0) {
+                    it.setNegativeButton(negativeRes) { dialog, _ ->
+                        onNegative(dialog)
+                    }
+                }
+            }
+            .show()
+    }
+
     fun loading(
         context: Context,
         titleRes: Int,

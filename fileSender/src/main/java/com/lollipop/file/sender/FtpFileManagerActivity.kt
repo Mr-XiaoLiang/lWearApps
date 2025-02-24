@@ -139,7 +139,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
         binding.backButton.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
         binding.closeButton.setOnClickListener { finish() }
         onBackPressedDispatcher.addCallback(crumbsOnBackPressedCallback)
-        binding.optionButton.setOnClickListener { showFileOption(OPTION_FOLDER, currentPath) }
+        binding.optionButton.setOnClickListener { showFileOption(OPTION_FOLDER, currentPath, true) }
 
         binding.pasteControlButton.setOnClickListener {
             paste(currentPath)
@@ -222,7 +222,8 @@ class FtpFileManagerActivity : AppCompatActivity() {
             FTPFile.TYPE_FILE -> {
                 showFileOption(
                     OPTION_FILE,
-                    getFilePath(file.name)
+                    getFilePath(file.name),
+                    false
                 )
             }
         }
@@ -234,21 +235,24 @@ class FtpFileManagerActivity : AppCompatActivity() {
             FTPFile.TYPE_DIRECTORY -> {
                 showFileOption(
                     OPTION_FOLDER,
-                    filePath
+                    filePath,
+                    true
                 )
             }
 
             FTPFile.TYPE_LINK -> {
                 showFileOption(
                     OPTION_LINK,
-                    filePath
+                    filePath,
+                    false
                 )
             }
 
             FTPFile.TYPE_FILE -> {
                 showFileOption(
                     OPTION_FILE,
-                    filePath
+                    filePath,
+                    false
                 )
             }
         }
@@ -263,7 +267,8 @@ class FtpFileManagerActivity : AppCompatActivity() {
 
     private fun showFileOption(
         optionArray: Array<Int>,
-        filePath: String
+        filePath: String,
+        isDir: Boolean
     ) {
         DialogHelper.list(
             context = this,
@@ -271,31 +276,31 @@ class FtpFileManagerActivity : AppCompatActivity() {
             itemResList = optionArray
         ) { dialog, option ->
             dialog.dismiss()
-            onOptionClick(option, filePath)
+            onOptionClick(option, filePath, isDir)
         }
     }
 
-    private fun onOptionClick(option: Int, filePath: String) {
+    private fun onOptionClick(option: Int, filePath: String, isDir: Boolean) {
         when (option) {
             R.string.option_ftp_file_hold -> {
-                FileTransferStation.holdRemote(filePath)
+                FileTransferStation.holdRemote(filePath, isDir)
             }
 
             R.string.option_ftp_file_download -> {
-                FileTransferStation.holdRemote(filePath)
+                FileTransferStation.holdRemote(filePath, isDir)
                 FileTransferStation.pending = FileTransferStation.Pending.Download
                 chooseLocalPath()
             }
 
             R.string.option_ftp_file_copy -> {
-                FileTransferStation.holdRemote(filePath)
+                FileTransferStation.holdRemote(filePath, isDir)
                 FileTransferStation.pending = FileTransferStation.Pending.Copy
                 chooseRemotePath()
             }
 
             R.string.option_ftp_file_move -> {
                 // 移动文件，需要先暂存文件
-                FileTransferStation.holdRemote(filePath)
+                FileTransferStation.holdRemote(filePath, isDir)
                 // 设置Pending类型，然后发起选择，等待结果
                 FileTransferStation.pending = FileTransferStation.Pending.Move
                 // 进入远程选择模式
@@ -303,7 +308,9 @@ class FtpFileManagerActivity : AppCompatActivity() {
             }
 
             R.string.option_ftp_file_paste -> {
-                paste(filePath)
+                if (isDir) {
+                    paste(filePath)
+                }
             }
 
             R.string.option_ftp_file_rename -> {
@@ -322,7 +329,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
             }
 
             R.string.option_ftp_file_delete -> {
-                FileTransferStation.delete(filePath)
+                FileTransferStation.delete(filePath, isDir)
                 authorize()
             }
         }
@@ -364,7 +371,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
     }
 
     private fun authorize() {
-        FtpFlowAuthorizeDialog.show(this)
+        FtpFlowAuthorizeDialog().show(supportFragmentManager, FtpFlowAuthorizeDialog.TAG)
     }
 
     private fun chooseRemotePath() {

@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import com.lollipop.file.sender.FTPLog
 import com.lollipop.wear.basic.ListenerManager
 import com.lollipop.wear.data.FileHelper
 import com.lollipop.wear.data.PreferenceHelper
@@ -145,6 +146,10 @@ object FtpManager {
             FTPClient()
         }
 
+        private val log by lazy {
+            FTPLog.with(this)
+        }
+
         val ftpClient: FTPClient
             get() = impl
 
@@ -206,22 +211,27 @@ object FtpManager {
          * 连接并且登录FTP服务器
          */
         fun connect(callback: RequestCallback<Boolean>) {
+            log.d("connect")
             tryRequest(callback) {
                 var connectResult = false
                 var loginResult = false
                 try {
+                    log.d("connect.connect")
                     val result = impl.connect(info.host, info.port)
                     notifyConnectResult(RequestResult.success(result))
                     connectResult = true
                 } catch (e: Throwable) {
+                    log.e("connect.connect.error", e)
                     notifyConnectResult(RequestResult.failure(e))
                 }
                 if (connectResult) {
                     try {
+                        log.d("connect.login")
                         impl.login(info.username, info.password)
                         notifyLoginResult(RequestResult.success(true))
                         loginResult = true
                     } catch (e: Throwable) {
+                        log.e("connect.login.error", e)
                         notifyLoginResult(RequestResult.failure(e))
                     }
                 }

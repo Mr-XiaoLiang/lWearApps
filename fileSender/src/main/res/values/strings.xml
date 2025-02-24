@@ -50,5 +50,13 @@
     <string name="flow_item_option_hint_rename">重命名为</string>
     <string name="flow_item_option_hint_delete">删除</string>
     <string name="ftp_client_not_found">请先连接到一个FTP服务器</string>
+    <string name="error_uri_empty">请输入地址</string>
+    <string name="error_port_empty">请输入端口号</string>
+    <string name="error_port_invalid">端口号必须为整数数字</string>
+    <string name="connecting">连接中</string>
+    <string name="ok">好的</string>
+    <string name="connect_success">连接成功</string>
+    <string name="connect_failed">连接失败</string>
+    <string name="error_uri_invalid">连接地址格式错误</string>
 
 </resources>

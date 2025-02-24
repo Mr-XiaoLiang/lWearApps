@@ -100,9 +100,9 @@ class FTPDataTransferServer implements FTPDataTransferConnectionProvider,
 			}
 		}
 		if (useRange) {
-			ArrayList availables = new ArrayList();
+			ArrayList<Integer> availables = new ArrayList<>();
 			for (int i = start; i <= stop; i++) {
-				availables.add(new Integer(i));
+				availables.add(i);
 			}
 			int size;
 			boolean done = false;

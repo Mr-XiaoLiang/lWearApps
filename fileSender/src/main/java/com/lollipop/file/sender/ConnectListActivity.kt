@@ -53,9 +53,9 @@ class ConnectListActivity : AppCompatActivity() {
             startActivity(Intent(this, ScanActivity::class.java))
         }
         binding.customButton.setOnClickListener {
-//            startActivity(Intent(this, CustomLoginActivity::class.java))
+            startActivity(Intent(this, CustomLoginActivity::class.java))
 //            startActivity(Intent(this, FtpFileManagerActivity::class.java))
-            FtpFlowAuthorizeDialog().show(supportFragmentManager, FtpFlowAuthorizeDialog.TAG)
+//            FtpFlowAuthorizeDialog().show(supportFragmentManager, FtpFlowAuthorizeDialog.TAG)
         }
         binding.recyclerView.adapter = itemAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
