@@ -9,11 +9,11 @@
     tools:context=".CustomLoginActivity">
 
     <LinearLayout
-        android:elevation="12dp"
         android:id="@+id/actionBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/action_bar_background"
+        android:elevation="12dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
@@ -95,9 +95,15 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.materialswitch.MaterialSwitch
-                android:layout_width="wrap_content"
                 android:id="@+id/anonymousSwitch"
-                android:layout_height="wrap_content"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginTop="12dp"
+                android:gravity="end|center_vertical"
+                android:text="@string/label_anonymous"
+                android:textColor="@color/on_content_background"
+                android:textSize="16sp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/nameInputLayout"
@@ -135,6 +141,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/connectButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -143,7 +150,6 @@
                 android:layout_marginBottom="24dp"
                 android:text="@string/label_connect"
                 android:textStyle="bold"
-                android:id="@+id/connectButton"
                 app:icon="@drawable/baseline_done_24" />
 
         </LinearLayout>

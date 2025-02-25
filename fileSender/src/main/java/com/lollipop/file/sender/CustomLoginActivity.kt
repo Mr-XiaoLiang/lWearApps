@@ -1,9 +1,11 @@
 package com.lollipop.file.sender
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.lollipop.file.sender.databinding.ActivityCustomLoginBinding
@@ -13,6 +15,68 @@ import com.lollipop.file.sender.ftp.RequestResult
 import com.lollipop.wear.basic.DialogHelper
 
 class CustomLoginActivity : AppCompatActivity() {
+
+    companion object {
+
+        private const val PARAMS_HOST = "HOST"
+        private const val PARAMS_PORT = "PORT"
+        private const val PARAMS_USERNAME = "USERNAME"
+        private const val PARAMS_PASSWORD = "PASSWORD"
+        private const val PARAMS_IS_ANONYMOUS = "IS_ANONYMOUS"
+
+        private const val DEFAULT_HOST = ""
+        private const val DEFAULT_PORT = 2121
+        private const val DEFAULT_USERNAME = "lftp"
+        private const val DEFAULT_PASSWORD = "lftp"
+        private const val DEFAULT_IS_ANONYMOUS = false
+
+        fun start(context: Context, uri: String = "") {
+            if (uri.isEmpty()) {
+                start(
+                    context,
+                    DEFAULT_HOST,
+                    DEFAULT_PORT,
+                    DEFAULT_USERNAME,
+                    DEFAULT_PASSWORD,
+                    DEFAULT_IS_ANONYMOUS
+                )
+                return
+            }
+            var host = DEFAULT_HOST
+            var port = DEFAULT_PORT
+            var username = DEFAULT_USERNAME
+            var password = DEFAULT_PASSWORD
+            var isAnonymous = DEFAULT_IS_ANONYMOUS
+            try {
+                val uriInfo = uri.toUri()
+                host = uriInfo.host ?: DEFAULT_HOST
+                port = uriInfo.port ?: DEFAULT_PORT
+                username = uriInfo.getQueryParameter("u") ?: DEFAULT_USERNAME
+                password = uriInfo.getQueryParameter("p") ?: DEFAULT_PASSWORD
+                isAnonymous = uriInfo.getQueryParameter("a") == "1"
+            } catch (e: Throwable) {
+                FTPLog.with(this).e("start.toUri()", e)
+            }
+
+        }
+
+        fun start(
+            context: Context,
+            host: String,
+            port: Int,
+            username: String,
+            password: String,
+            isAnonymous: Boolean
+        ) {
+            context.startActivity(Intent(context, CustomLoginActivity::class.java).apply {
+                putExtra(PARAMS_HOST, host)
+                putExtra(PARAMS_PORT, port)
+                putExtra(PARAMS_USERNAME, username)
+                putExtra(PARAMS_PASSWORD, password)
+                putExtra(PARAMS_IS_ANONYMOUS, isAnonymous)
+            })
+        }
+    }
 
     private val binding by lazy {
         ActivityCustomLoginBinding.inflate(layoutInflater)
@@ -54,6 +118,11 @@ class CustomLoginActivity : AppCompatActivity() {
         binding.connectButton.setOnClickListener {
             login()
         }
+        binding.anonymousSwitch.setOnCheckedChangeListener { _, isChecked ->
+            binding.nameInputLayout.isEnabled = !isChecked
+            binding.pwdInputLayout.isEnabled = !isChecked
+        }
+        binding.anonymousSwitch.isChecked = false
     }
 
     private fun login() {
@@ -64,30 +133,6 @@ class CustomLoginActivity : AppCompatActivity() {
             log.e("Invalid uri, uriStr.isEmpty()")
             return
         }
-//        val uriInfo = try {
-//            uriStr.toUri()
-//        } catch (e: Throwable) {
-//            binding.uriInputLayout.error = getString(R.string.error_uri_invalid)
-//            log.e("Invalid uri", e)
-//            return
-//        }
-//        if (uriInfo.host == null || TextUtils.isEmpty(uriInfo.host) || TextUtils.isEmpty(uriInfo.scheme)) {
-//            binding.uriInputLayout.error = getString(R.string.error_uri_invalid)
-//            log.e("Invalid uri, uriInfo.host == null || TextUtils.isEmpty(uriInfo.host) || TextUtils.isEmpty(uriInfo.scheme)")
-//            return
-//        }
-//        val uriPath = try {
-//            uriInfo.toString()
-//        } catch (e: Throwable) {
-//            log.e("Invalid uri", e)
-//            binding.uriInputLayout.error = getString(R.string.error_uri_invalid)
-//            return
-//        }
-//        if (uriPath.isEmpty()) {
-//            binding.uriInputLayout.error = getString(R.string.error_uri_invalid)
-//            log.e("Invalid uri, uriPath.isNullOrEmpty()")
-//            return
-//        }
         val port = binding.portInputLayout.editText?.text?.toString()?.trim() ?: ""
         if (port.isEmpty()) {
             binding.portInputLayout.error = getString(R.string.error_port_empty)
