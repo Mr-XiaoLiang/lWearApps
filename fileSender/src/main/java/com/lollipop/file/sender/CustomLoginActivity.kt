@@ -5,12 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.lollipop.file.sender.databinding.ActivityCustomLoginBinding
 import com.lollipop.file.sender.ftp.ConnectInfo
 import com.lollipop.file.sender.ftp.FtpManager
+import com.lollipop.file.sender.ftp.FtpUri
 import com.lollipop.file.sender.ftp.RequestResult
 import com.lollipop.wear.basic.DialogHelper
 
@@ -18,62 +18,11 @@ class CustomLoginActivity : AppCompatActivity() {
 
     companion object {
 
-        private const val PARAMS_HOST = "HOST"
-        private const val PARAMS_PORT = "PORT"
-        private const val PARAMS_USERNAME = "USERNAME"
-        private const val PARAMS_PASSWORD = "PASSWORD"
-        private const val PARAMS_IS_ANONYMOUS = "IS_ANONYMOUS"
-
-        private const val DEFAULT_HOST = ""
-        private const val DEFAULT_PORT = 2121
-        private const val DEFAULT_USERNAME = "lftp"
-        private const val DEFAULT_PASSWORD = "lftp"
-        private const val DEFAULT_IS_ANONYMOUS = false
+        private const val PARAMS_URI = "FTP_URI"
 
         fun start(context: Context, uri: String = "") {
-            if (uri.isEmpty()) {
-                start(
-                    context,
-                    DEFAULT_HOST,
-                    DEFAULT_PORT,
-                    DEFAULT_USERNAME,
-                    DEFAULT_PASSWORD,
-                    DEFAULT_IS_ANONYMOUS
-                )
-                return
-            }
-            var host = DEFAULT_HOST
-            var port = DEFAULT_PORT
-            var username = DEFAULT_USERNAME
-            var password = DEFAULT_PASSWORD
-            var isAnonymous = DEFAULT_IS_ANONYMOUS
-            try {
-                val uriInfo = uri.toUri()
-                host = uriInfo.host ?: DEFAULT_HOST
-                port = uriInfo.port ?: DEFAULT_PORT
-                username = uriInfo.getQueryParameter("u") ?: DEFAULT_USERNAME
-                password = uriInfo.getQueryParameter("p") ?: DEFAULT_PASSWORD
-                isAnonymous = uriInfo.getQueryParameter("a") == "1"
-            } catch (e: Throwable) {
-                FTPLog.with(this).e("start.toUri()", e)
-            }
-
-        }
-
-        fun start(
-            context: Context,
-            host: String,
-            port: Int,
-            username: String,
-            password: String,
-            isAnonymous: Boolean
-        ) {
             context.startActivity(Intent(context, CustomLoginActivity::class.java).apply {
-                putExtra(PARAMS_HOST, host)
-                putExtra(PARAMS_PORT, port)
-                putExtra(PARAMS_USERNAME, username)
-                putExtra(PARAMS_PASSWORD, password)
-                putExtra(PARAMS_IS_ANONYMOUS, isAnonymous)
+                putExtra(PARAMS_URI, uri)
             })
         }
     }
@@ -86,12 +35,26 @@ class CustomLoginActivity : AppCompatActivity() {
         FTPLog.with(this)
     }
 
+    private val paramsUri by lazy {
+        intent.getStringExtra(PARAMS_URI) ?: ""
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(binding.root)
         initInsets()
         initView()
+        if (paramsUri.isNotEmpty()) {
+            val ftpUri = FtpUri.parse(paramsUri)
+            if (ftpUri != FtpUri.EMPTY) {
+                binding.uriInputLayout.editText?.setText(ftpUri.host)
+                binding.portInputLayout.editText?.setText(ftpUri.port.toString())
+                binding.anonymousSwitch.isChecked = ftpUri.anonymous
+                binding.nameInputLayout.editText?.setText(ftpUri.username)
+                binding.pwdInputLayout.editText?.setText(ftpUri.password)
+            }
+        }
     }
 
     private fun initInsets() {

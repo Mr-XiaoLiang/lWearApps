@@ -24,8 +24,21 @@ class FtpUri(
         const val FTP_PREFIX = "ftp"
         const val FTPS_PREFIX = "ftps"
 
+        val EMPTY = FtpUri(
+            useSSL = false,
+            host = "",
+            port = 21,
+            anonymous = true,
+            username = "",
+            password = "",
+        )
+
         fun parse(uri: String): FtpUri {
-            return parse(uri.toUri())
+            return try {
+                parse(uri.toUri())
+            } catch (e: Exception) {
+                EMPTY
+            }
         }
 
         fun parse(uri: Uri): FtpUri {
@@ -39,7 +52,7 @@ class FtpUri(
                     21
                 }
             }
-            val userInfo = uri.userInfo?:""
+            val userInfo = uri.userInfo ?: ""
             val anonymous = userInfo.isEmpty()
             val userInfoArray = userInfo.split(":")
             val username = if (anonymous) {

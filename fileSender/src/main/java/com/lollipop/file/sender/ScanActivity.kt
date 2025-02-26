@@ -12,10 +12,15 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import com.lollipop.file.sender.databinding.ActivityScanBinding
+import com.lollipop.file.sender.ftp.ConnectInfo
+import com.lollipop.file.sender.ftp.FtpManager
+import com.lollipop.file.sender.ftp.FtpUri
+import com.lollipop.file.sender.ftp.RequestResult
 import com.lollipop.file.sender.scan.FocusAnimationHelper
 import com.lollipop.qr.BarcodeReader
 import com.lollipop.qr.comm.BarcodeResult
 import com.lollipop.qr.reader.OnBarcodeScanResultListener
+import com.lollipop.wear.basic.DialogHelper
 
 class ScanActivity : AppCompatActivity(), OnBarcodeScanResultListener {
 
@@ -33,6 +38,10 @@ class ScanActivity : AppCompatActivity(), OnBarcodeScanResultListener {
 
     private val focusAnimationHelper = FocusAnimationHelper {
         binding.focusView
+    }
+
+    private val log by lazy {
+        FTPLog.with(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,8 +96,68 @@ class ScanActivity : AppCompatActivity(), OnBarcodeScanResultListener {
     }
 
     override fun onBarcodeScanResult(result: BarcodeResult) {
-        // TODO("Not yet implemented")
+        barcodeReader.analyzerEnable = false
+        val list = result.list
+        for (barcode in list) {
+            val rawValue = barcode.info.rawValue
+            val ftpUri = FtpUri.parse(rawValue)
+            if (ftpUri != FtpUri.EMPTY) {
+                connect(ftpUri)
+                return
+            }
+        }
+    }
 
+    private fun connect(ftpUri: FtpUri) {
+        val connectInfo = ConnectInfo(
+            host = ftpUri.host,
+            port = ftpUri.port,
+            username = ftpUri.username,
+            password = ftpUri.password,
+            isAnonymous = ftpUri.anonymous
+        )
+        val loading = DialogHelper.loading(this, R.string.connecting)
+        FtpManager.getOrCreate(connectInfo).connect { result ->
+            loading.dismiss()
+            val isSuccess = when (result) {
+                is RequestResult.Success -> {
+                    log.d("Connect success: ${result.data}")
+                    result.data
+                }
+
+                is RequestResult.Failure -> {
+                    log.e("Connect failed", result.error)
+                    false
+                }
+            }
+            if (isSuccess) {
+                DialogHelper.alert(
+                    context = this,
+                    messageRes = R.string.connect_success,
+                    positiveRes = R.string.ok,
+                    onPositive = {
+                        it.dismiss()
+                        finish()
+                    }
+                )
+            } else {
+                DialogHelper.alert(
+                    context = this,
+                    messageRes = R.string.connect_failed,
+                    positiveRes = R.string.retry,
+                    negativeRes = R.string.label_custom_uri,
+                    onPositive = {
+                        it.dismiss()
+                        barcodeReader.analyzerEnable = true
+                    },
+                    onNegative = {
+                        it.dismiss()
+                        CustomLoginActivity.start(this, ftpUri.getUrl())
+                        finish()
+                    }
+                )
+            }
+        }
     }
 
 }

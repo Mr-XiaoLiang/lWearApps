@@ -58,5 +58,6 @@
     <string name="connect_failed">连接失败</string>
     <string name="error_uri_invalid">连接地址格式错误</string>
     <string name="label_anonymous">匿名登录</string>
+    <string name="retry">重试</string>
 
 </resources>
