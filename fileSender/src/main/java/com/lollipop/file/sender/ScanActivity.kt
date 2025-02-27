@@ -98,24 +98,23 @@ class ScanActivity : AppCompatActivity(), OnBarcodeScanResultListener {
     override fun onBarcodeScanResult(result: BarcodeResult) {
         barcodeReader.analyzerEnable = false
         val list = result.list
+        var isFound = false
         for (barcode in list) {
             val rawValue = barcode.info.rawValue
             val ftpUri = FtpUri.parse(rawValue)
             if (ftpUri != FtpUri.EMPTY) {
                 connect(ftpUri)
-                return
+                isFound = true
+                break
             }
+        }
+        if (!isFound) {
+            barcodeReader.analyzerEnable = true
         }
     }
 
     private fun connect(ftpUri: FtpUri) {
-        val connectInfo = ConnectInfo(
-            host = ftpUri.host,
-            port = ftpUri.port,
-            username = ftpUri.username,
-            password = ftpUri.password,
-            isAnonymous = ftpUri.anonymous
-        )
+        val connectInfo = ConnectInfo.fromUri(ftpUri)
         val loading = DialogHelper.loading(this, R.string.connecting)
         FtpManager.getOrCreate(connectInfo).connect { result ->
             loading.dismiss()

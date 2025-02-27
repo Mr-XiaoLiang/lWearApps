@@ -33,6 +33,9 @@ class ConnectListActivity : AppCompatActivity() {
         setContentView(binding.root)
         initInsets()
         initView()
+        FtpManager.read(this) {
+            refresh()
+        }
     }
 
     private fun initInsets() {
@@ -67,7 +70,7 @@ class ConnectListActivity : AppCompatActivity() {
         // 弹出提示框，如果没有连接，需要提示连接，如果已经连接，就提示打开或断开连接
         val optionArray = if (connectState) {
             // 已经连接，提示打开或者断开
-            arrayOf(R.string.option_open, R.string.option_disconnect)
+            arrayOf(R.string.option_open, R.string.option_disconnect, R.string.option_delete)
         } else {
             // 没有连接，提示连接
             arrayOf(R.string.option_connect)
@@ -103,6 +106,20 @@ class ConnectListActivity : AppCompatActivity() {
                         itemAdapter.notifyItemChanged(it)
                     }
                 }
+            }
+
+            R.string.option_delete -> {
+                DialogHelper.alert(
+                    context = this,
+                    messageRes = R.string.title_delete_connect,
+                    positiveRes = R.string.option_delete_confirm,
+                    negativeRes = R.string.option_cancel,
+                    onPositive = { dialog ->
+                        dialog.dismiss()
+                        FtpManager.remove(info.token)
+                        FtpManager.save(this)
+                    }
+                )
             }
 
             R.string.option_open -> {

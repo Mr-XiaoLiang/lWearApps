@@ -7,9 +7,6 @@
     <string name="label_pwd">密码</string>
     <string name="label_name">账户名</string>
     <string name="label_port">端口号</string>
-    <string name="ftp_default_name" translatable="false">lftp</string>
-    <string name="ftp_default_pwd" translatable="false">lftp</string>
-    <string name="ftp_default_port" translatable="false">2121</string>
     <string name="label_connect">连接</string>
     <string name="label_connect_list">连接列表</string>
 
@@ -19,6 +16,7 @@
     <string name="title_options">选项</string>
     <string name="option_connect">连接</string>
     <string name="option_disconnect">断开</string>
+    <string name="option_delete">删除</string>
     <string name="option_open">打开</string>
     <string name="option_cancel">取消</string>
 
@@ -50,8 +48,6 @@
     <string name="flow_item_option_hint_delete">删除</string>
     <string name="ftp_client_not_found">请先连接到一个FTP服务器</string>
     <string name="error_uri_empty">请输入地址</string>
-    <string name="error_port_empty">请输入端口号</string>
-    <string name="error_port_invalid">端口号必须为整数数字</string>
     <string name="connecting">连接中</string>
     <string name="ok">好的</string>
     <string name="connect_success">连接成功</string>
@@ -59,5 +55,7 @@
     <string name="error_uri_invalid">连接地址格式错误</string>
     <string name="label_anonymous">匿名登录</string>
     <string name="retry">重试</string>
+    <string name="title_delete_connect">确定要删除这一条连接记录吗？</string>
+    <string name="option_delete_confirm">确认删除</string>
 
 </resources>

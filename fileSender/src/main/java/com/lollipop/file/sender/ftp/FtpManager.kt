@@ -22,10 +22,8 @@ object FtpManager {
     private const val SP_FILE = "ftp.lp"
 
     private const val KEY_LIST = "connectList"
-    private const val KEY_USERNAME = "username"
-    private const val KEY_PASSWORD = "password"
-    private const val KEY_HOST = "host"
-    private const val KEY_PORT = "port"
+    private const val KEY_URI = "uri"
+    private const val KEY_NAME = "name"
 
     private val clientMap = HashMap<String, Client>()
 
@@ -70,11 +68,12 @@ object FtpManager {
         return clientMap.values.map { it.info }
     }
 
-    fun read(context: Context) {
+    fun read(context: Context, onEndCallback: () -> Unit) {
         PreferenceHelper.from(context, SP_FILE).readJson { result ->
             when (result) {
                 is FileHelper.FileResult.Failure -> {
                     // 发生异常就不处理了
+                    onEndCallback()
                 }
 
                 is FileHelper.FileResult.Success -> {
@@ -83,17 +82,17 @@ object FtpManager {
                     if (connectArray != null && connectArray.length() > 0) {
                         for (index in 0 until connectArray.length()) {
                             val item = connectArray.optJSONObject(index)
-                            val connectInfo = ConnectInfo(
-                                host = item.optString(KEY_HOST),
-                                port = item.optInt(KEY_PORT),
-                                username = item.optString(KEY_USERNAME),
-                                password = item.optString(KEY_PASSWORD)
-                            )
-                            if (connectInfo.host.isNotEmpty() && connectInfo.port > 0) {
-                                getOrCreate(connectInfo)
+                            val ftpUri = FtpUri.parse(item.optString(KEY_URI))
+                            if (ftpUri != FtpUri.EMPTY) {
+                                val connectInfo = ConnectInfo.fromUri(ftpUri)
+                                connectInfo.name = item.optString(KEY_NAME)
+                                if (connectInfo.host.isNotEmpty() && connectInfo.port > 0) {
+                                    getOrCreate(connectInfo)
+                                }
                             }
                         }
                     }
+                    onEndCallback()
                 }
             }
         }
@@ -106,10 +105,8 @@ object FtpManager {
             list.forEach { info ->
                 connectArray.put(
                     JSONObject()
-                        .put(KEY_HOST, info.host)
-                        .put(KEY_PORT, info.port)
-                        .put(KEY_USERNAME, info.username)
-                        .put(KEY_PASSWORD, info.password)
+                        .put(KEY_URI, info.toUri().getUrl())
+                        .put(KEY_NAME, info.name)
                 )
             }
             json.put(KEY_LIST, connectArray)
@@ -216,6 +213,7 @@ object FtpManager {
                 var connectResult = false
                 var loginResult = false
                 try {
+                    impl.security = info.security.key
                     log.d("connect.connect")
                     val result = impl.connect(info.host, info.port)
                     notifyConnectResult(RequestResult.success(result))
@@ -225,20 +223,19 @@ object FtpManager {
                     notifyConnectResult(RequestResult.failure(e))
                 }
                 if (connectResult) {
-                    if (info.isAnonymous) {
-                        loginResult = true
-                        log.d("connect.login.skip")
-                        notifyLoginResult(RequestResult.success(true))
-                    } else {
-                        try {
-                            log.d("connect.login")
+                    try {
+                        if (info.isAnonymous) {
+                            log.d("connect.login anonymous")
+                            impl.login("ftp", "ftp")
+                        } else {
+                            log.d("connect.login ${info.username} : ${info.password}")
                             impl.login(info.username, info.password)
-                            notifyLoginResult(RequestResult.success(true))
-                            loginResult = true
-                        } catch (e: Throwable) {
-                            log.e("connect.login.error", e)
-                            notifyLoginResult(RequestResult.failure(e))
                         }
+                        notifyLoginResult(RequestResult.success(true))
+                        loginResult = true
+                    } catch (e: Throwable) {
+                        log.e("connect.login.error", e)
+                        notifyLoginResult(RequestResult.failure(e))
                     }
                 }
                 connectStateCache = connectResult && loginResult
@@ -256,6 +253,7 @@ object FtpManager {
                     result = result && impl.isAuthenticated
                 }
                 connectStateCache = result
+                log.d("isConnected: $result")
                 result
             }
         }

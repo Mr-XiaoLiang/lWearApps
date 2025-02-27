@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.core.net.toUri
 
 /**
- * @param useSSL 如果为 true，则使用 FTPS 协议；否则使用 FTP 协议。
+ * @param security FTP 或 FTPS。
  * @param host 服务器的主机名。
  * @param port 服务器的端口号。
  * @param anonymous 如果为 true，则使用匿名登录；否则使用提供的用户名和密码。
@@ -12,7 +12,7 @@ import androidx.core.net.toUri
  * @param password 登录的密码，如果匿名登录则为 null。
  */
 class FtpUri(
-    val useSSL: Boolean,
+    val security: FTPSecurity,
     val host: String,
     val port: Int,
     val anonymous: Boolean,
@@ -21,11 +21,9 @@ class FtpUri(
 ) {
 
     companion object {
-        const val FTP_PREFIX = "ftp"
-        const val FTPS_PREFIX = "ftps"
 
         val EMPTY = FtpUri(
-            useSSL = false,
+            security = FTPSecurity.FTP,
             host = "",
             port = 21,
             anonymous = true,
@@ -42,15 +40,11 @@ class FtpUri(
         }
 
         fun parse(uri: Uri): FtpUri {
-            val useSSL = uri.scheme == FTPS_PREFIX
+            val security = FTPSecurity.find(uri.scheme ?: "")
             val host = uri.host ?: ""
             var port = uri.port
             if (port <= 0) {
-                port = if (useSSL) {
-                    990
-                } else {
-                    21
-                }
+                port = security.defaultPort
             }
             val userInfo = uri.userInfo ?: ""
             val anonymous = userInfo.isEmpty()
@@ -66,7 +60,7 @@ class FtpUri(
                 userInfoArray.getOrNull(1) ?: ""
             }
             return FtpUri(
-                useSSL = useSSL,
+                security = security,
                 host = host,
                 port = port,
                 anonymous = anonymous,
@@ -82,11 +76,7 @@ class FtpUri(
      * @return 构建好的 FTP 或 FTPS URL 字符串。
      */
     fun getUrl(): String {
-        val scheme = if (useSSL) {
-            FTPS_PREFIX
-        } else {
-            FTP_PREFIX
-        }
+        val scheme = security.prefix
         val authority = if (anonymous) {
             "$host:$port"
         } else {

@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.lollipop.file.sender.databinding.ActivityCustomLoginBinding
 import com.lollipop.file.sender.ftp.ConnectInfo
+import com.lollipop.file.sender.ftp.FTPSecurity
 import com.lollipop.file.sender.ftp.FtpManager
 import com.lollipop.file.sender.ftp.FtpUri
 import com.lollipop.file.sender.ftp.RequestResult
@@ -96,18 +97,23 @@ class CustomLoginActivity : AppCompatActivity() {
             log.e("Invalid uri, uriStr.isEmpty()")
             return
         }
+
+        var security = FTPSecurity.FTP
+        var portInt: Int = security.defaultPort
+
+        val ftpUri = FtpUri.parse(uriStr)
+        if (ftpUri != FtpUri.EMPTY) {
+            security = ftpUri.security
+            portInt = ftpUri.port
+        }
+
         val port = binding.portInputLayout.editText?.text?.toString()?.trim() ?: ""
-        if (port.isEmpty()) {
-            binding.portInputLayout.error = getString(R.string.error_port_empty)
-            log.e("Invalid port, port.isEmpty()")
-            return
+        if (port.isNotEmpty()) {
+            port.toIntOrNull()?.also {
+                portInt = it
+            }
         }
-        val portInt = port.toIntOrNull()
-        if (portInt == null) {
-            binding.portInputLayout.error = getString(R.string.error_port_invalid)
-            log.e("Invalid port, portInt == null")
-            return
-        }
+
         val username = binding.nameInputLayout.editText?.text?.toString()?.trim() ?: ""
         val password = binding.pwdInputLayout.editText?.text?.toString()?.trim() ?: ""
         val isAnonymous = binding.anonymousSwitch.isChecked
@@ -118,6 +124,7 @@ class CustomLoginActivity : AppCompatActivity() {
         binding.pwdInputLayout.error = null
 
         val connectInfo = ConnectInfo(
+            security = security,
             host = uriStr,
             port = portInt,
             username = username,

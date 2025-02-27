@@ -97,6 +97,10 @@ class FtpFileManagerActivity : AppCompatActivity() {
         intent.getStringExtra(KEY_TOKEN) ?: ""
     }
 
+    private val log by lazy {
+        FTPLog.with(this)
+    }
+
     private val localFileChooser = FileChooseHelper.fileChoose(
         activity = this, callback = ::onLocalFileChoose
     )
@@ -427,13 +431,25 @@ class FtpFileManagerActivity : AppCompatActivity() {
 
     private fun updateCurrentPath() {
         if (currentPath.isEmpty() || crumbsList.isEmpty()) {
-            findClient()?.rootPath(successNext {
-                val rootPath = it
-                currentPath = rootPath
-                crumbsList.clear()
-                crumbsList.add(CrumbsInfo(getString(R.string.label_ftp_root), rootPath))
-                onRefresh()
-            })
+            findClient()?.rootPath { result ->
+                when (result) {
+                    is RequestResult.Failure<String> -> {
+                        log.e("updateCurrentPath.ERROR", result.error)
+                        binding.swipeRefreshLayout.post {
+                            binding.swipeRefreshLayout.isRefreshing = false
+                        }
+                        showError()
+                    }
+                    is RequestResult.Success<String> -> {
+                        val rootPath = result.data
+                        log.d("updateCurrentPath.ROOT_PATH = $rootPath")
+                        currentPath = rootPath
+                        crumbsList.clear()
+                        crumbsList.add(CrumbsInfo(getString(R.string.label_ftp_root), rootPath))
+                        onRefresh()
+                    }
+                }
+            }
         } else {
             currentPath = crumbsList.last().path
             onRefresh()
@@ -450,19 +466,32 @@ class FtpFileManagerActivity : AppCompatActivity() {
         }
         val client = findClient() ?: return
         // 更新目录，然后才刷新列表
-        client.cdAndList(currentPath, successNext { files ->
-            val ftpFileList = files.toList()
-            crumbsList.last?.childList?.also {
-                // 更新面包屑记录
-                it.clear()
-                it.addAll(ftpFileList)
+        client.cdAndList(currentPath) { result ->
+            when (result) {
+                is RequestResult.Success -> {
+                    val files = result.data
+                    val ftpFileList = files.toList()
+                    crumbsList.last?.childList?.also {
+                        // 更新面包屑记录
+                        it.clear()
+                        it.addAll(ftpFileList)
+                    }
+                    updateFileList(ftpFileList)
+                    // 刷新列表的时候，需要关闭下拉刷新
+                    binding.swipeRefreshLayout.post {
+                        binding.swipeRefreshLayout.isRefreshing = false
+                    }
+                }
+
+                is RequestResult.Failure -> {
+                    log.e("loadFileList.ERROR", result.error)
+                    binding.swipeRefreshLayout.post {
+                        binding.swipeRefreshLayout.isRefreshing = false
+                    }
+                    showError()
+                }
             }
-            updateFileList(ftpFileList)
-            // 刷新列表的时候，需要关闭下拉刷新
-            binding.swipeRefreshLayout.post {
-                binding.swipeRefreshLayout.isRefreshing = false
-            }
-        })
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -471,22 +500,6 @@ class FtpFileManagerActivity : AppCompatActivity() {
         fileList.addAll(list)
         fileList.add(SpaceInfo)
         fileAdapter.notifyDataSetChanged()
-    }
-
-    private inline fun <reified T : Any> successNext(
-        crossinline callback: (T) -> Unit
-    ): FtpManager.RequestCallback<T> {
-        return FtpManager.RequestCallback { result ->
-            when (result) {
-                is RequestResult.Success -> {
-                    callback(result.data)
-                }
-
-                is RequestResult.Failure -> {
-                    showError()
-                }
-            }
-        }
     }
 
     private fun showError() {
