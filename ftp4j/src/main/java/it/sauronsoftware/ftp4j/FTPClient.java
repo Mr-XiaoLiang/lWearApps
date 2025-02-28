@@ -37,6 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -154,7 +155,7 @@ public class FTPClient {
      * The DateFormat object used to parse the reply to a MDTM command.
      */
     private static final DateFormat MDTM_DATE_FORMAT = new SimpleDateFormat(
-            "yyyyMMddHHmmss");
+            "yyyyMMddHHmmss", Locale.US);
 
     /**
      * The RegExp Pattern object used to parse the reply to a PASV command.

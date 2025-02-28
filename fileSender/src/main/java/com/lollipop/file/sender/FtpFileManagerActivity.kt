@@ -174,6 +174,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
         }
 
         onCrumbsChanged()
+        crumbsAdapter.notifyDataSetChanged()
     }
 
     private fun onRefresh() {
@@ -183,6 +184,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
         loadFileList()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun onCrumbsClick(info: CrumbsInfo) {
         if (crumbsList.indexOf(info) >= 0) {
             while (crumbsList.isNotEmpty()) {
@@ -194,6 +196,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
         } else {
             crumbsList.addLast(info)
         }
+        crumbsAdapter.notifyDataSetChanged()
         onCrumbsChanged()
     }
 
@@ -229,12 +232,12 @@ class FtpFileManagerActivity : AppCompatActivity() {
         when (file.type) {
             FTPFile.TYPE_DIRECTORY -> {
                 val filePath = getFilePath(file.name)
-                crumbsList.addLast(CrumbsInfo(name = file.name, path = filePath))
+                addCrumbs(CrumbsInfo(name = file.name, path = filePath))
                 onCrumbsChanged()
             }
 
             FTPFile.TYPE_LINK -> {
-                crumbsList.addLast(CrumbsInfo(name = file.name, path = file.link))
+                addCrumbs(CrumbsInfo(name = file.name, path = file.link))
                 onCrumbsChanged()
             }
 
@@ -278,10 +281,8 @@ class FtpFileManagerActivity : AppCompatActivity() {
     }
 
     private fun handlerCrumbsBackPressed() {
-        if (crumbsList.size > 1) {
-            crumbsList.removeLast()
-            onCrumbsChanged()
-        }
+        removeCrumbsLast()
+        onCrumbsChanged()
     }
 
     private fun showFileOption(
@@ -440,20 +441,45 @@ class FtpFileManagerActivity : AppCompatActivity() {
                         }
                         showError()
                     }
+
                     is RequestResult.Success<String> -> {
                         val rootPath = result.data
                         log.d("updateCurrentPath.ROOT_PATH = $rootPath")
                         currentPath = rootPath
-                        crumbsList.clear()
-                        crumbsList.add(CrumbsInfo(getString(R.string.label_ftp_root), rootPath))
+                        resetCrumbs(CrumbsInfo(getString(R.string.label_ftp_root), rootPath))
                         onRefresh()
                     }
                 }
             }
         } else {
-            currentPath = crumbsList.last().path
+            currentPath = lastCrumbs()?.path ?: ""
             onRefresh()
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun resetCrumbs(info: CrumbsInfo) {
+        crumbsList.clear()
+        crumbsList.add(info)
+        crumbsAdapter.notifyDataSetChanged()
+    }
+
+    private fun addCrumbs(info: CrumbsInfo) {
+        val index = crumbsList.size
+        crumbsList.addLast(info)
+        crumbsAdapter.notifyItemInserted(index)
+    }
+
+    private fun removeCrumbsLast() {
+        val size = crumbsList.size
+        if (size > 1) {
+            crumbsList.removeLast()
+            crumbsAdapter.notifyItemRemoved(size - 1)
+        }
+    }
+
+    private fun lastCrumbs(): CrumbsInfo? {
+        return crumbsList.lastOrNull()
     }
 
     private fun loadFileList() {
@@ -461,7 +487,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
             updateCurrentPath()
             return
         }
-        crumbsList.last?.childList?.also {
+        lastCrumbs()?.childList?.also {
             updateFileList(it)
         }
         val client = findClient() ?: return
@@ -471,7 +497,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
                 is RequestResult.Success -> {
                     val files = result.data
                     val ftpFileList = files.toList()
-                    crumbsList.last?.childList?.also {
+                    lastCrumbs()?.childList?.also {
                         // 更新面包屑记录
                         it.clear()
                         it.addAll(ftpFileList)

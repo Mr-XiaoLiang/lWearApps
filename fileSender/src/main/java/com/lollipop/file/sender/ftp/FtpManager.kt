@@ -140,7 +140,9 @@ object FtpManager {
     ) {
 
         private val impl by lazy {
-            FTPClient()
+            FTPClient().apply {
+                setMLSDPolicy(FTPClient.MLSD_IF_SUPPORTED)
+            }
         }
 
         private val log by lazy {

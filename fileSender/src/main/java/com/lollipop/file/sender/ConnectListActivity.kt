@@ -73,7 +73,7 @@ class ConnectListActivity : AppCompatActivity() {
             arrayOf(R.string.option_open, R.string.option_disconnect, R.string.option_delete)
         } else {
             // 没有连接，提示连接
-            arrayOf(R.string.option_connect)
+            arrayOf(R.string.option_connect, R.string.option_delete)
         }
 
         DialogHelper.list(

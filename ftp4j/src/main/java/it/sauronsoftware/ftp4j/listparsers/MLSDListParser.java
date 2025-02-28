@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -42,12 +43,12 @@ public class MLSDListParser implements FTPListParser {
 	/**
 	 * Date format 1 for MLSD date facts (supports millis).
 	 */
-	private static final DateFormat MLSD_DATE_FORMAT_1 = new SimpleDateFormat("yyyyMMddhhmmss.SSS Z");
+	private static final DateFormat MLSD_DATE_FORMAT_1 = new SimpleDateFormat("yyyyMMddhhmmss.SSS Z", Locale.US);
 
 	/**
 	 * Date format 2 for MLSD date facts (doesn't support millis).
 	 */
-	private static final DateFormat MLSD_DATE_FORMAT_2 = new SimpleDateFormat("yyyyMMddhhmmss Z");
+	private static final DateFormat MLSD_DATE_FORMAT_2 = new SimpleDateFormat("yyyyMMddhhmmss Z", Locale.US);
 
 	public FTPFile[] parse(String[] lines) throws FTPListParseException {
 		ArrayList list = new ArrayList();
