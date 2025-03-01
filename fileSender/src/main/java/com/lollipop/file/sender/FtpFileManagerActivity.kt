@@ -167,7 +167,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
             upload()
         }
         binding.holdControlButton.setOnClickListener {
-            // TODO 当前暂存的文件清单
+            FtpFileHoldListDialog().show(supportFragmentManager, FtpFileHoldListDialog.TAG)
         }
         binding.flowControlButton.setOnClickListener {
             authorize()
@@ -669,9 +669,9 @@ class FtpFileManagerActivity : AppCompatActivity() {
             private fun getFileTypeIcon(file: FTPFile): Int {
                 return when (file.type) {
                     FTPFile.TYPE_DIRECTORY -> R.drawable.baseline_folder_24
-                    FTPFile.TYPE_FILE -> R.drawable.baseline_file_24px
+                    FTPFile.TYPE_FILE -> R.drawable.baseline_file_24
                     FTPFile.TYPE_LINK -> R.drawable.baseline_file_link_24px
-                    else -> R.drawable.baseline_file_24px
+                    else -> R.drawable.baseline_file_24
                 }
             }
 
