@@ -145,6 +145,7 @@ class FtpFileManagerActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun initView() {
         binding.crumbsView.also { view ->
             view.adapter = crumbsAdapter
