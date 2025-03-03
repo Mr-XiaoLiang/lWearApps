@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.lollipop.wear.wf"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.lollipop.wear.wf"

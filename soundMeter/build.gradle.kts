@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.lollipop.sound"
-    compileSdk = 34
+    compileSdk = 35
 
     buildFeatures {
         viewBinding = true

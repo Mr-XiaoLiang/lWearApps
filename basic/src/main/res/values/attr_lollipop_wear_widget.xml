@@ -25,7 +25,18 @@
     <declare-styleable name="ArcLayout_Layout">
         <attr name="layout_arc_angle" format="float" />
         <attr name="layout_arc_radius" format="dimension" />
+        <attr name="layout_arc_radiusPercent" format="float"/>
         <attr name="layout_arc_margin" format="dimension" />
+        <attr name="layout_arc_fixEdge" format="boolean" />
+        <attr name="layout_arc_sizeMode" format="enum">
+            <enum name="minEdge" value="0" />
+            <enum name="maxEdge" value="1" />
+            <enum name="height" value="2" />
+            <enum name="width" value="3" />
+            <enum name="weight" value="4" />
+        </attr>
+        <attr name="layout_arc_widthPercent" format="float" />
+        <attr name="layout_arc_heightPercent" format="float" />
         <attr name="layout_arc_circleCenter" format="enum">
             <enum name="center" value="0" />
             <enum name="left" value="1" />

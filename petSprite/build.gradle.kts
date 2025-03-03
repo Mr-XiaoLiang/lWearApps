@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.lollipop.wear.ps"
-    compileSdk = 34
+    compileSdk = 35
 
     buildFeatures {
         viewBinding = true

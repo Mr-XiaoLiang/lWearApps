@@ -42,6 +42,30 @@ open class ArcLayout @JvmOverloads constructor(
         layoutChildren(left, top, right, bottom)
     }
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
+
+        val childParentWidth = widthSize - paddingLeft - paddingRight
+        val childParentHeight = heightSize - paddingTop - paddingBottom
+
+        val count = childCount
+        for (i in 0 until count) {
+            val child = getChildAt(i)
+            if (child.visibility == GONE) {
+                continue
+            }
+            val lp = child.layoutParams as ArcLayoutParams
+
+            val childWidthMeasureSpec = lp.getWidthLayoutParam(childParentWidth, childParentHeight)
+            val childHeightMeasureSpec =
+                lp.getHeightLayoutParam(childParentWidth, childParentHeight)
+            child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
+        }
+
+        setMeasuredDimension(widthSize, heightSize)
+    }
+
     override fun dispatchDraw(canvas: Canvas) {
         super.dispatchDraw(canvas)
         if (isInEditMode) {
@@ -58,13 +82,27 @@ open class ArcLayout @JvmOverloads constructor(
         }
     }
 
-    private fun getParentRadius(mode: RadiusMode, parentWidth: Int, parentHeight: Int): Float {
-        return when (mode) {
+    private fun getParentRadius(
+        mode: RadiusMode,
+        parentWidth: Int,
+        parentHeight: Int,
+        childWidth: Int,
+        childHeight: Int,
+        fixEdge: Boolean
+    ): Float {
+        val offsetSize = if (fixEdge) {
+            max(childWidth, childHeight) / 2F
+        } else {
+            0F
+        }
+        var radius = when (mode) {
             RadiusMode.MinEdge -> min(parentWidth, parentHeight) / 2F
             RadiusMode.MaxEdge -> max(parentWidth, parentHeight) / 2F
             RadiusMode.Height -> parentHeight / 2F
             RadiusMode.Width -> parentWidth / 2F
         }
+        radius -= offsetSize
+        return radius
     }
 
     private fun layoutChildren(left: Int, top: Int, right: Int, bottom: Int) {
@@ -84,13 +122,21 @@ open class ArcLayout @JvmOverloads constructor(
             }
 
             val lp = child.layoutParams as ArcLayoutParams
-            val circleCenter = lp.getCircleCenter(parentWidth, parentHeight)
-            val parentRadius = getParentRadius(lp.radiusMode, parentWidth, parentHeight)
-            val centerX = parentLeft + circleCenter[0]
-            val centerY = parentTop + circleCenter[1]
 
             val childWidth = child.measuredWidth
             val childHeight = child.measuredHeight
+
+            val circleCenter = lp.getCircleCenter(parentWidth, parentHeight)
+            val parentRadius = getParentRadius(
+                lp.radiusMode,
+                parentWidth,
+                parentHeight,
+                childWidth,
+                childHeight,
+                lp.fixEdge
+            )
+            val centerX = parentLeft + circleCenter[0]
+            val centerY = parentTop + circleCenter[1]
 
             val angle = lp.angle
 
@@ -129,7 +175,12 @@ open class ArcLayout @JvmOverloads constructor(
         var angle: Float = 0F
         var edgeMargin: Float = 0F
         var radius: Float = 0F
+        var radiusPercent: Float = 1F
         var radiusMode: RadiusMode = RadiusMode.MinEdge
+        var sizeMode: SizeMode = SizeMode.None
+        var widthPercent: Float = 0F
+        var heightPercent: Float = 0F
+        var fixEdge: Boolean = false
 
         constructor(width: Int, height: Int) : super(width, height)
         constructor(source: ArcLayoutParams) : super(source) {
@@ -137,6 +188,10 @@ open class ArcLayout @JvmOverloads constructor(
             edgeMargin = source.edgeMargin
             radius = source.radius
             radiusMode = source.radiusMode
+            sizeMode = source.sizeMode
+            widthPercent = source.widthPercent
+            heightPercent = source.heightPercent
+            fixEdge = source.fixEdge
         }
 
         constructor(source: ViewGroup.LayoutParams) : super(source)
@@ -145,16 +200,128 @@ open class ArcLayout @JvmOverloads constructor(
             angle = a.getFloat(R.styleable.ArcLayout_Layout_layout_arc_angle, 0F)
             edgeMargin = a.getDimension(R.styleable.ArcLayout_Layout_layout_arc_margin, 0F)
             radius = a.getDimension(R.styleable.ArcLayout_Layout_layout_arc_radius, 0F)
-            radiusMode = RadiusMode.MinEdge
-            val mode = a.getInt(
+            radiusPercent = a.getFloat(R.styleable.ArcLayout_Layout_layout_arc_radiusPercent, 1F)
+            widthPercent = a.getFloat(R.styleable.ArcLayout_Layout_layout_arc_widthPercent, 0F)
+            heightPercent = a.getFloat(R.styleable.ArcLayout_Layout_layout_arc_heightPercent, 0F)
+            fixEdge = a.getBoolean(R.styleable.ArcLayout_Layout_layout_arc_fixEdge, false)
+
+            val radiusModeValue = a.getInt(
                 R.styleable.ArcLayout_Layout_layout_arc_mode, RadiusMode.MinEdge.declare
             )
-            RadiusMode.entries.forEach {
-                if (it.declare == mode) {
-                    radiusMode = it
+            radiusMode = RadiusMode.find(radiusModeValue) ?: RadiusMode.MinEdge
+            sizeMode = SizeMode.None
+            val sizeModeValue = a.getInt(
+                R.styleable.ArcLayout_Layout_layout_arc_sizeMode, SizeMode.None.declare
+            )
+            sizeMode = SizeMode.find(sizeModeValue) ?: SizeMode.None
+
+            a.recycle()
+        }
+
+        private fun makeMeasureSpec(size: Int, mode: Int): Int {
+            return MeasureSpec.makeMeasureSpec(size, mode)
+        }
+
+        private fun getDefaultMeasureSpec(layoutSize: Int, parentSize: Int): Int {
+            return when (layoutSize) {
+                ViewGroup.LayoutParams.MATCH_PARENT -> {
+                    makeMeasureSpec(parentSize, MeasureSpec.EXACTLY)
+                }
+
+                ViewGroup.LayoutParams.WRAP_CONTENT -> {
+                    makeMeasureSpec(parentSize, MeasureSpec.AT_MOST)
+                }
+
+                else -> {
+                    makeMeasureSpec(layoutSize, MeasureSpec.EXACTLY)
                 }
             }
-            a.recycle()
+        }
+
+        fun getWidthLayoutParam(parentWidth: Int, parentHeight: Int): Int {
+            when (sizeMode) {
+                SizeMode.None -> {
+                    return getDefaultMeasureSpec(width, parentWidth)
+                }
+
+                SizeMode.MinEdge -> {
+                    return makeMeasureSpec(
+                        (min(parentWidth, parentHeight) * widthPercent).toInt(),
+                        MeasureSpec.EXACTLY
+                    )
+                }
+
+                SizeMode.MaxEdge -> {
+                    return makeMeasureSpec(
+                        (max(parentWidth, parentHeight) * widthPercent).toInt(),
+                        MeasureSpec.EXACTLY
+                    )
+                }
+
+                SizeMode.Height -> {
+                    return makeMeasureSpec(
+                        (parentHeight * widthPercent).toInt(),
+                        MeasureSpec.EXACTLY
+                    )
+                }
+
+                SizeMode.Width -> {
+                    return makeMeasureSpec(
+                        (parentWidth * widthPercent).toInt(),
+                        MeasureSpec.EXACTLY
+                    )
+                }
+
+                SizeMode.Weight -> {
+                    return makeMeasureSpec(
+                        (parentWidth * widthPercent).toInt(),
+                        MeasureSpec.EXACTLY
+                    )
+                }
+            }
+        }
+
+        fun getHeightLayoutParam(parentWidth: Int, parentHeight: Int): Int {
+            when (sizeMode) {
+                SizeMode.None -> {
+                    return getDefaultMeasureSpec(height, parentHeight)
+                }
+
+                SizeMode.MinEdge -> {
+                    return makeMeasureSpec(
+                        (min(parentWidth, parentHeight) * heightPercent).toInt(),
+                        MeasureSpec.EXACTLY
+                    )
+                }
+
+                SizeMode.MaxEdge -> {
+                    return makeMeasureSpec(
+                        (max(parentWidth, parentHeight) * heightPercent).toInt(),
+                        MeasureSpec.EXACTLY
+                    )
+                }
+
+                SizeMode.Height -> {
+                    return makeMeasureSpec(
+                        (parentHeight * heightPercent).toInt(),
+                        MeasureSpec.EXACTLY
+                    )
+                }
+
+                SizeMode.Width -> {
+                    return makeMeasureSpec(
+                        (parentWidth * heightPercent).toInt(),
+                        MeasureSpec.EXACTLY
+                    )
+                }
+
+                SizeMode.Weight -> {
+                    return makeMeasureSpec(
+                        (parentHeight * heightPercent).toInt(),
+                        MeasureSpec.EXACTLY
+                    )
+                }
+            }
         }
 
         fun getCircleCenter(parentWidth: Int, parentHeight: Int): FloatArray {
@@ -193,11 +360,11 @@ open class ArcLayout @JvmOverloads constructor(
             return floatArrayOf(x, y)
         }
 
-        fun optRadius(def: Float): Float {
+        fun optRadius(parentRadius: Float): Float {
             if (radius.toInt() > 0) {
                 return radius
             }
-            return def
+            return parentRadius * radiusPercent
         }
 
     }
@@ -234,7 +401,29 @@ open class ArcLayout @JvmOverloads constructor(
         MinEdge(0),
         MaxEdge(1),
         Height(2),
-        Width(3)
+        Width(3);
+
+        companion object {
+            fun find(value: Int): RadiusMode? {
+                return entries.find { it.declare == value }
+            }
+        }
+
+    }
+
+    enum class SizeMode(val declare: Int) {
+        None(-1),
+        MinEdge(0),
+        MaxEdge(1),
+        Height(2),
+        Width(3),
+        Weight(4);
+
+        companion object {
+            fun find(value: Int): SizeMode? {
+                return entries.find { it.declare == value }
+            }
+        }
     }
 
 }

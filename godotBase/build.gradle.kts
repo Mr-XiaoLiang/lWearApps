@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.lollipop.wear.game"
-    compileSdk = 34
+    compileSdk = 35
 
     buildFeatures {
         viewBinding = true

@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    compileSdk = 34
+    compileSdk = 35
     namespace = "com.google.android.renderscript"
     defaultConfig {
         minSdk = 21

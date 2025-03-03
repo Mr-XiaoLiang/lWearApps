@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.lollipop.qr"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 21
