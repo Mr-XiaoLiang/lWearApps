@@ -1,32 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/dcdImageView"
-        android:layout_width="0px"
-        android:layout_height="0px"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.16" />
 
     <com.lollipop.wear.widget.ArcLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ImageView
             android:id="@+id/kuugaImageView"
             android:layout_width="0px"
             android:layout_height="0px"
-            app:layout_constraintCircle="@id/dcdImageView"
-            app:layout_constraintCircleAngle="120"
-            app:layout_constraintCircleRadius="100dp"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintWidth_percent="0.16" />
+            app:layout_arc_angle="270"
+            app:layout_arc_fixEdge="true"
+            app:layout_arc_heightPercent="0.16"
+            app:layout_arc_radiusPercent="0.9"
+            app:layout_arc_sizeMode="minEdge"
+            app:layout_arc_widthPercent="0.16"
+            tools:src="@drawable/ic_launcher_background" />
+
+        <ImageView
+            android:layout_width="0px"
+            android:layout_height="0px"
+            app:layout_arc_angle="310"
+            app:layout_arc_fixEdge="true"
+            app:layout_arc_heightPercent="0.16"
+            app:layout_arc_radiusPercent="0.9"
+            app:layout_arc_sizeMode="minEdge"
+            app:layout_arc_widthPercent="0.16"
+            tools:src="@drawable/ic_launcher_background" />
+
+        <ImageView
+            android:layout_width="0px"
+            android:layout_height="0px"
+            app:layout_arc_angle="350"
+            app:layout_arc_fixEdge="true"
+            app:layout_arc_heightPercent="0.16"
+            app:layout_arc_radiusPercent="0.9"
+            app:layout_arc_sizeMode="minEdge"
+            app:layout_arc_widthPercent="0.16"
+            tools:src="@drawable/ic_launcher_background" />
+
+        <ImageView
+            android:layout_width="0px"
+            android:layout_height="0px"
+            app:layout_arc_angle="30"
+            app:layout_arc_fixEdge="true"
+            app:layout_arc_heightPercent="0.16"
+            app:layout_arc_radiusPercent="0.9"
+            app:layout_arc_sizeMode="minEdge"
+            app:layout_arc_widthPercent="0.16"
+            tools:src="@drawable/ic_launcher_background" />
+
+        <ImageView
+            android:layout_width="0px"
+            android:layout_height="0px"
+            app:layout_arc_angle="70"
+            app:layout_arc_fixEdge="true"
+            app:layout_arc_heightPercent="0.16"
+            app:layout_arc_radiusPercent="0.9"
+            app:layout_arc_sizeMode="minEdge"
+            app:layout_arc_widthPercent="0.16"
+            tools:src="@drawable/ic_launcher_background" />
+
+        <ImageView
+            android:layout_width="0px"
+            android:layout_height="0px"
+            app:layout_arc_angle="110"
+            app:layout_arc_fixEdge="true"
+            app:layout_arc_heightPercent="0.16"
+            app:layout_arc_radiusPercent="0.9"
+            app:layout_arc_sizeMode="minEdge"
+            app:layout_arc_widthPercent="0.16"
+            tools:src="@drawable/ic_launcher_background" />
+
+        <ImageView
+            android:layout_width="0px"
+            android:layout_height="0px"
+            app:layout_arc_angle="150"
+            app:layout_arc_fixEdge="true"
+            app:layout_arc_heightPercent="0.16"
+            app:layout_arc_radiusPercent="0.9"
+            app:layout_arc_sizeMode="minEdge"
+            app:layout_arc_widthPercent="0.16"
+            tools:src="@drawable/ic_launcher_background" />
+
+        <ImageView
+            android:layout_width="0px"
+            android:layout_height="0px"
+            app:layout_arc_angle="190"
+            app:layout_arc_fixEdge="true"
+            app:layout_arc_heightPercent="0.16"
+            app:layout_arc_radiusPercent="0.9"
+            app:layout_arc_sizeMode="minEdge"
+            app:layout_arc_widthPercent="0.16"
+            tools:src="@drawable/ic_launcher_background" />
+
+        <ImageView
+            android:layout_width="0px"
+            android:layout_height="0px"
+            app:layout_arc_angle="230"
+            app:layout_arc_fixEdge="true"
+            app:layout_arc_heightPercent="0.16"
+            app:layout_arc_radiusPercent="0.9"
+            app:layout_arc_sizeMode="minEdge"
+            app:layout_arc_widthPercent="0.16"
+            tools:src="@drawable/ic_launcher_background" />
+
+        <ImageView
+            android:id="@+id/dcdImageView"
+            android:layout_width="0px"
+            android:layout_height="0px"
+            app:layout_arc_angle="270"
+            app:layout_arc_fixEdge="true"
+            app:layout_arc_heightPercent="0.16"
+            app:layout_arc_radiusPercent="0.35"
+            app:layout_arc_sizeMode="minEdge"
+            app:layout_arc_widthPercent="0.16"
+            tools:src="@drawable/ic_launcher_background" />
+
+        <ImageView
+            android:layout_width="0px"
+            android:layout_height="0px"
+            app:layout_arc_angle="150"
+            app:layout_arc_fixEdge="true"
+            app:layout_arc_heightPercent="0.16"
+            app:layout_arc_radiusPercent="0.35"
+            app:layout_arc_sizeMode="minEdge"
+            app:layout_arc_widthPercent="0.16"
+            tools:src="@drawable/ic_launcher_background" />
+
+        <ImageView
+            android:layout_width="0px"
+            android:layout_height="0px"
+            app:layout_arc_angle="30"
+            app:layout_arc_fixEdge="true"
+            app:layout_arc_heightPercent="0.16"
+            app:layout_arc_radiusPercent="0.35"
+            app:layout_arc_sizeMode="minEdge"
+            app:layout_arc_widthPercent="0.16"
+            tools:src="@drawable/ic_launcher_background" />
+
     </com.lollipop.wear.widget.ArcLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
