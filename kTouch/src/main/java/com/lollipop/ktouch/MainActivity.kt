@@ -1,18 +1,11 @@
 package com.lollipop.ktouch
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.lollipop.ktouch.databinding.ActivityMainBinding
+import com.lollipop.ktouch.base.PagerActivity
+import com.lollipop.ktouch.base.SubPager
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : PagerActivity() {
+    override val pageArray: Array<Class<out SubPager>>
+        get() = TODO("Not yet implemented")
 
-    private val binding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-    }
 
 }
